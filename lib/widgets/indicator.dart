@@ -31,6 +31,7 @@ class TriplexUIIndicator extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(10),
         border: BoxBorder.all(
           color: theme.colorScheme.primary,

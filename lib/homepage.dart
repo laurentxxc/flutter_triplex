@@ -18,6 +18,7 @@ import 'widgets/button.dart';
 import 'widgets/indicator.dart';
 import 'widgets/time_progress.dart';
 import 'widgets/message_board.dart';
+import 'widgets/game_title.dart';
 
 const String introMessage = '''
 🎉 Welcome to Triplex 🎉
@@ -41,7 +42,18 @@ Take a break ☕️ and resume when you're ready!
 
 const String gameOverMessage = '''
 Game Over! Time's up.
+
 Try to beat your best score next time!
+
+😜
+''';
+
+const String gameOverMessageBestScore = '''
+Game Over! Time's up.
+
+Congratulation ! You make the best score this time.
+
+🎉
 ''';
 
 // Game constants
@@ -59,8 +71,7 @@ const int timeExtra = 10;
 
 //UI constants
 /// UI size constraints
-const Size fullUISize = Size(500, 1000);
-const Size gridUISize = Size(500, 740);
+const double uiWidth = 500;
 const double iconSize = 40;
 
 //UI Colors
@@ -82,18 +93,21 @@ enum GameState {
   gameOver(
     buttonIcon: Icons.play_arrow,
     buttonText: "Start",
-    messageText: gameOverMessage,
+    messageText: gameOverMessage, 
+    messageTextAlt: gameOverMessageBestScore,
   );
 
   const GameState({
     required this.buttonText,
     required this.buttonIcon,
     required this.messageText,
+    this.messageTextAlt = ''
   });
 
   final String buttonText;
   final IconData buttonIcon;
   final String messageText;
+  final String messageTextAlt;
 }
 
 class MyHomePage extends StatefulWidget {
@@ -131,6 +145,7 @@ class _MyHomePageState extends State<MyHomePage>
   int _tileScore = 0;
   double _timeProgress = 1.0;
   Timer? _gameTimer;
+  bool _isGameCompletedWithBestScore = false;
 
   late AnimationController _tileScoringAnimationController;
   late Animation<double> _scaleAnimation;
@@ -202,6 +217,7 @@ class _MyHomePageState extends State<MyHomePage>
       _gameAssets = AssetCollection();
       _gameState = GameState.running;
       _score = 0;
+      _isGameCompletedWithBestScore = false;
       _timeLeft = maxTime;
       _timeProgress = 1.0;
       _gameTimer?.cancel();
@@ -238,6 +254,7 @@ class _MyHomePageState extends State<MyHomePage>
       _gameTimer?.cancel();
       if (_score > _bestScore) {
         _bestScore = _score;
+        _isGameCompletedWithBestScore = true;
       }
     });
   }
@@ -302,6 +319,7 @@ class _MyHomePageState extends State<MyHomePage>
       color: tileSelectionColor,
       fontWeight: FontWeight.bold,
     );
+
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -314,66 +332,55 @@ class _MyHomePageState extends State<MyHomePage>
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
         // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: theme.colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: GameTitle(title: widget.title),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: SizedBox(
-          width: fullUISize.width,
-          height: fullUISize.height,
-          child: Column(
-            // Column is also a layout widget. It takes a list of children and
-            // arranges them vertically. By default, it sizes itself to fit its
-            // children horizontally, and tries to be as tall as its parent.
-            //
-            // Column has various properties to control how it sizes itself and
-            // how it positions its children. Here we use mainAxisAlignment to
-            // center the children vertically; the main axis here is the vertical
-            // axis because Columns are vertical (the cross axis would be
-            // horizontal).
-            //
-            // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-            // action in the IDE, or press "p" in the console), to see the
-            // wireframe for each widget.
-            mainAxisAlignment: .start,
-            children: [
-              // score display
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TriplexUIIndicator(
-                      uiIndicatorText: _formatScore(_score),
-                      uiIndicatorSymbol: Icons.sports_score,
-                      uiSemantic: 'Current score',
-                    ),
-                    TriplexUIIndicator(
-                      uiIndicatorText: _formatTime(_timeLeft),
-                      uiIndicatorSymbol: Icons.timer,
-                      uiSemantic: 'Time left',
-                    ),
-                    TriplexUIIndicator(
-                      uiIndicatorText: _formatScore(_bestScore),
-                      uiIndicatorSymbol: Icons.emoji_events,
-                      uiSemantic: 'Best score',
-                    ),
-                  ],
+        child: FittedBox(
+          fit: BoxFit.contain,
+          child: SizedBox(
+            width: uiWidth,
+            //height: maxHeight,
+            child: Column(
+              //mainAxisAlignment: .start,
+              //verticalDirection: VerticalDirection.down,
+              children: [
+                // score display
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TriplexUIIndicator(
+                        uiIndicatorText: _formatScore(_score),
+                        uiIndicatorSymbol: Icons.sports_score,
+                        uiSemantic: 'Current score',
+                      ),
+                      TriplexUIIndicator(
+                        uiIndicatorText: _formatTime(_timeLeft),
+                        uiIndicatorSymbol: Icons.timer,
+                        uiSemantic: 'Time left',
+                      ),
+                      TriplexUIIndicator(
+                        uiIndicatorText: _formatScore(_bestScore),
+                        uiIndicatorSymbol: Icons.emoji_events,
+                        uiSemantic: 'Best score',
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              // Timer
-              Padding(
-                padding: EdgeInsets.only(top: 20, bottom: 20),
-                child: TriplexTimeProgressBar(progress: _timeProgress),
-              ),
-              // Play grid
-              Expanded(
-                child: Stack(
-                  fit: StackFit.loose,
+                // Timer
+                Padding(
+                  padding: EdgeInsets.only(top: 20, bottom: 20),
+                  child: TriplexTimeProgressBar(progress: _timeProgress),
+                ),
+                // Play grid
+                Stack(
+                  fit: StackFit.passthrough,
                   children: [
                     // base widget
                     ScrollConfiguration(
@@ -429,7 +436,7 @@ class _MyHomePageState extends State<MyHomePage>
                                             ? TileView.fromAsset(
                                                 _gameAssets.assetAt(index),
                                               )
-                                            : Container()),
+                                            : TileView.empty()),
                                       ),
                                     ),
                                   ),
@@ -493,19 +500,20 @@ class _MyHomePageState extends State<MyHomePage>
                         top: 0,
                         left: 0,
                         child: TriplexBoardMessage(
-                          message: _gameState.messageText,
+                          message: (_isGameCompletedWithBestScore ? _gameState.messageTextAlt: _gameState.messageText),
                           size: const Size(500, 760),
                         ),
                       ),
                   ],
                 ),
-              ),
-              TriplexButton(
-                buttonSymbol: _gameState.buttonIcon,
-                buttonText: _gameState.buttonText,
-                onTap: () => _onGameButtonTap,
-              ),
-            ],
+                SizedBox(height: 20), //empty space
+                TriplexButton(
+                  buttonSymbol: _gameState.buttonIcon,
+                  buttonText: _gameState.buttonText,
+                  onTap: () => _onGameButtonTap,
+                ),
+              ],
+            ),
           ),
         ),
       ),

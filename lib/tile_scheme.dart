@@ -12,6 +12,9 @@ import 'asset_model.dart';
 class TileView extends StatelessWidget {
   // View representation of a tile for a given asset
   // TODO: this class is currently limited for asset with 4 criteria and 3 values per criteria
+  // TODO: this currently returning tile view with fixed 100x100 size
+  static const double tileViewSize = 100;
+
   // Mapping of criteria:
   // 1 - symbol type (flag, crown, heart)
   // 2 - nb of same repeated symbol
@@ -30,10 +33,17 @@ class TileView extends StatelessWidget {
     Color.fromARGB(255, 37, 125, 49),
   ];
   static const _backgroundColors = [
-    Color.fromARGB(255, 115, 253, 255),
-    Color.fromARGB(255, 239, 184, 237),
-    Color.fromARGB(255, 166, 255, 186),
+    Color.fromARGB(255, 148, 253, 255),
+    Color.fromARGB(255, 248, 202, 246),
+    Color.fromARGB(255, 175, 247, 191),
   ];
+
+  static final _backgroundGradients = [
+    RadialGradient(colors: [ _backgroundColors[0],Colors.black ], center:Alignment.center, radius:3.0),
+    RadialGradient(colors: [ _backgroundColors[1],Colors.black ], center:Alignment.center, radius:3.0),
+    RadialGradient(colors: [ _backgroundColors[2],Colors.black ], center:Alignment.center, radius:3.0),
+  ];
+  
   static const _fontSizes = [60.0, 40.0, 25.0];
 
   static final Map<Asset, TileView> _cache = {};
@@ -41,7 +51,7 @@ class TileView extends StatelessWidget {
   final String symbol;
   final double fontSize;
   final Color fgColor;
-  final Color bgColor;
+  final RadialGradient bgColor;
 
   const TileView({
     Key? key,
@@ -51,14 +61,25 @@ class TileView extends StatelessWidget {
     required this.bgColor,
   }) : super(key: key);
 
+  static Widget empty() {
+    return Container(width: tileViewSize, height: tileViewSize,);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final List<Shadow> shadows = [Shadow( color: theme.colorScheme.primary, offset:Offset(1,1), blurRadius: 5)];
+
     return Container(
-      color: bgColor,
+      width: tileViewSize,
+      height: tileViewSize,
+      decoration: BoxDecoration(
+        gradient: bgColor,
+      ),
       child: Center(
         child: Text(
           symbol,
-          style: TextStyle(color: fgColor, fontSize: fontSize),
+          style: TextStyle(color: fgColor, fontSize: fontSize, shadows: shadows),
         ),
       ),
     );
@@ -81,7 +102,7 @@ class TileView extends StatelessWidget {
     // criteria 3
     Color fgColor = _symbolsColors[asset.valueAt(2) - 1];
     // criteria 4
-    Color bgColor = _backgroundColors[asset.valueAt(3) - 1];
+    RadialGradient bgColor = _backgroundGradients[asset.valueAt(3) - 1];
 
     TileView tv = TileView(
       symbol: label,

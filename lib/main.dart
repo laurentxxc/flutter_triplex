@@ -27,7 +27,7 @@ class TriplexApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: mainThemeColor),
         textTheme: GoogleFonts.revaliaTextTheme(Theme.of(context).textTheme),
       ),
-      home: const MyHomePage(title: 'Triplex Game'),
+      home: const MyHomePage(title: 'Triplex'),
     );
   }
 }

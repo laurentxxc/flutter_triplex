@@ -29,8 +29,8 @@ The game uses stateful widgets for real-time updates, animations for tile change
 
 ## Current limitations
 - No data persistence (scores/best scores reset on app restart).
-- Fixed board size (24 tiles in 4x6 grid); not responsive to all screen sizes.
-- Web-specific: Scrollbars may appear on small windows; no mobile optimizations.
+- Fixed board size (24 tiles in 4x6 grid)
+- Single tile theme.
 - No sound effects or advanced animations.
 
 ## Author

@@ -1,0 +1,57 @@
+@startuml Triplex Archi Diagram
+title "Triplex Archi Diagram"
+package "Models" {
+    class AssetFactory{
+        + nb_attributes: int
+        + attribute_size: int
+
+        + generateRandomAsset() -> Asset
+        + generateRandomAssets() -> [Asset]
+
+        + generateMatchingAsset(with: [Asset]) -> Asset
+        + generateMatchingAssets(matchingLevel: int) -> [Asset]
+
+        + checkAssetsMatchingLevel(assets: [Asset]) -> int
+
+    }
+
+    class Asset{
+        + attributes: [int]
+    }
+}
+
+package "UI Components" {
+
+
+    class SelectableTile{
+        - face: Widget
+        + isSelected: bool
+
+        + toggleSelection()
+        + select()
+        + unselect()
+        + changeFace(newFace: Widget)
+        + invertColor()  
+    }
+
+    class TileFaceFactory{
+        + createTileFace(asset: Asset) -> Widget
+    }
+}
+
+
+package "Game Logic" {
+
+    class TriplexGame{
+        +
+        + assets: [Asset]
+        + score: int
+
+        + startNewGame()
+        + resetGame()
+
+        + selectAsset(asset: Asset)
+        + checkSelectedAssetsMatchingLevel() -> int
+    }
+}
+@enduml

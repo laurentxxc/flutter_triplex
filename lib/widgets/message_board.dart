@@ -31,7 +31,7 @@ class TriplexBoardMessage extends StatelessWidget {
         color: theme.colorScheme.primaryContainer.withValues(alpha: 0.9),
         margin: const EdgeInsets.all(30),
         child: Center(
-          child: Text(message, textAlign: TextAlign.center, style: textStyle),
+          child: Text(message, textAlign: TextAlign.center, style: textStyle, softWrap: true,),
         ),
       ),
     );

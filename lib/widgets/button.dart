@@ -14,6 +14,7 @@ class TriplexButton extends StatelessWidget {
   final Function onTap;
 
   TriplexButton({
+    super.key,
     required this.buttonSymbol,
     required this.buttonText,
     required this.onTap,
@@ -54,5 +55,34 @@ class TriplexButton extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class CircleButton extends StatelessWidget{
+  final IconData buttonSymbol;
+  final Function onTap;
+
+  CircleButton({
+    super.key,
+    required this.buttonSymbol,
+    required this.onTap
+    });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
+    return SizedBox(
+      height:50,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: theme.colorScheme.surfaceContainer,
+          side: BorderSide(width: 5, color: theme.colorScheme.primary),
+          elevation: 10,
+        ),
+        onPressed: onTap(),
+        child: Icon(buttonSymbol,size:40, color:theme.colorScheme.primary),
+      ),
+    ); 
   }
 }

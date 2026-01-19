@@ -10,10 +10,11 @@ import 'dart:js_interop';
 import 'package:web/web.dart' as web;
 
 class WebAudioPlayer {
+
+  static final audio = web.HTMLAudioElement();
+
   static Future<void> playSound(String assetPath) async {
     try {
-      final audio =
-          web.HTMLAudioElement(); // assetPath like '/assets/sounds/click.mp3'
       final webPath = assetPath.startsWith('/assets/')
           ? assetPath
           : '/assets/assets/$assetPath';

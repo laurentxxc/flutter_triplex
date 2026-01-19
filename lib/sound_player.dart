@@ -31,6 +31,7 @@ class SoundPlayer {
   static void init(){
     final List<String> sounds = List.from(Sound.values.map((s) => s.soundFileName));
     cache.loadAll(sounds);
+    player.setPlayerMode(PlayerMode.lowLatency);
   }
 
   static Future<void> play(Sound sound) async {

@@ -1,5 +1,5 @@
 name: triplex
-description: "A new Flutter project."
+description: "Tile matching game Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -37,6 +37,7 @@ dependencies:
   google_fonts: ^7.0.0
   url_launcher: ^6.2.6
   audioplayers: ^6.5.1
+  web: ^1.1.1
 
 dev_dependencies:
   flutter_test:

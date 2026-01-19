@@ -21,11 +21,13 @@ class TileView extends StatelessWidget {
   // 3 - symbol color (blue, red, green)
   // 4 - background color (cyan, pink, light green)
 
+// custom font for symbol ♥︎ => '0', ♛ => '1' and ⚑ => '2'
+  static final symbolStyle =TextStyle(fontFamily: 'triplex');
+
   static const _symbols = [
-    ['⚑', '♛', '♥︎'],
-    ['⚑⚑', '♛♛', '♥︎♥︎'],
-    ['⚑⚑⚑', '♛♛♛', '♥︎♥︎♥︎'],
-    //    ['⚑♛⚽︎', '♛⚑⚽︎', '♛⚑⚽︎']
+    ['0', '1', '2'],
+    ['00', '11', '22'],
+    ['000', '111', '222'],
   ];
   static const _symbolsColors = [
     Color.fromARGB(255, 66, 59, 255),
@@ -79,7 +81,7 @@ class TileView extends StatelessWidget {
       child: Center(
         child: Text(
           symbol,
-          style: TextStyle(color: fgColor, fontSize: fontSize, shadows: shadows),
+          style: symbolStyle.copyWith(color: fgColor, fontSize: fontSize, shadows: shadows),
         ),
       ),
     );

@@ -9,16 +9,16 @@
 import 'package:audioplayers/audioplayers.dart';
 
 enum Sound{
-  tile(soundFileName: 'click.wav'),
-  clock(soundFileName: 'clock.wav'),
-  matchingOK(soundFileName: 'matching_good.wav'),
-  matchingKO(soundFileName: 'matching_wrong.wav'),
-  endingBest(soundFileName: 'ending1.wav'),
-  ending(soundFileName: 'ending2.wav'),
-  volume_off(soundFileName: 'volume_off.wav'),
-  volume_on(soundFileName: 'volume_on.wav'),
-  restart(soundFileName: 'restart.wav'),
-  message(soundFileName: 'message.wav');
+  tile(soundFileName: 'click.mp3'),
+  clock(soundFileName: 'clock.mp3'),
+  matchingOK(soundFileName: 'matching_good.mp3'),
+  matchingKO(soundFileName: 'matching_wrong.mp3'),
+  endingBest(soundFileName: 'ending1.mp3'),
+  ending(soundFileName: 'ending2.mp3'),
+  volume_off(soundFileName: 'volume_off.mp3'),
+  volume_on(soundFileName: 'volume_on.mp3'),
+  restart(soundFileName: 'restart.mp3'),
+  message(soundFileName: 'message.mp3');
 
   const Sound({required this.soundFileName});
   final String soundFileName;

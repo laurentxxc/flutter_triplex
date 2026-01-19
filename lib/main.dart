@@ -10,8 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'homepage.dart';
+import 'sound_player.dart';
 
 void main() {
+  SoundPlayer.init();
   runApp(const TriplexApp());
 }
 

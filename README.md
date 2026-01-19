@@ -31,7 +31,6 @@ The game uses stateful widgets for real-time updates, animations for tile change
 - No data persistence (scores/best scores reset on app restart).
 - Fixed board size (24 tiles in 4x6 grid)
 - Single tile theme.
-- No sound effects or advanced animations.
 
 ## Author
 I am Laurent and I like playing with new languages, computer technologies and coding agents.

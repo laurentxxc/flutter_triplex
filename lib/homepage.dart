@@ -12,6 +12,7 @@ import 'dart:math';
 
 import 'asset_model.dart';
 import 'tile_scheme.dart';
+import 'sound_player.dart';
 
 // custom widgets
 import 'widgets/button.dart';
@@ -19,6 +20,9 @@ import 'widgets/indicator.dart';
 import 'widgets/time_progress.dart';
 import 'widgets/message_board.dart';
 import 'widgets/game_title.dart';
+
+const bool debug =
+      String.fromEnvironment('DEBUG_ASSETS', defaultValue: 'false') == 'true';
 
 const String introMessage = '''
 🎉 Welcome to Triplex 🎉
@@ -58,7 +62,7 @@ Congratulation ! You make the best score this time.
 
 // Game constants
 /// Initial time (in seconds) given to player
-const int maxTime = 180;
+const int maxTime = (debug ? 30 : 180);
 
 /// Score penalty per tile in case of wrong match
 const int scorePenalty = -1;
@@ -146,6 +150,7 @@ class _MyHomePageState extends State<MyHomePage>
   double _timeProgress = 1.0;
   Timer? _gameTimer;
   bool _isGameCompletedWithBestScore = false;
+  bool _isVolumeOn = false;
 
   late AnimationController _tileScoringAnimationController;
   late Animation<double> _scaleAnimation;
@@ -183,6 +188,7 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   void _onGameButtonTap() {
+    if (_isVolumeOn) SoundPlayer.play(Sound.message);
     if (_gameState == GameState.notStarted ||
         _gameState == GameState.gameOver) {
       _startGame();
@@ -193,8 +199,18 @@ class _MyHomePageState extends State<MyHomePage>
     }
   }
 
+  void _onVolumeButtonTap(){
+    (_isVolumeOn ? _mute() : _unmute());
+  }
+
+  void _onRestartButton(){
+    if (_isVolumeOn) SoundPlayer.play(Sound.restart);
+    _startGame();
+  }
+
   // Game state changes
   void _updateTime(int seconds) {
+    if (_isVolumeOn & (seconds <6)) SoundPlayer.play(Sound.clock); 
     setState(() {
       _timeLeft = seconds;
       _timeProgress = min(1.0, _timeLeft / maxTime);
@@ -202,6 +218,7 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   void _toggleTile(int index) {
+    if (_isVolumeOn) SoundPlayer.play(Sound.tile);
     setState(() {
       if (!_selectedTiles.contains(index)) {
         _selectedTiles.add(index);
@@ -257,12 +274,14 @@ class _MyHomePageState extends State<MyHomePage>
         _isGameCompletedWithBestScore = true;
       }
     });
+    if (_isVolumeOn) SoundPlayer.play(_isGameCompletedWithBestScore ? Sound.endingBest : Sound.ending);
   }
 
   void _updateBoardAndScore() {
     int matchingLevel = _gameAssets.getMatchingLevel(_selectedTiles);
     if (matchingLevel >= 0) {
       // correct match
+      if (_isVolumeOn) SoundPlayer.play(Sound.matchingOK);
       setState(() {
         _tileScore =
             (AssetsFactory.nbCriteriaPerAsset - matchingLevel) * scoreBonus;
@@ -284,6 +303,7 @@ class _MyHomePageState extends State<MyHomePage>
       });
     } else {
       // wrong match
+      if (_isVolumeOn) SoundPlayer.play(Sound.matchingKO);
       setState(() {
         _notMatchingTiles = List.from(_selectedTiles);
         _score += scorePenalty;
@@ -295,6 +315,21 @@ class _MyHomePageState extends State<MyHomePage>
       });
     }
   }
+
+  // volumes handling
+  void _mute() {
+    SoundPlayer.play(Sound.volume_off);
+    setState(() {
+      _isVolumeOn = false;      
+    });
+  }
+  void _unmute() {
+    SoundPlayer.play(Sound.volume_on);
+    setState(() {
+      _isVolumeOn = true;      
+    });
+  }
+
 
   // Heplers for building UI
   String _formatTime(int seconds) {
@@ -507,11 +542,22 @@ class _MyHomePageState extends State<MyHomePage>
                   ],
                 ),
                 SizedBox(height: 20), //empty space
-                TriplexButton(
-                  buttonSymbol: _gameState.buttonIcon,
-                  buttonText: _gameState.buttonText,
-                  onTap: () => _onGameButtonTap,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    // Volume button
+                    CircleButton(buttonSymbol: (_isVolumeOn ? Icons.volume_off : Icons.volume_up), onTap: () => _onVolumeButtonTap),
+                    // Main button
+                    TriplexButton(
+                      buttonSymbol: _gameState.buttonIcon,
+                      buttonText: _gameState.buttonText,
+                      onTap: () => _onGameButtonTap,
+                    ),
+                    // Restart button
+                    CircleButton(buttonSymbol: Icons.replay, onTap: () => _onRestartButton),
+                  ],
                 ),
+                SizedBox(height: 20), //empty space
               ],
             ),
           ),

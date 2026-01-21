@@ -46,7 +46,7 @@ class TileView extends StatelessWidget {
     RadialGradient(colors: [ _backgroundColors[2],Colors.black ], center:Alignment.center, radius:3.0),
   ];
   
-  static const _fontSizes = [60.0, 40.0, 25.0];
+  static const _fontSizes = [70.0, 45.0, 30.0];
 
   static final Map<Asset, TileView> _cache = {};
 

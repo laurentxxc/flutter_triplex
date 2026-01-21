@@ -8,6 +8,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class GameTitle extends StatelessWidget {
   final String title;
@@ -25,34 +26,51 @@ class GameTitle extends StatelessWidget {
 
     final titleSmallStyle = titleStyle.copyWith(fontSize: 10);
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(title, style: titleStyle),
-        Padding(
-          padding: const EdgeInsets.only(left:10,bottom:20),
-          child: Row(
-            children: [
-              Text('joyfully made by ', style: titleSmallStyle),
-              GestureDetector(
-                onTap: () async {
-                  const url = 'https://webresume-lxxc.vercel.app';
-                  if (await canLaunchUrl(Uri.parse(url))) {
-                    await launchUrl(Uri.parse(url));
-                  }
-                },
-                child: Text(
-                  'L.Vincent',
-                  style: titleSmallStyle.copyWith(
-                    decoration: TextDecoration.underline,
-                    fontWeight: FontWeight.w900,
-                  ),
+    Future<String> _getAppVersion() async {
+      final packageInfo = await PackageInfo.fromPlatform();
+      return packageInfo.version; // e.g., "1.0.0"
+    }
+
+    return FutureBuilder<String>(
+      future: _getAppVersion(),
+      builder: (context, snapshot) {
+        final version = snapshot.data ?? 'x.y.z';
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(title, style: titleStyle),
+            SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height:7),
+                Row(
+                  children: [
+                    Text('joyfully made by ', style: titleSmallStyle),
+                    GestureDetector(
+                      onTap: () async {
+                        const url = 'https://webresume-lxxc.vercel.app';
+                        if (await canLaunchUrl(Uri.parse(url))) {
+                          await launchUrl(Uri.parse(url));
+                        }
+                      },
+                      child: Text(
+                        'L.Vincent',
+                        style: titleSmallStyle.copyWith(
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-        ),
-      ],
+                SizedBox(height: 10),
+                Text("v$version", style: titleSmallStyle),
+              ],
+            ),
+          ],
+        );
+      }
     );
   }
 }

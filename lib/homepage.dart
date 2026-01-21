@@ -9,6 +9,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'asset_model.dart';
 import 'tile_scheme.dart';
@@ -157,6 +158,18 @@ class _MyHomePageState extends State<MyHomePage>
   List<int> _matchingTiles = [];
   List<int> _notMatchingTiles = [];
 
+  Future<void> _loadBestScore() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _bestScore = prefs.getInt('bestScore') ?? 0;
+    });
+  }
+
+  Future<void> _saveBestScore(int score) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('bestScore',score);
+  }
+
   @override
   void initState() {
     _tileScoringAnimationController = AnimationController(
@@ -167,6 +180,8 @@ class _MyHomePageState extends State<MyHomePage>
       begin: 1.0,
       end: 1.5,
     ).animate(_tileScoringAnimationController);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadBestScore());
 
     super.initState();
   }
@@ -231,6 +246,7 @@ class _MyHomePageState extends State<MyHomePage>
   void _startGame() {
     setState(() {
       // init game assets
+      _selectedTiles.clear(); //clean in case of restart
       _gameAssets = AssetCollection();
       _gameState = GameState.running;
       _score = 0;
@@ -271,6 +287,7 @@ class _MyHomePageState extends State<MyHomePage>
       _gameTimer?.cancel();
       if (_score > _bestScore) {
         _bestScore = _score;
+        _saveBestScore(_bestScore);
         _isGameCompletedWithBestScore = true;
       }
     });

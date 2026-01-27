@@ -31,7 +31,7 @@ class TriplexButton extends StatelessWidget {
 
     return SizedBox(
       height: 50,
-      width: 250,
+      width: 300,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           elevation: 10,

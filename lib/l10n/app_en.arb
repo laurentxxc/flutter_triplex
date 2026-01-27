@@ -1,0 +1,59 @@
+{
+  "@@locale": "en",
+  "@@last_modified": "2025-01-26T10:00:00.000Z",
+  
+  "appTitle": "Triplex",
+  "@appTitle": {
+    "description": "Application title"
+  },
+  
+  "startButton": "Start",
+  "@startButton": {
+    "description": "Text shown on the start game button"
+  },
+  
+  "pauseButton": "Pause",
+  "@pauseButton": {
+    "description": "Text shown on the pause game button"
+  },
+  
+  "resumeButton": "Resume",
+  "@resumeButton": {
+    "description": "Text shown on the resume game button"
+  },
+  
+  "currentScore": "Current score",
+  "@currentScore": {
+    "description": "Semantic label for current score indicator"
+  },
+  
+  "timeLeft": "Time left",
+  "@timeLeft": {
+    "description": "Semantic label for time left indicator"
+  },
+  
+  "bestScore": "Best score",
+  "@bestScore": {
+    "description": "Semantic label for best score indicator"
+  },
+  
+  "welcomeMessage": "🎉 Welcome to Triplex 🎉\n\nIn this game, you have limited time to find matching triplets of tiles based on their attributes.\nEach tile has different attributes (e.g. representation, size, color, background).\n\nSelect three tiles to form a match.\n\nYou have a valid match if, for each attribute, the three tiles are either all the same or all different.\nThe goal is to find as many valid matches as possible before time runs out!\n\nGood luck and have fun! 🍀",
+  "@welcomeMessage": {
+    "description": "Welcome message shown when game starts"
+  },
+  
+  "pauseMessage": "The game is paused.\n\nTake a break ☕️ and resume when you're ready!",
+  "@pauseMessage": {
+    "description": "Message shown when game is paused"
+  },
+  
+  "gameOverMessage": "Game Over! Time's up.\n\nTry to beat your best score next time!\n\n😜",
+  "@gameOverMessage": {
+    "description": "Message shown when game ends normally"
+  },
+  
+  "gameOverMessageBestScore": "Game Over! Time's up.\n\nCongratulation ! You make the best score this time.\n\n🎉",
+  "@gameOverMessageBestScore": {
+    "description": "Message shown when game ends with new best score"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "@@locale": "fr",
+  "@@last_modified": "2025-01-26T10:00:00.000Z",
+  
+  "appTitle": "Triplex",
+  "@appTitle": {
+    "description": "Application title"
+  },
+  
+  "startButton": "Commencer",
+  "@startButton": {
+    "description": "Text shown on the start game button"
+  },
+  
+  "pauseButton": "Pause",
+  "@pauseButton": {
+    "description": "Text shown on the pause game button"
+  },
+  
+  "resumeButton": "Reprendre",
+  "@resumeButton": {
+    "description": "Text shown on the resume game button"
+  },
+  
+  "currentScore": "Score actuel",
+  "@currentScore": {
+    "description": "Semantic label for current score indicator"
+  },
+  
+  "timeLeft": "Temps restant",
+  "@timeLeft": {
+    "description": "Semantic label for time left indicator"
+  },
+  
+  "bestScore": "Meilleur score",
+  "@bestScore": {
+    "description": "Semantic label for best score indicator"
+  },
+  
+  "welcomeMessage": "🎉 Bienvenue dans Triplex 🎉\n\nDans ce jeu, vous avez un temps limité pour trouver des triplets de tuiles correspondantes basées sur leurs attributs.\nChaque tuile a différents attributs (ex: représentation, taille, couleur, fond).\n\nSélectionnez trois tuiles pour former une correspondance.\n\nVous avez une correspondance valide si, pour chaque attribut, les trois tuiles sont soit toutes identiques soit toutes différentes.\nLe but est de trouver autant de correspondances valides que possible avant la fin du temps!\n\nBonne chance et amusez-vous bien! 🍀",
+  "@welcomeMessage": {
+    "description": "Welcome message shown when game starts"
+  },
+  
+  "pauseMessage": "Le jeu est en pause.\n\nPrenez une pause ☕️ et reprenez quand vous êtes prêt!",
+  "@pauseMessage": {
+    "description": "Message shown when game is paused"
+  },
+  
+  "gameOverMessage": "Jeu terminé! Le temps est écoulé.\n\nEssayez de battre votre meilleur score la prochaine fois!\n\n😜",
+  "@gameOverMessage": {
+    "description": "Message shown when game ends normally"
+  },
+  
+  "gameOverMessageBestScore": "Jeu terminé! Le temps est écoulé.\n\nFélicitations! Vous avez obtenu le meilleur score cette fois-ci.\n\n🎉",
+  "@gameOverMessageBestScore": {
+    "description": "Message shown when game ends with new best score"
+  }
+}

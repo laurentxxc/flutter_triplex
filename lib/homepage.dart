@@ -14,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'asset_model.dart';
 import 'tile_scheme.dart';
 import 'sound_player.dart';
+import 'generated/app_localizations.dart';
 
 // custom widgets
 import 'widgets/button.dart';
@@ -21,45 +22,10 @@ import 'widgets/indicator.dart';
 import 'widgets/time_progress.dart';
 import 'widgets/message_board.dart';
 import 'widgets/game_title.dart';
+import 'widgets/language_switcher.dart';
 
 const bool debug =
-      String.fromEnvironment('DEBUG_ASSETS', defaultValue: 'false') == 'true';
-
-const String introMessage = '''
-🎉 Welcome to Triplex 🎉
-
-In this game, you have limited time to find matching triplets of tiles based on their attributes.
-Each tile has different attributes (e.g. representation, size, color, background).
-
-Select three tiles to form a match.
-
-You have a valid match if, for each attribute, the three tiles are either all the same or all different.
-The goal is to find as many valid matches as possible before time runs out!
-
-Good luck and have fun! 🍀
-''';
-
-const String pauseMessage = '''
-The game is paused.
-
-Take a break ☕️ and resume when you're ready!
-''';
-
-const String gameOverMessage = '''
-Game Over! Time's up.
-
-Try to beat your best score next time!
-
-😜
-''';
-
-const String gameOverMessageBestScore = '''
-Game Over! Time's up.
-
-Congratulation ! You make the best score this time.
-
-🎉
-''';
+    String.fromEnvironment('DEBUG_ASSETS', defaultValue: 'false') == 'true';
 
 // Game constants
 /// Initial time (in seconds) given to player
@@ -86,37 +52,74 @@ const Color tileSelectionColor = Colors.orange;
 enum GameState {
   notStarted(
     buttonIcon: Icons.play_arrow,
-    buttonText: "Start",
-    messageText: introMessage,
+    messageTextKey: "welcomeMessage",
+    buttonTextKey: "startButton",
   ),
-  running(buttonIcon: Icons.pause, buttonText: "Pause", messageText: ""),
+  running(
+    buttonIcon: Icons.pause,
+    messageTextKey: "",
+    buttonTextKey: "pauseButton",
+  ),
   paused(
     buttonIcon: Icons.play_arrow,
-    buttonText: "Resume",
-    messageText: pauseMessage,
+    messageTextKey: "pauseMessage",
+    buttonTextKey: "resumeButton",
   ),
   gameOver(
     buttonIcon: Icons.play_arrow,
-    buttonText: "Start",
-    messageText: gameOverMessage, 
-    messageTextAlt: gameOverMessageBestScore,
+    messageTextKey: "gameOverMessage",
+    messageTextAltKey: "gameOverMessageBestScore",
+    buttonTextKey: "startButton",
   );
 
   const GameState({
-    required this.buttonText,
+    required this.buttonTextKey,
     required this.buttonIcon,
-    required this.messageText,
-    this.messageTextAlt = ''
+    required this.messageTextKey,
+    this.messageTextAltKey = '',
   });
 
-  final String buttonText;
+  final String buttonTextKey;
   final IconData buttonIcon;
-  final String messageText;
-  final String messageTextAlt;
+  final String messageTextKey;
+  final String messageTextAltKey;
+
+  String getButtonText(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (buttonTextKey) {
+      case 'startButton':
+        return l10n.startButton;
+      case 'pauseButton':
+        return l10n.pauseButton;
+      case 'resumeButton':
+        return l10n.resumeButton;
+      default:
+        return buttonTextKey;
+    }
+  }
+
+  String getMessageText(BuildContext context, {bool useAlt = false}) {
+    final l10n = AppLocalizations.of(context)!;
+    final key = useAlt && messageTextAltKey.isNotEmpty
+        ? messageTextAltKey
+        : messageTextKey;
+    switch (key) {
+      case 'welcomeMessage':
+        return l10n.welcomeMessage;
+      case 'pauseMessage':
+        return l10n.pauseMessage;
+      case 'gameOverMessage':
+        return l10n.gameOverMessage;
+      case 'gameOverMessageBestScore':
+        return l10n.gameOverMessageBestScore;
+      default:
+        return key;
+    }
+  }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.title, this.onLocaleChanged});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -128,6 +131,7 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+  final Function(Locale)? onLocaleChanged;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -167,7 +171,7 @@ class _MyHomePageState extends State<MyHomePage>
 
   Future<void> _saveBestScore(int score) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('bestScore',score);
+    await prefs.setInt('bestScore', score);
   }
 
   @override
@@ -214,18 +218,18 @@ class _MyHomePageState extends State<MyHomePage>
     }
   }
 
-  void _onVolumeButtonTap(){
+  void _onVolumeButtonTap() {
     (_isVolumeOn ? _mute() : _unmute());
   }
 
-  void _onRestartButton(){
+  void _onRestartButton() {
     if (_isVolumeOn) SoundPlayer.play(Sound.restart);
     _startGame();
   }
 
   // Game state changes
   void _updateTime(int seconds) {
-    if (_isVolumeOn & (seconds <6)) SoundPlayer.play(Sound.clock); 
+    if (_isVolumeOn & (seconds < 6)) SoundPlayer.play(Sound.clock);
     setState(() {
       _timeLeft = seconds;
       _timeProgress = min(1.0, _timeLeft / maxTime);
@@ -291,7 +295,10 @@ class _MyHomePageState extends State<MyHomePage>
         _isGameCompletedWithBestScore = true;
       }
     });
-    if (_isVolumeOn) SoundPlayer.play(_isGameCompletedWithBestScore ? Sound.endingBest : Sound.ending);
+    if (_isVolumeOn)
+      SoundPlayer.play(
+        _isGameCompletedWithBestScore ? Sound.endingBest : Sound.ending,
+      );
   }
 
   void _updateBoardAndScore() {
@@ -337,16 +344,16 @@ class _MyHomePageState extends State<MyHomePage>
   void _mute() {
     SoundPlayer.play(Sound.volume_off);
     setState(() {
-      _isVolumeOn = false;      
-    });
-  }
-  void _unmute() {
-    SoundPlayer.play(Sound.volume_on);
-    setState(() {
-      _isVolumeOn = true;      
+      _isVolumeOn = false;
     });
   }
 
+  void _unmute() {
+    SoundPlayer.play(Sound.volume_on);
+    setState(() {
+      _isVolumeOn = true;
+    });
+  }
 
   // Heplers for building UI
   String _formatTime(int seconds) {
@@ -388,6 +395,7 @@ class _MyHomePageState extends State<MyHomePage>
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: GameTitle(title: widget.title),
+        actions: [LanguageSwitcher(onLocaleChanged: widget.onLocaleChanged)],
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -410,17 +418,17 @@ class _MyHomePageState extends State<MyHomePage>
                       TriplexUIIndicator(
                         uiIndicatorText: _formatScore(_score),
                         uiIndicatorSymbol: Icons.sports_score,
-                        uiSemantic: 'Current score',
+                        uiSemantic: AppLocalizations.of(context)!.currentScore,
                       ),
                       TriplexUIIndicator(
                         uiIndicatorText: _formatTime(_timeLeft),
                         uiIndicatorSymbol: Icons.timer,
-                        uiSemantic: 'Time left',
+                        uiSemantic: AppLocalizations.of(context)!.timeLeft,
                       ),
                       TriplexUIIndicator(
                         uiIndicatorText: _formatScore(_bestScore),
                         uiIndicatorSymbol: Icons.emoji_events,
-                        uiSemantic: 'Best score',
+                        uiSemantic: AppLocalizations.of(context)!.bestScore,
                       ),
                     ],
                   ),
@@ -552,7 +560,10 @@ class _MyHomePageState extends State<MyHomePage>
                         top: 0,
                         left: 0,
                         child: TriplexBoardMessage(
-                          message: (_isGameCompletedWithBestScore ? _gameState.messageTextAlt: _gameState.messageText),
+                          message: _gameState.getMessageText(
+                            context,
+                            useAlt: _isGameCompletedWithBestScore,
+                          ),
                           size: const Size(500, 760),
                         ),
                       ),
@@ -563,15 +574,23 @@ class _MyHomePageState extends State<MyHomePage>
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     // Volume button
-                    CircleButton(buttonSymbol: (_isVolumeOn ? Icons.volume_off : Icons.volume_up), onTap: () => _onVolumeButtonTap),
+                    CircleButton(
+                      buttonSymbol: (_isVolumeOn
+                          ? Icons.volume_off
+                          : Icons.volume_up),
+                      onTap: () => _onVolumeButtonTap,
+                    ),
                     // Main button
                     TriplexButton(
                       buttonSymbol: _gameState.buttonIcon,
-                      buttonText: _gameState.buttonText,
+                      buttonText: _gameState.getButtonText(context),
                       onTap: () => _onGameButtonTap,
                     ),
                     // Restart button
-                    CircleButton(buttonSymbol: Icons.replay, onTap: () => _onRestartButton),
+                    CircleButton(
+                      buttonSymbol: Icons.replay,
+                      onTap: () => _onRestartButton,
+                    ),
                   ],
                 ),
                 SizedBox(height: 20), //empty space

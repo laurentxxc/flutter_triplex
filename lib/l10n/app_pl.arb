@@ -1,0 +1,73 @@
+{
+  "@@locale": "pl",
+  "@@last_modified": "2025-01-30T10:00:00.000Z",
+  
+  "localeLogo": "🇵🇱",
+  "@localeLogo": {
+    "description": "Logo used for the locale"
+  },
+
+  "localeDesc":"Polski",
+  "@localeDesc": {
+    "description": "Description of the locale"
+  },
+
+  "settingLanguageMenu":"Język",
+  "settingsSoundMenu":"Dźwięk/Efekty",
+  "settingsTutorial":"Samouczek",
+
+  "appTitle": "Triplex",
+  "@appTitle": {
+    "description": "Application title"
+  },
+  
+  "startButton": "Rozpocznij",
+  "@startButton": {
+    "description": "Text shown on the start game button"
+  },
+  
+  "pauseButton": "Pauza",
+  "@pauseButton": {
+    "description": "Text shown on the pause game button"
+  },
+  
+  "resumeButton": "Wznów",
+  "@resumeButton": {
+    "description": "Text shown on the resume game button"
+  },
+  
+  "currentScore": "Aktualny wynik",
+  "@currentScore": {
+    "description": "Semantic label for current score indicator"
+  },
+  
+  "timeLeft": "Pozostały czas",
+  "@timeLeft": {
+    "description": "Semantic label for time left indicator"
+  },
+  
+  "bestScore": "Najlepszy wynik",
+  "@bestScore": {
+    "description": "Semantic label for best score indicator"
+  },
+  
+  "welcomeMessage": "🎉 Witaj w Triplex 🎉\n\nW tej grze masz ograniczony czas na znalezienie pasujących trójek kafelków na podstawie ich atrybutów.\nKażdy kafelek ma różne atrybuty (np. reprezentacja, rozmiar, kolor, tło).\n\nWybierz trzy kafelki, aby utworzyć dopasowanie.\n\nMasz prawidłowe dopasowanie, jeśli dla każdego atrybutu trzy kafelki są albo wszystkie takie same, albo wszystkie różne.\nCelem jest znalezienie jak największej liczby prawidłowych dopasowań przed upływem czasu!\n\nPowodzenia i baw się dobrze! 🍀",
+  "@welcomeMessage": {
+    "description": "Welcome message shown when game starts"
+  },
+  
+  "pauseMessage": "Gra jest wstrzymana.\n\nZrób przerwę ☕️ i wznów, gdy będziesz gotowy.",
+  "@pauseMessage": {
+    "description": "Message shown when game is paused"
+  },
+  
+  "gameOverMessage": "Koniec gry! Czas minął.\n\nSpróbuj pobić swój najlepszy wynik następnym razem!\n\n😜",
+  "@gameOverMessage": {
+    "description": "Message shown when game ends normally"
+  },
+  
+  "gameOverMessageBestScore": "Koniec gry! Czas minął.\n\nGratulacje! Tym razem uzyskałeś najlepszy wynik.\n\n🎉",
+  "@gameOverMessageBestScore": {
+    "description": "Message shown when game ends with new best score"
+  }
+}

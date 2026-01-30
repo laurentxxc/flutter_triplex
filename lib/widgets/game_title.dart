@@ -26,13 +26,13 @@ class GameTitle extends StatelessWidget {
 
     final titleSmallStyle = titleStyle.copyWith(fontSize: 10);
 
-    Future<String> _getAppVersion() async {
+    Future<String> getAppVersion() async {
       final packageInfo = await PackageInfo.fromPlatform();
       return packageInfo.version; // e.g., "1.0.0"
     }
 
     return FutureBuilder<String>(
-      future: _getAppVersion(),
+      future: getAppVersion(),
       builder: (context, snapshot) {
         final version = snapshot.data ?? 'x.y.z';
         return Row(

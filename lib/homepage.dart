@@ -22,7 +22,7 @@ import 'widgets/indicator.dart';
 import 'widgets/time_progress.dart';
 import 'widgets/message_board.dart';
 import 'widgets/game_title.dart';
-import 'widgets/language_switcher.dart';
+import 'widgets/settings_panel.dart';
 
 const bool debug =
     String.fromEnvironment('DEBUG_ASSETS', defaultValue: 'false') == 'true';
@@ -119,7 +119,7 @@ enum GameState {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title, this.onLocaleChanged});
+  const MyHomePage({super.key, required this.title, required this.onLocaleChanged,});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -131,7 +131,7 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
-  final Function(Locale)? onLocaleChanged;
+  final Function(Locale) onLocaleChanged;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -156,6 +156,8 @@ class _MyHomePageState extends State<MyHomePage>
   Timer? _gameTimer;
   bool _isGameCompletedWithBestScore = false;
   bool _isVolumeOn = false;
+  bool _isSettingsOn = false;
+  bool _isTutorialOn = true;
 
   late AnimationController _tileScoringAnimationController;
   late Animation<double> _scaleAnimation;
@@ -218,8 +220,28 @@ class _MyHomePageState extends State<MyHomePage>
     }
   }
 
-  void _onVolumeButtonTap() {
-    (_isVolumeOn ? _mute() : _unmute());
+  void _onVolumeToggleSwitch(bool target) {
+    (target ? _soundOn() : _soundOff());
+  }
+
+  void _onSettingsButtonTap() {
+    if (_isVolumeOn) SoundPlayer.play(Sound.message);
+    if (_isSettingsOn) {
+      _closeSettings();
+    } else {
+      if (_gameState == GameState.running) _pauseGame();
+      _openSettings();
+    }
+  }
+
+  void _onTutorialSettingEvt() {
+    // game is not running normally because we are in Settings
+    if (_gameState == GameState.running) return;
+    if (_isVolumeOn) SoundPlayer.play(Sound.message);
+    setState(() {
+      _isSettingsOn = false;
+      _isTutorialOn = true;
+    });
   }
 
   void _onRestartButton() {
@@ -250,6 +272,8 @@ class _MyHomePageState extends State<MyHomePage>
   void _startGame() {
     setState(() {
       // init game assets
+      _isSettingsOn = false;
+      _isTutorialOn = false;
       _selectedTiles.clear(); //clean in case of restart
       _gameAssets = AssetCollection();
       _gameState = GameState.running;
@@ -275,6 +299,8 @@ class _MyHomePageState extends State<MyHomePage>
 
   void _resumeGame() {
     setState(() {
+      _isSettingsOn = false;
+      _isTutorialOn = false;
       _gameState = GameState.running;
       _gameTimer?.cancel();
       _gameTimer = Timer.periodic(
@@ -295,10 +321,11 @@ class _MyHomePageState extends State<MyHomePage>
         _isGameCompletedWithBestScore = true;
       }
     });
-    if (_isVolumeOn)
+    if (_isVolumeOn) {
       SoundPlayer.play(
         _isGameCompletedWithBestScore ? Sound.endingBest : Sound.ending,
       );
+    }
   }
 
   void _updateBoardAndScore() {
@@ -340,15 +367,29 @@ class _MyHomePageState extends State<MyHomePage>
     }
   }
 
+  // handle settings panel
+  void _openSettings(){
+    setState(() {
+      _isSettingsOn = true;
+    });
+  }
+
+  void _closeSettings(){
+    setState( () {
+      _isSettingsOn = false;
+    });
+  }
+
+
   // volumes handling
-  void _mute() {
+  void _soundOff() {
     SoundPlayer.play(Sound.volume_off);
     setState(() {
       _isVolumeOn = false;
     });
   }
 
-  void _unmute() {
+  void _soundOn() {
     SoundPlayer.play(Sound.volume_on);
     setState(() {
       _isVolumeOn = true;
@@ -366,7 +407,7 @@ class _MyHomePageState extends State<MyHomePage>
     if (score >= 0) {
       return score.toString().padLeft(4, '0');
     } else {
-      return "-" + (score * -1).toString().padLeft(3, '0');
+      return "-${(score * -1).toString().padLeft(3, '0')}";
     }
   }
 
@@ -395,7 +436,6 @@ class _MyHomePageState extends State<MyHomePage>
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: GameTitle(title: widget.title),
-        actions: [LanguageSwitcher(onLocaleChanged: widget.onLocaleChanged)],
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -560,12 +600,26 @@ class _MyHomePageState extends State<MyHomePage>
                         top: 0,
                         left: 0,
                         child: TriplexBoardMessage(
-                          message: _gameState.getMessageText(
+                          message: (_isTutorialOn) ?
+                            AppLocalizations.of(context)!.welcomeMessage
+                          : _gameState.getMessageText(
                             context,
                             useAlt: _isGameCompletedWithBestScore,
                           ),
                           size: const Size(500, 760),
                         ),
+                      ),
+                    if (_isSettingsOn)
+                      Positioned(
+                        top:0,
+                        left:0,
+                        child: SettingsPanel(
+                          size: const Size(500,760),
+                          isSoundOn: _isVolumeOn, 
+                          onSoundTap: (b) => _onVolumeToggleSwitch(b), 
+                          onLanguageSelect: (loc) => widget.onLocaleChanged(loc),
+                          onTutorialTap: () => _onTutorialSettingEvt,
+                          ),
                       ),
                   ],
                 ),
@@ -573,12 +627,9 @@ class _MyHomePageState extends State<MyHomePage>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    // Volume button
                     CircleButton(
-                      buttonSymbol: (_isVolumeOn
-                          ? Icons.volume_off
-                          : Icons.volume_up),
-                      onTap: () => _onVolumeButtonTap,
+                      buttonSymbol: Icons.settings,
+                      onTap: () => _onSettingsButtonTap,
                     ),
                     // Main button
                     TriplexButton(

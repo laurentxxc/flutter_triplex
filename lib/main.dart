@@ -70,10 +70,8 @@ class _TriplexAppState extends State<TriplexApp> {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('en'), // English
-        Locale('fr'), // French
-      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+
       localeResolutionCallback: (locale, supportedLocales) {
         if (_locale != null) return _locale;
         if (locale != null) {
@@ -85,7 +83,7 @@ class _TriplexAppState extends State<TriplexApp> {
         }
         return supportedLocales.first;
       },
-      home: MyHomePage(title: 'Triplex', onLocaleChanged: _setLocale),
+      home: MyHomePage(title: 'Triplex', onLocaleChanged: _setLocale,),
     );
   }
 }

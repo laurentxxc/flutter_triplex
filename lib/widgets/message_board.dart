@@ -18,7 +18,7 @@ class TriplexBoardMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textStyle = theme.textTheme.displaySmall!.copyWith(
-      fontSize: 22,
+      fontSize: 21,
       color: theme.colorScheme.primary,
       fontWeight: FontWeight.bold,
     );

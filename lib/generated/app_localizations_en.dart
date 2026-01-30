@@ -9,6 +9,21 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get localeLogo => '🇬🇧';
+
+  @override
+  String get localeDesc => 'English';
+
+  @override
+  String get settingLanguageMenu => 'Language';
+
+  @override
+  String get settingsSoundMenu => 'Sound/FX';
+
+  @override
+  String get settingsTutorial => 'Tutorial';
+
+  @override
   String get appTitle => 'Triplex';
 
   @override

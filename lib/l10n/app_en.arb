@@ -2,6 +2,20 @@
   "@@locale": "en",
   "@@last_modified": "2025-01-26T10:00:00.000Z",
   
+  "localeLogo": "🇬🇧",
+  "@localeLogo": {
+    "description": "Logo used for the locale"
+  },
+
+  "localeDesc":"English",
+  "@localeDesc": {
+    "description": "Description of the locale"
+  },
+
+  "settingLanguageMenu":"Language",
+  "settingsSoundMenu":"Sound/FX",
+  "settingsTutorial":"Tutorial",
+  
   "appTitle": "Triplex",
   "@appTitle": {
     "description": "Application title"

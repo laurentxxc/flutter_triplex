@@ -1,0 +1,73 @@
+{
+  "@@locale": "de",
+  "@@last_modified": "2025-01-30T10:00:00.000Z",
+  
+  "localeLogo": "🇩🇪",
+  "@localeLogo": {
+    "description": "Logo used for the locale"
+  },
+
+  "localeDesc":"Deutsch",
+  "@localeDesc": {
+    "description": "Description of the locale"
+  },
+
+  "settingLanguageMenu":"Sprache",
+  "settingsSoundMenu":"Ton/Effekte",
+  "settingsTutorial":"Tutorial",
+
+  "appTitle": "Triplex",
+  "@appTitle": {
+    "description": "Application title"
+  },
+  
+  "startButton": "Starten",
+  "@startButton": {
+    "description": "Text shown on the start game button"
+  },
+  
+  "pauseButton": "Pause",
+  "@pauseButton": {
+    "description": "Text shown on the pause game button"
+  },
+  
+  "resumeButton": "Fortsetzen",
+  "@resumeButton": {
+    "description": "Text shown on the resume game button"
+  },
+  
+  "currentScore": "Aktueller Punktestand",
+  "@currentScore": {
+    "description": "Semantic label for current score indicator"
+  },
+  
+  "timeLeft": "Verbleibende Zeit",
+  "@timeLeft": {
+    "description": "Semantic label for time left indicator"
+  },
+  
+  "bestScore": "Bester Punktestand",
+  "@bestScore": {
+    "description": "Semantic label for best score indicator"
+  },
+  
+  "welcomeMessage": "🎉 Willkommen bei Triplex 🎉\n\nIn diesem Spiel haben Sie begrenzte Zeit, um passende Dreiergruppen von Kacheln basierend auf ihren Attributen zu finden.\nJede Kachel hat unterschiedliche Attribute (z.B. Darstellung, Größe, Farbe, Hintergrund).\n\nWählen Sie drei Kacheln, um eine Übereinstimmung zu bilden.\n\nSie haben eine gültige Übereinstimmung, wenn für jedes Attribut die drei Kacheln entweder alle gleich oder alle unterschiedlich sind.\nDas Ziel ist, so viele gültige Übereinstimmungen wie möglich zu finden, bevor die Zeit abläuft!\n\nViel Glück und haben Sie Spaß! 🍀",
+  "@welcomeMessage": {
+    "description": "Welcome message shown when game starts"
+  },
+  
+  "pauseMessage": "Das Spiel ist pausiert.\n\nMachen Sie eine Pause ☕️ und setzen Sie fort, wenn Sie bereit sind.",
+  "@pauseMessage": {
+    "description": "Message shown when game is paused"
+  },
+  
+  "gameOverMessage": "Spiel beendet! Zeit abgelaufen.\n\nVersuchen Sie, Ihren besten Punktestand beim nächsten Mal zu schlagen.\n\n😜",
+  "@gameOverMessage": {
+    "description": "Message shown when game ends normally"
+  },
+  
+  "gameOverMessageBestScore": "Spiel beendet! Zeit abgelaufen.\n\nHerzlichen Glückwunsch! Sie haben diesmal den besten Punktestand erreicht.\n\n🎉",
+  "@gameOverMessageBestScore": {
+    "description": "Message shown when game ends with new best score"
+  }
+}

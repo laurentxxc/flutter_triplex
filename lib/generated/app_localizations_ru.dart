@@ -15,6 +15,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get localeDesc => 'Русский';
 
   @override
+  String get settingsTitle => 'Настройки';
+
+  @override
   String get settingLanguageMenu => 'Язык';
 
   @override

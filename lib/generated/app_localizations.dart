@@ -124,6 +124,12 @@ abstract class AppLocalizations {
   /// **'English'**
   String get localeDesc;
 
+  /// Title for the settings panel
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
   /// No description provided for @settingLanguageMenu.
   ///
   /// In en, this message translates to:

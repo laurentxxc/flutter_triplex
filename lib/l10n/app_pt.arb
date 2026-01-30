@@ -12,6 +12,10 @@
     "description": "Description of the locale"
   },
 
+  "settingsTitle":"Configurações",
+  "@settingsTitle": {
+    "description": "Title for the settings panel"
+  },
   "settingLanguageMenu":"Idioma",
   "settingsSoundMenu":"Som/Efeitos",
   "settingsTutorial":"Tutorial",

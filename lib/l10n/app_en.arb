@@ -12,10 +12,14 @@
     "description": "Description of the locale"
   },
 
+  "settingsTitle":"Settings",
+  "@settingsTitle": {
+    "description": "Title for the settings panel"
+  },
   "settingLanguageMenu":"Language",
   "settingsSoundMenu":"Sound/FX",
   "settingsTutorial":"Tutorial",
-  
+
   "appTitle": "Triplex",
   "@appTitle": {
     "description": "Application title"

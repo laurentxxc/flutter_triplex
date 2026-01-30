@@ -9,6 +9,8 @@
 import 'package:flutter/material.dart';
 import '../generated/app_localizations.dart';
 
+const Widget menuSettingSeparator = SizedBox(height:25);
+
 Widget createLanguageViewItem(AppLocalizations loc, TextStyle style) {
   return Text(
     "${loc.localeLogo}  ${loc.localeDesc}",
@@ -32,14 +34,14 @@ List<PopupMenuItem<Locale>> createLanguageMenu(TextStyle style) {
 class SettingsPanel extends StatelessWidget {
   final Size size;
   final Function(bool) onSoundTap;
-  final Function(Locale) onLanguageSelect;
+  final Function(Locale) onLanguageTap;
   final Function onTutorialTap;
   final bool isSoundOn;
 
   SettingsPanel({
     required this.size,
     required this.onSoundTap,
-    required this.onLanguageSelect,
+    required this.onLanguageTap,
     required this.onTutorialTap,
     required this.isSoundOn,
   });
@@ -48,7 +50,7 @@ class SettingsPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final menuTextStyle = theme.textTheme.displaySmall!.copyWith(
-      fontSize: 22,
+      fontSize: 20,
       color: theme.colorScheme.primary,
       fontWeight: FontWeight.bold,
     );
@@ -58,6 +60,8 @@ class SettingsPanel extends StatelessWidget {
       fontWeight: FontWeight.bold,
     );
     final AppLocalizations loc = AppLocalizations.of(context)!;
+    
+    final GlobalKey<PopupMenuButtonState<Locale>> _popupMenuKey = GlobalKey();
 
     return SizedBox(
       width: size.width,
@@ -71,90 +75,116 @@ class SettingsPanel extends StatelessWidget {
 
           children: [
             Text(
-              loc.settingLanguageMenu,
+              loc.settingsTitle,
               textAlign: TextAlign.center,
-              style: menuTextStyle,
+              style: menuTextStyle.copyWith(fontSize: 30),
               softWrap: true,
             ),
-            const SizedBox(height: 10),
-            PopupMenuButton<Locale>(
-              tooltip: '',
-              onSelected: (value) {
-                onLanguageSelect(value);
-              },
-              itemBuilder: (context) => createLanguageMenu(langTextStyle),
-              child: Card(
-                color: theme.colorScheme.primaryContainer,
+            
+            menuSettingSeparator,
+            menuSettingSeparator,
+            
+            SizedBox(
+              width: 300,
+              height: 60,
+              child: PopupMenuButton<Locale>(
+                key: _popupMenuKey,
+                position: PopupMenuPosition.over,
+                offset: const Offset(40, 30),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
                   side: BorderSide(width: 1, color: theme.colorScheme.primary),
-                ),
-                elevation: 1,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 5,
-                    horizontal: 15,
+                  borderRadius: BorderRadius.circular(20.0)
                   ),
-                  child: createLanguageViewItem(loc, langTextStyle),
-                ),
+                tooltip: '',
+                onSelected: (value) {
+                  onLanguageTap(value);
+                },
+                itemBuilder: (context) => createLanguageMenu(langTextStyle),
+                child: SettingsButton(
+                  leftText: loc.settingLanguageMenu, 
+                  rightLogo: Text(loc.localeLogo, style: const TextStyle(fontSize: 25)), 
+                  onTap: () {
+                    // Programmatically trigger the popup menu
+                    _popupMenuKey.currentState?.showButtonMenu();                   
+                  }
+                  ),
               ),
             ),
 
-            const SizedBox(height: 25),
+            menuSettingSeparator,
 
             // sounds settings
-            Text(
-              loc.settingsSoundMenu,
-              textAlign: TextAlign.center,
-              style: menuTextStyle,
-              softWrap: true,
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.volume_off, color: theme.colorScheme.primary),
-                Switch(
-                  value: isSoundOn,
-                  inactiveTrackColor: theme.colorScheme.surfaceContainer,
-                  inactiveThumbColor: theme.colorScheme.primary,
-                  activeTrackColor: theme.colorScheme.primary,
-                  activeThumbColor: theme.colorScheme.surfaceContainer,
-                  hoverColor: theme.colorScheme.onPrimary.withAlpha(60),
-                  onChanged: (value) {
-                    onSoundTap(value);
-                  },
-                ),
-                Icon(Icons.volume_up, color: theme.colorScheme.primary),
-              ],
-            ),
-
-            const SizedBox(height: 25),
-
-            Text(
-              loc.settingsTutorial,
-              textAlign: TextAlign.center,
-              style: menuTextStyle,
-              softWrap: true,
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: onTutorialTap(),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: theme.colorScheme.primaryContainer,
-                side: BorderSide(width: 2, color: theme.colorScheme.primary),
-                elevation: 3,
+            SizedBox(
+              width: 300,
+              height: 60,
+              child: SettingsButton(
+                leftText: loc.settingsSoundMenu, 
+                rightLogo: Icon((isSoundOn) ? Icons.volume_up : Icons.volume_off, size:40, color: theme.colorScheme.primary), 
+                onTap: () => onSoundTap(!isSoundOn),
               ),
-              child: Icon(
-                Icons.help_center,
-                size: 29,
-                color: theme.colorScheme.primary,
+            ),
+
+            menuSettingSeparator,
+
+           // Tutorial access
+            SizedBox(
+              width: 300,
+              height: 60,
+              child: SettingsButton(
+                leftText: loc.settingsTutorial, 
+                rightLogo: Icon(Icons.help_center, size:40, color: theme.colorScheme.primary), 
+                onTap: () => onTutorialTap()
               ),
             ),
           ],
         ),
-        // tutorials
-        // Achievements
+      ),
+    );
+  }
+}
+
+class SettingsButton extends StatelessWidget {
+  const SettingsButton({
+    super.key,
+    required this.leftText,
+    required this.rightLogo,
+    required this.onTap, 
+  });
+
+  final Function onTap;
+  final String leftText;
+  final Widget rightLogo;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final menuTextStyle = theme.textTheme.displaySmall!.copyWith(
+      fontSize: 20,
+      color: theme.colorScheme.primary,
+      fontWeight: FontWeight.bold,
+    );
+
+    return ElevatedButton(
+      onPressed:() => onTap(),
+      style: ElevatedButton.styleFrom(
+      backgroundColor: theme.colorScheme.surfaceContainer,
+      side: BorderSide(width: 3, color: theme.colorScheme.primary),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      elevation: 10,
+    ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: Text(
+              leftText,
+              style: menuTextStyle,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          rightLogo,
+        ],
       ),
     );
   }

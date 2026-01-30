@@ -15,6 +15,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get localeDesc => 'Українська';
 
   @override
+  String get settingsTitle => 'Налаштування';
+
+  @override
   String get settingLanguageMenu => 'Мова';
 
   @override

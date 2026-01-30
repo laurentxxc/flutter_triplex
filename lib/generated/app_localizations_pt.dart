@@ -15,6 +15,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get localeDesc => 'Português';
 
   @override
+  String get settingsTitle => 'Configurações';
+
+  @override
   String get settingLanguageMenu => 'Idioma';
 
   @override

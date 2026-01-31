@@ -49,7 +49,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get welcomeMessage =>
-      '🎉 Benvenuto in Triplex 🎉\n\nIn questo gioco, hai tempo limitato per trovare triplette di tessere corrispondenti basate sui loro attributi.\nOgni tessera ha diversi attributi (es. rappresentazione, dimensione, colore, sfondo).\n\nSeleziona tre tessere per formare una corrispondenza.\n\nHai una corrispondenza valida se, per ogni attributo, le tre tessere sono o tutte uguali o tutte diverse.\nL\'obiettivo è trovare il maggior numero possibile di corrispondenze valide prima che scada il tempo!\n\nBuona fortuna e divertiti! 🍀';
+      '🎉 Benvenuti a Triplex 🎉\n\nIn questo gioco, hai un tempo limitato per trovare triplette di tessere corrispondenti in base ai loro attributi. Ogni tessera ha attributi diversi (ad esempio, rappresentazione, dimensione, colore, sfondo).\n\nSeleziona tre tessere per formare una corrispondenza.\n\nHai una corrispondenza valida se, per ogni attributo, le tre tessere sono o tutte uguali o tutte diverse.\nL\'obiettivo è trovare il maggior numero possibile di corrispondenze valide prima che scada il tempo!\n\nBuona fortuna e buon divertimento! 🍀';
 
   @override
   String get pauseMessage =>

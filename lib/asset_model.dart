@@ -78,20 +78,20 @@ class AssetCollection {
     }
 
     // for last one generate a matching asset with 2 others form the board randomly selected
-    final i_a3 = positions[positions.length - 1];
-    int i_a1, i_a2 = 0;
+    final iA3 = positions[positions.length - 1];
+    int iA1, iA2 = 0;
 
     do {
-      i_a1 = Random().nextInt(assets.length);
-    } while (positions.contains(i_a1));
+      iA1 = Random().nextInt(assets.length);
+    } while (positions.contains(iA1));
 
     do {
-      i_a2 = Random().nextInt(assets.length);
-    } while (positions.contains(i_a2) || i_a2 == i_a1);
+      iA2 = Random().nextInt(assets.length);
+    } while (positions.contains(iA2) || iA2 == iA1);
 
-    assets[i_a3] = AssetsFactory.singleton.generateMatchingAsset(
-      assets[i_a1],
-      assets[i_a2],
+    assets[iA3] = AssetsFactory.singleton.generateMatchingAsset(
+      assets[iA1],
+      assets[iA2],
     );
   }
 }

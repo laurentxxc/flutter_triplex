@@ -47,7 +47,7 @@ class TriplexUIIndicator extends StatelessWidget {
               uiIndicatorSymbol,
               size: 40,
               color: theme.colorScheme.primary,
-              semanticLabel: 'Current score',
+              semanticLabel: uiSemantic,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10, bottom: 8.0),

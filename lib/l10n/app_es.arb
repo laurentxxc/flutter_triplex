@@ -1,0 +1,77 @@
+{
+  "@@locale": "es",
+  "@@last_modified": "2025-01-30T10:00:00.000Z",
+  
+  "localeLogo": "🇪🇸",
+  "@localeLogo": {
+    "description": "Logo used for the locale"
+  },
+
+  "localeDesc":"Español",
+  "@localeDesc": {
+    "description": "Description of the locale"
+  },
+
+  "settingsTitle":"Ajustes",
+  "@settingsTitle": {
+    "description": "Title for the settings panel"
+  },
+  "settingLanguageMenu":"Idioma",
+  "settingsSoundMenu":"Sonido/Efectos",
+  "settingsTutorial":"Tutorial",
+
+  "appTitle": "Triplex",
+  "@appTitle": {
+    "description": "Application title"
+  },
+  
+  "startButton": "Empezar",
+  "@startButton": {
+    "description": "Text shown on the start game button"
+  },
+  
+  "pauseButton": "Pausa",
+  "@pauseButton": {
+    "description": "Text shown on the pause game button"
+  },
+  
+  "resumeButton": "Reanudar",
+  "@resumeButton": {
+    "description": "Text shown on the resume game button"
+  },
+  
+  "currentScore": "Puntuación actual",
+  "@currentScore": {
+    "description": "Semantic label for current score indicator"
+  },
+  
+  "timeLeft": "Tiempo restante",
+  "@timeLeft": {
+    "description": "Semantic label for time left indicator"
+  },
+  
+  "bestScore": "Mejor puntuación",
+  "@bestScore": {
+    "description": "Semantic label for best score indicator"
+  },
+  
+  "welcomeMessage": "🎉 ¡Bienvenido a Triplex! 🎉\n\nEn este juego, tienes tiempo limitado para encontrar tríos de fichas coincidentes basadas en sus atributos.\nCada ficha tiene diferentes atributos (ej: representación, tamaño, color, fondo).\n\nSelecciona tres fichas para formar una coincidencia.\n\nTienes una coincidencia válida si, para cada atributo, las tres fichas son o todas iguales o todas diferentes.\n¡El objetivo es encontrar tantas coincidencias válidas como sea posible antes de que se acabe el tiempo!\n\n¡Buena suerte y diviértete! 🍀",
+  "@welcomeMessage": {
+    "description": "Welcome message shown when game starts"
+  },
+  
+  "pauseMessage": "El juego está en pausa.\n\nToma un descanso ☕️ y reanuda cuando estés listo.",
+  "@pauseMessage": {
+    "description": "Message shown when game is paused"
+  },
+  
+  "gameOverMessage": "¡Juego terminado! Se acabó el tiempo.\n\nIntenta superar tu mejor puntuación la próxima vez.\n\n😜",
+  "@gameOverMessage": {
+    "description": "Message shown when game ends normally"
+  },
+  
+  "gameOverMessageBestScore": "¡Juego terminado! Se acabó el tiempo.\n\n¡Felicidades! Has conseguido la mejor puntuación esta vez.\n\n🎉",
+  "@gameOverMessageBestScore": {
+    "description": "Message shown when game ends with new best score"
+  }
+}

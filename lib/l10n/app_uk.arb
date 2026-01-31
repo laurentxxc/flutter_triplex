@@ -1,0 +1,77 @@
+{
+  "@@locale": "uk",
+  "@@last_modified": "2025-01-30T10:00:00.000Z",
+  
+  "localeLogo": "🇺🇦",
+  "@localeLogo": {
+    "description": "Logo used for the locale"
+  },
+
+  "localeDesc":"Українська",
+  "@localeDesc": {
+    "description": "Description of the locale"
+  },
+
+  "settingsTitle":"Налаштування",
+  "@settingsTitle": {
+    "description": "Title for the settings panel"
+  },
+  "settingLanguageMenu":"Мова",
+  "settingsSoundMenu":"Звук/Ефекти",
+  "settingsTutorial":"Посібник",
+
+  "appTitle": "Triplex",
+  "@appTitle": {
+    "description": "Application title"
+  },
+  
+  "startButton": "Почати",
+  "@startButton": {
+    "description": "Text shown on the start game button"
+  },
+  
+  "pauseButton": "Пауза",
+  "@pauseButton": {
+    "description": "Text shown on the pause game button"
+  },
+  
+  "resumeButton": "Продовжити",
+  "@resumeButton": {
+    "description": "Text shown on the resume game button"
+  },
+  
+  "currentScore": "Поточний рахунок",
+  "@currentScore": {
+    "description": "Semantic label for current score indicator"
+  },
+  
+  "timeLeft": "Часу залишилось",
+  "@timeLeft": {
+    "description": "Semantic label for time left indicator"
+  },
+  
+  "bestScore": "Найкращий рахунок",
+  "@bestScore": {
+    "description": "Semantic label for best score indicator"
+  },
+  
+  "welcomeMessage": "🎉 Ласкаво просимо до Triplex 🎉\n\nУ цій грі ви маєте обмежений час, щоб знайти відповідні трійки плиток на основі їх атрибутів.\nКожна плитка має різні атрибути (наприклад, представлення, розмір, колір, фон).\n\nОберіть три плитки, щоб створити відповідність.\n\nВи маєте дійсну відповідність, якщо для кожного атрибута три плитки або всі однакові, або всі різні.\nМета - знайти якомога більше дійсних відповідей до закінчення часу!\n\nБажаємо удачі та гарно проведіть час! 🍀",
+  "@welcomeMessage": {
+    "description": "Welcome message shown when game starts"
+  },
+  
+  "pauseMessage": "Гра призупинена.\n\nЗробіть перерву ☕️ та продовжте, коли будете готові.",
+  "@pauseMessage": {
+    "description": "Message shown when game is paused"
+  },
+  
+  "gameOverMessage": "Гра закінчена! Час вийшов.\n\nСпробуйте перемогти свій найкращий рахунок наступного разу!\n\n😜",
+  "@gameOverMessage": {
+    "description": "Message shown when game ends normally"
+  },
+  
+  "gameOverMessageBestScore": "Гра закінчена! Час вийшов.\n\nВітаємо! Цього разу ви встановили найкращий рахунок.\n\n🎉",
+  "@gameOverMessageBestScore": {
+    "description": "Message shown when game ends with new best score"
+  }
+}

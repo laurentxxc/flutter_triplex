@@ -27,10 +27,13 @@ The game is built using Flutter and follows a simple architecture:
 
 The game uses stateful widgets for real-time updates, animations for tile changes, and custom widgets for reusability.
 
-## Current limitations
-- No data persistence (scores/best scores reset on app restart).
-- Fixed board size (24 tiles in 4x6 grid)
-- Single tile theme.
+## Nice to have
+* [x] Language selection
+  => This has been added in v1.2.0
+* [ ] Several difficulty levels
+* [ ] Other themes for tiles
+* [ ] A way to earn some achievements
+* [ ] Better tutorial
 
 ## Author
 I am Laurent and I like playing with new languages, computer technologies and coding agents.

@@ -1,0 +1,77 @@
+{
+  "@@locale": "it",
+  "@@last_modified": "2025-01-30T10:00:00.000Z",
+  
+  "localeLogo": "🇮🇹",
+  "@localeLogo": {
+    "description": "Logo used for the locale"
+  },
+
+  "localeDesc":"Italiano",
+  "@localeDesc": {
+    "description": "Description of the locale"
+  },
+
+  "settingsTitle":"Impostazioni",
+  "@settingsTitle": {
+    "description": "Title for the settings panel"
+  },
+  "settingLanguageMenu":"Lingua",
+  "settingsSoundMenu":"Audio/Effetti",
+  "settingsTutorial":"Tutorial",
+
+  "appTitle": "Triplex",
+  "@appTitle": {
+    "description": "Application title"
+  },
+  
+  "startButton": "Inizia",
+  "@startButton": {
+    "description": "Text shown on the start game button"
+  },
+  
+  "pauseButton": "Pausa",
+  "@pauseButton": {
+    "description": "Text shown on the pause game button"
+  },
+  
+  "resumeButton": "Riprendi",
+  "@resumeButton": {
+    "description": "Text shown on the resume game button"
+  },
+  
+  "currentScore": "Punteggio attuale",
+  "@currentScore": {
+    "description": "Semantic label for current score indicator"
+  },
+  
+  "timeLeft": "Tempo rimanente",
+  "@timeLeft": {
+    "description": "Semantic label for time left indicator"
+  },
+  
+  "bestScore": "Miglior punteggio",
+  "@bestScore": {
+    "description": "Semantic label for best score indicator"
+  },
+  
+  "welcomeMessage": "🎉 Benvenuti a Triplex 🎉\n\nIn questo gioco, hai un tempo limitato per trovare triplette di tessere corrispondenti in base ai loro attributi. Ogni tessera ha attributi diversi (ad esempio, rappresentazione, dimensione, colore, sfondo).\n\nSeleziona tre tessere per formare una corrispondenza.\n\nHai una corrispondenza valida se, per ogni attributo, le tre tessere sono o tutte uguali o tutte diverse.\nL'obiettivo è trovare il maggior numero possibile di corrispondenze valide prima che scada il tempo!\n\nBuona fortuna e buon divertimento! 🍀",
+  "@welcomeMessage": {
+    "description": "Welcome message shown when game starts"
+  },
+  
+  "pauseMessage": "Il gioco è in pausa.\n\nPrenditi una pausa ☕️ e riprendi quando sei pronto!",
+  "@pauseMessage": {
+    "description": "Message shown when game is paused"
+  },
+  
+  "gameOverMessage": "Gioco finito! Tempo scaduto.\n\nCerca di battere il tuo miglior punteggio la prossima volta!\n\n😜",
+  "@gameOverMessage": {
+    "description": "Message shown when game ends normally"
+  },
+  
+  "gameOverMessageBestScore": "Gioco finito! Tempo scaduto.\n\nCongratulazioni! Hai ottenuto il miglior punteggio questa volta.\n\n🎉",
+  "@gameOverMessageBestScore": {
+    "description": "Message shown when game ends with new best score"
+  }
+}

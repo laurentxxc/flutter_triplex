@@ -56,15 +56,15 @@ class TileView extends StatelessWidget {
   final RadialGradient bgColor;
 
   const TileView({
-    Key? key,
+    super.key,
     required this.symbol,
     required this.fontSize,
     required this.fgColor,
     required this.bgColor,
-  }) : super(key: key);
+  });
 
   static Widget empty() {
-    return Container(width: tileViewSize, height: tileViewSize,);
+    return SizedBox(width: tileViewSize, height: tileViewSize,);
   }
 
   @override

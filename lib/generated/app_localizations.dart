@@ -190,28 +190,64 @@ abstract class AppLocalizations {
   /// **'Best score'**
   String get bestScore;
 
-  /// Welcome message shown when game starts
+  /// No description provided for @tutorial_welcome.
   ///
   /// In en, this message translates to:
-  /// **'🎉 Welcome to Triplex 🎉\n\nIn this game, you have limited time to find matching triplets of tiles based on their attributes.\nEach tile has different attributes (e.g. representation, size, color, background).\n\nSelect three tiles to form a match.\n\nYou have a valid match if, for each attribute, the three tiles are either all the same or all different.\nThe goal is to find as many valid matches as possible before time runs out!\n\nGood luck and have fun! 🍀'**
-  String get welcomeMessage;
+  /// **'Welcome to Triplex'**
+  String get tutorial_welcome;
+
+  /// No description provided for @tutorial_main.
+  ///
+  /// In en, this message translates to:
+  /// **'In this game, you have limited time to find matching triplets of tiles based on their attributes.\nEach tile has different attributes (e.g. representation, size, color, background).\n\nSelect three tiles to form a match.\n\nYou have a valid match if, for each attribute, the three tiles are either all the same or all different.\nThe goal is to find as many valid matches as possible before time runs out!'**
+  String get tutorial_main;
+
+  /// No description provided for @tutorial_good_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Example of valid match'**
+  String get tutorial_good_title;
+
+  /// No description provided for @tutorial_good_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Same single blue heart icon is present on all tiles. Background colors are different across tiles.'**
+  String get tutorial_good_desc;
+
+  /// No description provided for @tutorial_wrong_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Example of wrong match'**
+  String get tutorial_wrong_title;
+
+  /// No description provided for @tutorial_wrong_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'The middle tile representation icon (crown) is the same as left tile but different from right tile (flag). Tile representation icons must be either all the same or all different.'**
+  String get tutorial_wrong_desc;
+
+  /// No description provided for @tutorial_final.
+  ///
+  /// In en, this message translates to:
+  /// **'Good luck and have fun!'**
+  String get tutorial_final;
 
   /// Message shown when game is paused
   ///
   /// In en, this message translates to:
-  /// **'The game is paused.\n\nTake a break ☕️ and resume when you\'re ready!'**
+  /// **'The game is paused.\n\nTake a break and resume when you\'re ready!'**
   String get pauseMessage;
 
   /// Message shown when game ends normally
   ///
   /// In en, this message translates to:
-  /// **'Game Over! Time\'s up.\n\nTry to beat your best score next time!\n\n😜'**
+  /// **'Game Over! Time\'s up.\n\nTry to beat your best score next time!'**
   String get gameOverMessage;
 
   /// Message shown when game ends with new best score
   ///
   /// In en, this message translates to:
-  /// **'Game Over! Time\'s up.\n\nCongratulation ! You make the best score this time.\n\n🎉'**
+  /// **'Game Over! Time\'s up.\n\nCongratulation ! You make the best score this time.'**
   String get gameOverMessageBestScore;
 }
 

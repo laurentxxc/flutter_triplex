@@ -48,18 +48,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bestScore => 'Best score';
 
   @override
-  String get welcomeMessage =>
-      '🎉 Welcome to Triplex 🎉\n\nIn this game, you have limited time to find matching triplets of tiles based on their attributes.\nEach tile has different attributes (e.g. representation, size, color, background).\n\nSelect three tiles to form a match.\n\nYou have a valid match if, for each attribute, the three tiles are either all the same or all different.\nThe goal is to find as many valid matches as possible before time runs out!\n\nGood luck and have fun! 🍀';
+  String get tutorial_welcome => 'Welcome to Triplex';
+
+  @override
+  String get tutorial_main =>
+      'In this game, you have limited time to find matching triplets of tiles based on their attributes.\nEach tile has different attributes (e.g. representation, size, color, background).\n\nSelect three tiles to form a match.\n\nYou have a valid match if, for each attribute, the three tiles are either all the same or all different.\nThe goal is to find as many valid matches as possible before time runs out!';
+
+  @override
+  String get tutorial_good_title => 'Example of valid match';
+
+  @override
+  String get tutorial_good_desc =>
+      'Same single blue heart icon is present on all tiles. Background colors are different across tiles.';
+
+  @override
+  String get tutorial_wrong_title => 'Example of wrong match';
+
+  @override
+  String get tutorial_wrong_desc =>
+      'The middle tile representation icon (crown) is the same as left tile but different from right tile (flag). Tile representation icons must be either all the same or all different.';
+
+  @override
+  String get tutorial_final => 'Good luck and have fun!';
 
   @override
   String get pauseMessage =>
-      'The game is paused.\n\nTake a break ☕️ and resume when you\'re ready!';
+      'The game is paused.\n\nTake a break and resume when you\'re ready!';
 
   @override
   String get gameOverMessage =>
-      'Game Over! Time\'s up.\n\nTry to beat your best score next time!\n\n😜';
+      'Game Over! Time\'s up.\n\nTry to beat your best score next time!';
 
   @override
   String get gameOverMessageBestScore =>
-      'Game Over! Time\'s up.\n\nCongratulation ! You make the best score this time.\n\n🎉';
+      'Game Over! Time\'s up.\n\nCongratulation ! You make the best score this time.';
 }

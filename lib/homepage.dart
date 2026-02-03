@@ -23,6 +23,7 @@ import 'widgets/time_progress.dart';
 import 'widgets/message_board.dart';
 import 'widgets/game_title.dart';
 import 'widgets/settings_panel.dart';
+import 'widgets/tutorial_board.dart';
 
 const bool debug =
     String.fromEnvironment('DEBUG_ASSETS', defaultValue: 'false') == 'true';
@@ -64,12 +65,15 @@ enum GameState {
     buttonIcon: Icons.play_arrow,
     messageTextKey: "pauseMessage",
     buttonTextKey: "resumeButton",
+    messageId: MessageType.pause,
   ),
   gameOver(
     buttonIcon: Icons.play_arrow,
     messageTextKey: "gameOverMessage",
     messageTextAltKey: "gameOverMessageBestScore",
     buttonTextKey: "startButton",
+    messageId: MessageType.gameOver,
+    messageIdAlt: MessageType.bestScore,
   );
 
   const GameState({
@@ -77,12 +81,16 @@ enum GameState {
     required this.buttonIcon,
     required this.messageTextKey,
     this.messageTextAltKey = '',
+    this.messageId = MessageType.none,
+    this.messageIdAlt = MessageType.none,
   });
 
   final String buttonTextKey;
   final IconData buttonIcon;
   final String messageTextKey;
   final String messageTextAltKey;
+  final MessageType messageId;
+  final MessageType messageIdAlt;
 
   String getButtonText(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -95,25 +103,6 @@ enum GameState {
         return l10n.resumeButton;
       default:
         return buttonTextKey;
-    }
-  }
-
-  String getMessageText(BuildContext context, {bool useAlt = false}) {
-    final l10n = AppLocalizations.of(context)!;
-    final key = useAlt && messageTextAltKey.isNotEmpty
-        ? messageTextAltKey
-        : messageTextKey;
-    switch (key) {
-      case 'welcomeMessage':
-        return l10n.welcomeMessage;
-      case 'pauseMessage':
-        return l10n.pauseMessage;
-      case 'gameOverMessage':
-        return l10n.gameOverMessage;
-      case 'gameOverMessageBestScore':
-        return l10n.gameOverMessageBestScore;
-      default:
-        return key;
     }
   }
 }
@@ -599,15 +588,9 @@ class _MyHomePageState extends State<MyHomePage>
                       Positioned(
                         top: 0,
                         left: 0,
-                        child: TriplexBoardMessage(
-                          message: (_isTutorialOn) ?
-                            AppLocalizations.of(context)!.welcomeMessage
-                          : _gameState.getMessageText(
-                            context,
-                            useAlt: _isGameCompletedWithBestScore,
-                          ),
-                          size: const Size(500, 760),
-                        ),
+                        child: (_isTutorialOn) ? 
+                        TriplexTutorial() :   
+                        TriplexBoardMessage(message: _isGameCompletedWithBestScore ? _gameState.messageIdAlt : _gameState.messageId),
                       ),
                     if (_isSettingsOn)
                       Positioned(

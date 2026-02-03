@@ -48,18 +48,38 @@ class AppLocalizationsPt extends AppLocalizations {
   String get bestScore => 'Melhor pontuação';
 
   @override
-  String get welcomeMessage =>
-      '🎉 Bem-vindo ao Triplex 🎉\n\nNeste jogo, tem tempo limitado para encontrar tríos de peças correspondentes baseadas nos seus atributos.\nCada peça tem atributos diferentes (ex: representação, tamanho, cor, fundo).\n\nSelecione três peças para formar uma correspondência.\n\nTem uma correspondência válida se, para cada atributo, as três peças são ou todas iguais ou todas diferentes.\nO objetivo é encontrar o maior número possível de correspondências válidas antes do tempo acabar!\n\nBoa sorte e divirta-se! 🍀';
+  String get tutorial_welcome => 'Bem-vindo ao Triplex';
+
+  @override
+  String get tutorial_main =>
+      'Neste jogo, tem tempo limitado para encontrar tríos de peças correspondentes baseadas nos seus atributos.\nCada peça tem atributos diferentes (ex: representação, tamanho, cor, fundo).\n\nSelecione três peças para formar uma correspondência.\n\nTem uma correspondência válida se, para cada atributo, as três peças são ou todas iguais ou todas diferentes.\nO objetivo é encontrar o maior número possível de correspondências válidas antes do tempo acabar!';
+
+  @override
+  String get tutorial_good_title => 'Exemplo de correspondência válida';
+
+  @override
+  String get tutorial_good_desc =>
+      'O mesmo ícone único de coração azul está presente em todas as peças. As cores de fundo são diferentes entre as peças.';
+
+  @override
+  String get tutorial_wrong_title => 'Exemplo de correspondência errada';
+
+  @override
+  String get tutorial_wrong_desc =>
+      'O ícone de representação da peça do meio (coroa) é o mesmo que a peça esquerda mas diferente da peça direita (bandeira). Os ícones de representação das peças devem ser ou todos iguais ou todos diferentes.';
+
+  @override
+  String get tutorial_final => 'Boa sorte e divirta-se!';
 
   @override
   String get pauseMessage =>
-      'O jogo está em pausa.\n\nFaça uma pausa ☕️ e retome quando estiver pronto.';
+      'O jogo está em pausa.\n\nFaça uma pausa e retome quando estiver pronto.';
 
   @override
   String get gameOverMessage =>
-      'Jogo terminado! Tempo esgotado.\n\nTente bater a sua melhor pontuação da próxima vez.\n\n😜';
+      'Jogo terminado! Tempo esgotado.\n\nTente bater a sua melhor pontuação da próxima vez.';
 
   @override
   String get gameOverMessageBestScore =>
-      'Jogo terminado! Tempo esgotado.\n\nParabéns! Achieve a melhor pontuação desta vez.\n\n🎉';
+      'Jogo terminado! Tempo esgotado.\n\nParabéns! Achieve a melhor pontuação desta vez.';
 }

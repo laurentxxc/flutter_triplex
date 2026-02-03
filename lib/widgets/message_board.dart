@@ -7,21 +7,106 @@
 // This file is part of Triplex, a puzzle game where players match tiles based on attributes.
 
 import 'package:flutter/material.dart';
+import 'package:triplex/generated/app_localizations.dart';
+
+const Widget coffeeLogo = Text('☕️', style: TextStyle(fontSize: 50));
+const Widget smileyLogo = Text('😜', style: TextStyle(fontSize: 50));
+const Widget winnerLogo = Text('🏆', style: TextStyle(fontSize: 50));
+const Widget vSpace = SizedBox(height:20.0);
+
+
+enum MessageType {
+  pause(
+    textId:'pauseMessage',
+    logo: coffeeLogo,
+    ),
+  gameOver(
+    textId:'gameOverMessage',
+    logo:smileyLogo
+  ),
+  bestScore(
+    textId: 'gameOverMessageBestScore',
+    logo:winnerLogo,
+  ),
+  none(
+    textId:'',
+    logo: Text('0'),
+  );
+
+  String translate(AppLocalizations l10n) {
+    switch (textId) {
+      case 'pauseMessage':
+        return l10n.pauseMessage;
+      case 'gameOverMessage':
+        return l10n.gameOverMessage;
+      case 'gameOverMessageBestScore':
+        return l10n.gameOverMessageBestScore;
+      default:
+        return 'unknown';
+    }
+  }
+ 
+  const MessageType({required this.textId, required this.logo}); 
+  final String textId;
+  final Widget logo;
+}
 
 class TriplexBoardMessage extends StatelessWidget {
-  final String message;
+  final MessageType message;
   final Size size;
+  final bool enableScrolling;
+  final bool showScrollbar;
 
-  TriplexBoardMessage({required this.message, required this.size});
+  TriplexBoardMessage({
+    required this.message,
+    this.size = const Size(500,760),
+    this.enableScrolling = false,   // default no scrolling (original behavior)
+    this.showScrollbar = true,      // default show scrollbar when scrolling
+  });
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final textStyle = theme.textTheme.displaySmall!.copyWith(
       fontSize: 21,
       color: theme.colorScheme.primary,
       fontWeight: FontWeight.bold,
     );
+
+    Widget content = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            message.translate(l10n), 
+            textAlign: TextAlign.center, 
+            style: textStyle, 
+            softWrap: true,
+          ),
+          vSpace,
+          message.logo,
+        ],
+      ),
+    );
+
+  // Wrap with scrolling widgets if enabled
+  if (enableScrolling) {
+    content = SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: content,
+    );
+    
+    if (showScrollbar) {
+      content = Scrollbar(
+        thumbVisibility: true,        // Always show scrollbar thumb
+        thickness: 8,              // Scrollbar thickness
+        radius: const Radius.circular(4),  // Rounded scrollbar
+        child: content,
+      );
+    }
+  }
 
     return SizedBox(
       width: size.width,
@@ -30,9 +115,7 @@ class TriplexBoardMessage extends StatelessWidget {
         elevation: 20,
         color: theme.colorScheme.primaryContainer.withValues(alpha: 0.9),
         margin: const EdgeInsets.all(30),
-        child: Center(
-          child: Text(message, textAlign: TextAlign.center, style: textStyle, softWrap: true,),
-        ),
+        child: content,
       ),
     );
   }

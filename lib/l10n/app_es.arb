@@ -55,22 +55,26 @@
     "description": "Semantic label for best score indicator"
   },
   
-  "welcomeMessage": "🎉 ¡Bienvenido a Triplex! 🎉\n\nEn este juego, tienes tiempo limitado para encontrar tríos de fichas coincidentes basadas en sus atributos.\nCada ficha tiene diferentes atributos (ej: representación, tamaño, color, fondo).\n\nSelecciona tres fichas para formar una coincidencia.\n\nTienes una coincidencia válida si, para cada atributo, las tres fichas son o todas iguales o todas diferentes.\n¡El objetivo es encontrar tantas coincidencias válidas como sea posible antes de que se acabe el tiempo!\n\n¡Buena suerte y diviértete! 🍀",
-  "@welcomeMessage": {
-    "description": "Welcome message shown when game starts"
-  },
+  "tutorial_welcome":"Bienvenido a Triplex",
+  "tutorial_main":"En este juego, tienes tiempo limitado para encontrar tríos de fichas coincidentes basadas en sus atributos.\nCada ficha tiene diferentes atributos (ej: representación, tamaño, color, fondo).\n\nSelecciona tres fichas para formar una coincidencia.\n\nTienes una coincidencia válida si, para cada atributo, las tres fichas son o todas iguales o todas diferentes.\n¡El objetivo es encontrar tantas coincidencias válidas como sea posible antes de que se acabe el tiempo!",
+
+  "tutorial_good_title":"Ejemplo de coincidencia válida",
+  "tutorial_good_desc":"El mismo icono de corazón azul único está presente en todas las fichas. Los colores de fondo son diferentes entre las fichas.",
+  "tutorial_wrong_title":"Ejemplo de coincidencia incorrecta",
+  "tutorial_wrong_desc":"El icono de representación de la ficha central (corona) es el mismo que la ficha izquierda pero diferente de la ficha derecha (bandera). Los iconos de representación de las fichas deben ser todos iguales o todos diferentes.",
+  "tutorial_final":"¡Buena suerte y diviértete!",
   
-  "pauseMessage": "El juego está en pausa.\n\nToma un descanso ☕️ y reanuda cuando estés listo.",
+  "pauseMessage": "El juego está en pausa.\n\nToma un descanso y reanuda cuando estés listo.",
   "@pauseMessage": {
     "description": "Message shown when game is paused"
   },
   
-  "gameOverMessage": "¡Juego terminado! Se acabó el tiempo.\n\nIntenta superar tu mejor puntuación la próxima vez.\n\n😜",
+  "gameOverMessage": "¡Juego terminado! Se acabó el tiempo.\n\nIntenta superar tu mejor puntuación la próxima vez.",
   "@gameOverMessage": {
     "description": "Message shown when game ends normally"
   },
   
-  "gameOverMessageBestScore": "¡Juego terminado! Se acabó el tiempo.\n\n¡Felicidades! Has conseguido la mejor puntuación esta vez.\n\n🎉",
+  "gameOverMessageBestScore": "¡Juego terminado! Se acabó el tiempo.\n\n¡Felicidades! Has conseguido la mejor puntuación esta vez.",
   "@gameOverMessageBestScore": {
     "description": "Message shown when game ends with new best score"
   }

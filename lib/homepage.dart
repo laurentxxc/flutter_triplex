@@ -53,24 +53,19 @@ const Color tileSelectionColor = Colors.orange;
 enum GameState {
   notStarted(
     buttonIcon: Icons.play_arrow,
-    messageTextKey: "welcomeMessage",
     buttonTextKey: "startButton",
   ),
   running(
     buttonIcon: Icons.pause,
-    messageTextKey: "",
     buttonTextKey: "pauseButton",
   ),
   paused(
     buttonIcon: Icons.play_arrow,
-    messageTextKey: "pauseMessage",
     buttonTextKey: "resumeButton",
     messageId: MessageType.pause,
   ),
   gameOver(
     buttonIcon: Icons.play_arrow,
-    messageTextKey: "gameOverMessage",
-    messageTextAltKey: "gameOverMessageBestScore",
     buttonTextKey: "startButton",
     messageId: MessageType.gameOver,
     messageIdAlt: MessageType.bestScore,
@@ -79,16 +74,12 @@ enum GameState {
   const GameState({
     required this.buttonTextKey,
     required this.buttonIcon,
-    required this.messageTextKey,
-    this.messageTextAltKey = '',
     this.messageId = MessageType.none,
     this.messageIdAlt = MessageType.none,
   });
 
   final String buttonTextKey;
   final IconData buttonIcon;
-  final String messageTextKey;
-  final String messageTextAltKey;
   final MessageType messageId;
   final MessageType messageIdAlt;
 

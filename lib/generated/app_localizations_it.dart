@@ -48,18 +48,38 @@ class AppLocalizationsIt extends AppLocalizations {
   String get bestScore => 'Miglior punteggio';
 
   @override
-  String get welcomeMessage =>
-      '🎉 Benvenuti a Triplex 🎉\n\nIn questo gioco, hai un tempo limitato per trovare triplette di tessere corrispondenti in base ai loro attributi. Ogni tessera ha attributi diversi (ad esempio, rappresentazione, dimensione, colore, sfondo).\n\nSeleziona tre tessere per formare una corrispondenza.\n\nHai una corrispondenza valida se, per ogni attributo, le tre tessere sono o tutte uguali o tutte diverse.\nL\'obiettivo è trovare il maggior numero possibile di corrispondenze valide prima che scada il tempo!\n\nBuona fortuna e buon divertimento! 🍀';
+  String get tutorial_welcome => 'Benvenuti a Triplex';
+
+  @override
+  String get tutorial_main =>
+      'In questo gioco, hai un tempo limitato per trovare triplette di tessere corrispondenti in base ai loro attributi. Ogni tessera ha attributi diversi (ad esempio, rappresentazione, dimensione, colore, sfondo).\n\nSeleziona tre tessere per formare una corrispondenza.\n\nHai una corrispondenza valida se, per ogni attributo, le tre tessere sono o tutte uguali o tutte diverse.\nL\'obiettivo è trovare il maggior numero possibile di corrispondenze valide prima che scada il tempo!';
+
+  @override
+  String get tutorial_good_title => 'Esempio di corrispondenza valida';
+
+  @override
+  String get tutorial_good_desc =>
+      'La stessa icona di cuore è presente su tutte le tessere. I colori di sfondo e delle icone sono diversi tra le tessere.';
+
+  @override
+  String get tutorial_wrong_title => 'Esempio di corrispondenza errata';
+
+  @override
+  String get tutorial_wrong_desc =>
+      'L\'icona della tessera centrale (corona) è uguale alla tessera di sinistra ma diversa dalla tessera di destra (bandiera). Le icone delle tessere devono essere o tutte uguali o tutte diverse.';
+
+  @override
+  String get tutorial_final => 'Buona fortuna e buon divertimento!';
 
   @override
   String get pauseMessage =>
-      'Il gioco è in pausa.\n\nPrenditi una pausa ☕️ e riprendi quando sei pronto!';
+      'Il gioco è in pausa.\n\nPrenditi una pausa e riprendi quando sei pronto!';
 
   @override
   String get gameOverMessage =>
-      'Gioco finito! Tempo scaduto.\n\nCerca di battere il tuo miglior punteggio la prossima volta!\n\n😜';
+      'Gioco finito! Tempo scaduto.\n\nCerca di battere il tuo miglior punteggio la prossima volta!';
 
   @override
   String get gameOverMessageBestScore =>
-      'Gioco finito! Tempo scaduto.\n\nCongratulazioni! Hai ottenuto il miglior punteggio questa volta.\n\n🎉';
+      'Gioco finito! Tempo scaduto.\n\nCongratulazioni! Hai ottenuto il miglior punteggio questa volta.';
 }

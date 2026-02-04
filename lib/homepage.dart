@@ -14,7 +14,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'asset_model.dart';
 import 'tile_scheme.dart';
 import 'sound_player.dart';
-import 'generated/app_localizations.dart';
 
 // custom widgets
 import 'widgets/button.dart';
@@ -23,6 +22,7 @@ import 'widgets/time_progress.dart';
 import 'widgets/message_board.dart';
 import 'widgets/game_title.dart';
 import 'widgets/settings_panel.dart';
+import 'widgets/tutorial_board.dart';
 
 const bool debug =
     String.fromEnvironment('DEBUG_ASSETS', defaultValue: 'false') == 'true';
@@ -50,72 +50,16 @@ const Color mainThemeColor = Colors.deepPurple;
 const Color tileSelectionColor = Colors.orange;
 
 enum GameState {
-  notStarted(
-    buttonIcon: Icons.play_arrow,
-    messageTextKey: "welcomeMessage",
-    buttonTextKey: "startButton",
-  ),
-  running(
-    buttonIcon: Icons.pause,
-    messageTextKey: "",
-    buttonTextKey: "pauseButton",
-  ),
-  paused(
-    buttonIcon: Icons.play_arrow,
-    messageTextKey: "pauseMessage",
-    buttonTextKey: "resumeButton",
-  ),
-  gameOver(
-    buttonIcon: Icons.play_arrow,
-    messageTextKey: "gameOverMessage",
-    messageTextAltKey: "gameOverMessageBestScore",
-    buttonTextKey: "startButton",
-  );
+  notStarted(buttonType: TriplexButtonType.start),
+  running(buttonType: TriplexButtonType.pause),
+  paused(buttonType: TriplexButtonType.resume, messageId: MessageType.pause,),
+  gameOver(buttonType: TriplexButtonType.start, messageId: MessageType.gameOver,),
+  bestScore(buttonType: TriplexButtonType.start,messageId: MessageType.bestScore);
 
-  const GameState({
-    required this.buttonTextKey,
-    required this.buttonIcon,
-    required this.messageTextKey,
-    this.messageTextAltKey = '',
-  });
+  const GameState({required this.buttonType, this.messageId = MessageType.none,});
 
-  final String buttonTextKey;
-  final IconData buttonIcon;
-  final String messageTextKey;
-  final String messageTextAltKey;
-
-  String getButtonText(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    switch (buttonTextKey) {
-      case 'startButton':
-        return l10n.startButton;
-      case 'pauseButton':
-        return l10n.pauseButton;
-      case 'resumeButton':
-        return l10n.resumeButton;
-      default:
-        return buttonTextKey;
-    }
-  }
-
-  String getMessageText(BuildContext context, {bool useAlt = false}) {
-    final l10n = AppLocalizations.of(context)!;
-    final key = useAlt && messageTextAltKey.isNotEmpty
-        ? messageTextAltKey
-        : messageTextKey;
-    switch (key) {
-      case 'welcomeMessage':
-        return l10n.welcomeMessage;
-      case 'pauseMessage':
-        return l10n.pauseMessage;
-      case 'gameOverMessage':
-        return l10n.gameOverMessage;
-      case 'gameOverMessageBestScore':
-        return l10n.gameOverMessageBestScore;
-      default:
-        return key;
-    }
-  }
+  final TriplexButtonType buttonType;
+  final MessageType messageId;
 }
 
 class MyHomePage extends StatefulWidget {
@@ -154,7 +98,6 @@ class _MyHomePageState extends State<MyHomePage>
   int _tileScore = 0;
   double _timeProgress = 1.0;
   Timer? _gameTimer;
-  bool _isGameCompletedWithBestScore = false;
   bool _isVolumeOn = false;
   bool _isSettingsOn = false;
   bool _isTutorialOn = true;
@@ -211,7 +154,8 @@ class _MyHomePageState extends State<MyHomePage>
   void _onGameButtonTap() {
     if (_isVolumeOn) SoundPlayer.play(Sound.message);
     if (_gameState == GameState.notStarted ||
-        _gameState == GameState.gameOver) {
+        _gameState == GameState.gameOver ||
+        _gameState == GameState.bestScore) {
       _startGame();
     } else if (_gameState == GameState.running) {
       _pauseGame();
@@ -278,7 +222,6 @@ class _MyHomePageState extends State<MyHomePage>
       _gameAssets = AssetCollection();
       _gameState = GameState.running;
       _score = 0;
-      _isGameCompletedWithBestScore = false;
       _timeLeft = maxTime;
       _timeProgress = 1.0;
       _gameTimer?.cancel();
@@ -311,19 +254,21 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   void _endGame() {
+    bool bestScoreReached = false;
     setState(() {
       _gameState = GameState.gameOver;
       _selectedTiles.clear();
       _gameTimer?.cancel();
       if (_score > _bestScore) {
+        bestScoreReached = true;
+        _gameState = GameState.bestScore;
         _bestScore = _score;
         _saveBestScore(_bestScore);
-        _isGameCompletedWithBestScore = true;
       }
     });
     if (_isVolumeOn) {
       SoundPlayer.play(
-        _isGameCompletedWithBestScore ? Sound.endingBest : Sound.ending,
+        bestScoreReached ? Sound.endingBest : Sound.ending,
       );
     }
   }
@@ -396,21 +341,6 @@ class _MyHomePageState extends State<MyHomePage>
     });
   }
 
-  // Heplers for building UI
-  String _formatTime(int seconds) {
-    int min = seconds ~/ 60;
-    int sec = seconds % 60;
-    return '${min.toString().padLeft(2, '0')}:${sec.toString().padLeft(2, '0')}';
-  }
-
-  String _formatScore(int score) {
-    if (score >= 0) {
-      return score.toString().padLeft(4, '0');
-    } else {
-      return "-${(score * -1).toString().padLeft(3, '0')}";
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -455,21 +385,9 @@ class _MyHomePageState extends State<MyHomePage>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      TriplexUIIndicator(
-                        uiIndicatorText: _formatScore(_score),
-                        uiIndicatorSymbol: Icons.sports_score,
-                        uiSemantic: AppLocalizations.of(context)!.currentScore,
-                      ),
-                      TriplexUIIndicator(
-                        uiIndicatorText: _formatTime(_timeLeft),
-                        uiIndicatorSymbol: Icons.timer,
-                        uiSemantic: AppLocalizations.of(context)!.timeLeft,
-                      ),
-                      TriplexUIIndicator(
-                        uiIndicatorText: _formatScore(_bestScore),
-                        uiIndicatorSymbol: Icons.emoji_events,
-                        uiSemantic: AppLocalizations.of(context)!.bestScore,
-                      ),
+                      TriplexUIIndicator(type: TriplexUIIndicatorType.currentScore, value:_score),
+                      TriplexUIIndicator(type: TriplexUIIndicatorType.timeLeft, value: _timeLeft),
+                      TriplexUIIndicator(type: TriplexUIIndicatorType.bestScore, value: _bestScore),
                     ],
                   ),
                 ),
@@ -599,15 +517,9 @@ class _MyHomePageState extends State<MyHomePage>
                       Positioned(
                         top: 0,
                         left: 0,
-                        child: TriplexBoardMessage(
-                          message: (_isTutorialOn) ?
-                            AppLocalizations.of(context)!.welcomeMessage
-                          : _gameState.getMessageText(
-                            context,
-                            useAlt: _isGameCompletedWithBestScore,
-                          ),
-                          size: const Size(500, 760),
-                        ),
+                        child: (_isTutorialOn) ? 
+                        TriplexTutorial() :   
+                        TriplexBoardMessage(message: _gameState.messageId),
                       ),
                     if (_isSettingsOn)
                       Positioned(
@@ -628,18 +540,17 @@ class _MyHomePageState extends State<MyHomePage>
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     CircleButton(
-                      buttonSymbol: Icons.settings,
+                      type: CircleButtonType.settings,
                       onTap: () => _onSettingsButtonTap,
                     ),
                     // Main button
                     TriplexButton(
-                      buttonSymbol: _gameState.buttonIcon,
-                      buttonText: _gameState.getButtonText(context),
+                      type: _gameState.buttonType,
                       onTap: () => _onGameButtonTap,
                     ),
                     // Restart button
                     CircleButton(
-                      buttonSymbol: Icons.replay,
+                      type: CircleButtonType.restart,
                       onTap: () => _onRestartButton,
                     ),
                   ],

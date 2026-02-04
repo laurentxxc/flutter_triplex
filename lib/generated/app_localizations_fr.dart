@@ -48,18 +48,38 @@ class AppLocalizationsFr extends AppLocalizations {
   String get bestScore => 'Meilleur score';
 
   @override
-  String get welcomeMessage =>
-      '🎉 Bienvenue dans Triplex 🎉\n\nVous avez un temps limité pour trouver des triplets de tuiles correspondantes basées sur leurs attributs.\nChaque tuile a différents attributs (ex: forme, taille, couleur, fond).\n\nSélectionnez trois tuiles pour former une correspondance.\n\nLa correspondance est valide si, pour chaque attribut, les trois tuiles sont soit toutes identiques soit toutes différentes.\nLe but est de trouver autant de correspondances valides que possible avant la fin du temps!\n\nBonne chance et amusez-vous bien! 🍀';
+  String get tutorial_welcome => 'Bienvenue dans Triplex';
+
+  @override
+  String get tutorial_main =>
+      'Dans ce jeu, vous avez un temps limité pour trouver des triplets de tuiles correspondantes.\n\nChaque tuile possède différents attributs (ex: forme, taille, couleur, fond).\nSélectionnez trois tuiles pour former une correspondance.\n\nLa correspondance est valide si, pour chaque attribut, les trois tuiles sont soit toutes identiques soit toutes différentes.\nLe but est de trouver autant de correspondances valides que possible avant la fin du temps!';
+
+  @override
+  String get tutorial_good_title => 'Exemple de correspondance valide';
+
+  @override
+  String get tutorial_good_desc =>
+      'La même icône (cœur) est présente sur toutes les tuiles. Les couleurs de fond et d\'icônes sont différentes entre les tuiles.';
+
+  @override
+  String get tutorial_wrong_title => 'Exemple de correspondance incorrecte';
+
+  @override
+  String get tutorial_wrong_desc =>
+      'L\'icône présente sur la tuile du milieu (couronne) est identique à celle de la tuile gauche mais différente de celle sur la tuile droite (drapeau) or les icônes des tuiles doivent être soit toutes identiques, soit toutes différentes.';
+
+  @override
+  String get tutorial_final => 'Bonne chance et amusez-vous bien!';
 
   @override
   String get pauseMessage =>
-      'Le jeu est en pause.\n\nPrenez une pause ☕️ et reprenez quand vous êtes prêt!';
+      'Le jeu est en pause.\n\nPrenez une pause et reprenez quand vous êtes prêt!';
 
   @override
   String get gameOverMessage =>
-      'Jeu terminé! Le temps est écoulé.\n\nEssayez de battre votre meilleur score la prochaine fois!\n\n😜';
+      'Jeu terminé! Le temps est écoulé.\n\nEssayez de battre votre meilleur score la prochaine fois!';
 
   @override
   String get gameOverMessageBestScore =>
-      'Jeu terminé! Le temps est écoulé.\n\nFélicitations! Vous avez obtenu le meilleur score cette fois-ci.\n\n🎉';
+      'Jeu terminé! Le temps est écoulé.\n\nFélicitations! Vous avez obtenu le meilleur score cette fois-ci.';
 }

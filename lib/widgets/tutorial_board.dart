@@ -135,9 +135,11 @@ class TriplexTutorial extends StatelessWidget {
 
       if (showScrollbar) {
         content = Scrollbar(
-          thumbVisibility: true, // Always show scrollbar thumb
-          thickness: 8, // Scrollbar thickness
-          radius: const Radius.circular(4), // Rounded scrollbar
+          // 2026-02-04: using parameter defined in main themeData
+          // thumbVisibility: true, // Always show scrollbar thumb
+          // trackVisibility: false,
+          // thickness: 10, // Scrollbar thickness
+          // radius: const Radius.circular(5), // Rounded scrollbar
           child: content,
         );
       }

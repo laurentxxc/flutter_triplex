@@ -57,11 +57,20 @@ class _TriplexAppState extends State<TriplexApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return MaterialApp(
       title: 'Triplex',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: mainThemeColor),
-        textTheme: GoogleFonts.revaliaTextTheme(Theme.of(context).textTheme),
+        textTheme: GoogleFonts.revaliaTextTheme(theme.textTheme),
+        scrollbarTheme: ScrollbarThemeData(
+          thickness: WidgetStateProperty.all(14.0),
+          thumbColor: WidgetStateProperty.all(theme.colorScheme.primary.withAlpha(150)),
+          thumbVisibility: WidgetStateProperty.all(true),
+          //trackVisibility: WidgetStateProperty.all(true),
+          trackBorderColor: WidgetStateProperty.all(theme.colorScheme.surfaceContainer),
+          radius: const Radius.circular(8),
+        ),
       ),
       locale: _locale,
       localizationsDelegates: const [

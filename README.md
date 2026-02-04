@@ -33,7 +33,8 @@ The game uses stateful widgets for real-time updates, animations for tile change
 * [ ] Several difficulty levels
 * [ ] Other themes for tiles
 * [ ] A way to earn some achievements
-* [ ] Better tutorial
+* [x] Better tutorial
+  => This had been added on v1.3.0
 
 ## Author
 I am Laurent and I like playing with new languages, computer technologies and coding agents.

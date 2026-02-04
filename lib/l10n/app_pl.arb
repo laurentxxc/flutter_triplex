@@ -59,9 +59,9 @@
   "tutorial_main":"W tej grze masz ograniczony czas na znalezienie pasujących trójek kafelków na podstawie ich atrybutów.\nKażdy kafelek ma różne atrybuty (np. reprezentacja, rozmiar, kolor, tło).\n\nWybierz trzy kafelki, aby utworzyć dopasowanie.\n\nMasz prawidłowe dopasowanie, jeśli dla każdego atrybutu trzy kafelki są albo wszystkie takie same, albo wszystkie różne.\nCelem jest znalezienie jak największej liczby prawidłowych dopasowań przed upływem czasu!",
 
   "tutorial_good_title":"Przykład prawidłowego dopasowania",
-  "tutorial_good_desc":"Ta sama pojedyncza ikona niebieskiego serca jest obecna na wszystkich kafelkach. Kolory tła są różne między kafelkami.",
+  "tutorial_good_desc":"Ta sama ikona serca jest obecna na wszystkich kafelkach. Kolory tła i ikon są różne między kafelkami.",
   "tutorial_wrong_title":"Przykład nieprawidłowego dopasowania",
-  "tutorial_wrong_desc":"Ikona reprezentacji środkowego kafelka (korona) jest taka sama jak lewego kafelka, ale różna od prawego kafelka (flaga). Ikony reprezentacji kafelków muszą być albo wszystkie takie same, albo wszystkie różne.",
+  "tutorial_wrong_desc":"Ikona środkowego kafelka (korona) jest taka sama jak lewego kafelka, ale różna od prawego kafelka (flaga). Ikony kafelków muszą być albo wszystkie takie same, albo wszystkie różne.",
   "tutorial_final":"Powodzenia i baw się dobrze!",
   
   "pauseMessage": "Gra jest wstrzymana.\n\nZrób przerwę i wznów, gdy będziesz gotowy.",

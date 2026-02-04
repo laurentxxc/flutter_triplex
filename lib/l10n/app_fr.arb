@@ -59,9 +59,9 @@
   "tutorial_main":"Dans ce jeu, vous avez un temps limité pour trouver des triplets de tuiles correspondantes.\n\nChaque tuile possède différents attributs (ex: forme, taille, couleur, fond).\nSélectionnez trois tuiles pour former une correspondance.\n\nLa correspondance est valide si, pour chaque attribut, les trois tuiles sont soit toutes identiques soit toutes différentes.\nLe but est de trouver autant de correspondances valides que possible avant la fin du temps!",
 
   "tutorial_good_title":"Exemple de correspondance valide",
-  "tutorial_good_desc":"La même icône de cœur bleu est présente sur toutes les tuiles. Les couleurs de fond sont différentes entre les tuiles.",
+  "tutorial_good_desc":"La même icône (cœur) est présente sur toutes les tuiles. Les couleurs de fond et d'icônes sont différentes entre les tuiles.",
   "tutorial_wrong_title":"Exemple de correspondance incorrecte",
-  "tutorial_wrong_desc":"L'icône de représentation de la tuile du milieu (couronne) est identique à la tuile de gauche mais différente de la tuile de droite (drapeau). Les icônes de représentation des tuiles doivent être soit toutes identiques soit toutes différentes.",
+  "tutorial_wrong_desc":"L'icône présente sur la tuile du milieu (couronne) est identique à celle de la tuile gauche mais différente de celle sur la tuile droite (drapeau) or les icônes des tuiles doivent être soit toutes identiques, soit toutes différentes.",
   "tutorial_final":"Bonne chance et amusez-vous bien!",
   
   "pauseMessage": "Le jeu est en pause.\n\nPrenez une pause et reprenez quand vous êtes prêt!",

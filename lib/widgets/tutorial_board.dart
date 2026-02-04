@@ -22,11 +22,11 @@ const bool showScrollbar = true;
 
 enum TutorialMatchSample {
   good(
-    assets: [[1,1,1,1], [1,1,1,2], [1,1,1,3]],
+    assets: [[1,1,3,1], [1,1,1,2], [1,1,2,3]],
     logo: goodLogo,
     ),
   wrong(
-    assets: [[2,1,3,1], [2,1,1,1], [3,1,2,1]],
+    assets: [[2,1,2,1], [2,1,2,1], [3,1,2,1]],
     logo: wrongLogo,
   );
 

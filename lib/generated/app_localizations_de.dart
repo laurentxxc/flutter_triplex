@@ -59,7 +59,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get tutorial_good_desc =>
-      'Das gleiche einzelne blaue Herz-Symbol ist auf allen Kacheln vorhanden. Die Hintergrundfarben sind bei den Kacheln unterschiedlich.';
+      'Das gleiche Herz-Symbol ist auf allen Kacheln vorhanden. Die Hintergrund- und Symbolfarben sind bei den Kacheln unterschiedlich.';
 
   @override
   String get tutorial_wrong_title =>
@@ -67,7 +67,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get tutorial_wrong_desc =>
-      'Das Darstellungssymbol der mittleren Kachel (Krone) ist dasselbe wie bei der linken Kachel, aber anders als bei der rechten Kachel (Flagge). Die Darstellungssymbole der Kacheln müssen entweder alle gleich oder alle unterschiedlich sein.';
+      'Das Symbol der mittleren Kachel (Krone) ist dasselbe wie bei der linken Kachel, aber anders als bei der rechten Kachel (Flagge). Die Kachel-Symbole müssen entweder alle gleich oder alle unterschiedlich sein.';
 
   @override
   String get tutorial_final => 'Viel Glück und haben Sie Spaß!';

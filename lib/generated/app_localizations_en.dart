@@ -59,14 +59,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tutorial_good_desc =>
-      'Same single blue heart icon is present on all tiles. Background colors are different across tiles.';
+      'Same single heart icon is present on all tiles. Background and icon colors are different across tiles.';
 
   @override
   String get tutorial_wrong_title => 'Example of wrong match';
 
   @override
   String get tutorial_wrong_desc =>
-      'The middle tile representation icon (crown) is the same as left tile but different from right tile (flag). Tile representation icons must be either all the same or all different.';
+      'The middle tile icon (crown) is the same as left tile but different from right tile (flag). Tile icons must be either all the same or all different.';
 
   @override
   String get tutorial_final => 'Good luck and have fun!';

@@ -211,7 +211,7 @@ abstract class AppLocalizations {
   /// No description provided for @tutorial_good_desc.
   ///
   /// In en, this message translates to:
-  /// **'Same single blue heart icon is present on all tiles. Background colors are different across tiles.'**
+  /// **'Same single heart icon is present on all tiles. Background and icon colors are different across tiles.'**
   String get tutorial_good_desc;
 
   /// No description provided for @tutorial_wrong_title.
@@ -223,7 +223,7 @@ abstract class AppLocalizations {
   /// No description provided for @tutorial_wrong_desc.
   ///
   /// In en, this message translates to:
-  /// **'The middle tile representation icon (crown) is the same as left tile but different from right tile (flag). Tile representation icons must be either all the same or all different.'**
+  /// **'The middle tile icon (crown) is the same as left tile but different from right tile (flag). Tile icons must be either all the same or all different.'**
   String get tutorial_wrong_desc;
 
   /// No description provided for @tutorial_final.

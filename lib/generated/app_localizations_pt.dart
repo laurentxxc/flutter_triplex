@@ -59,14 +59,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get tutorial_good_desc =>
-      'O mesmo ícone único de coração azul está presente em todas as peças. As cores de fundo são diferentes entre as peças.';
+      'O mesmo ícone de coração está presente em todas as peças. As cores de fundo e dos ícones são diferentes entre as peças.';
 
   @override
   String get tutorial_wrong_title => 'Exemplo de correspondência errada';
 
   @override
   String get tutorial_wrong_desc =>
-      'O ícone de representação da peça do meio (coroa) é o mesmo que a peça esquerda mas diferente da peça direita (bandeira). Os ícones de representação das peças devem ser ou todos iguais ou todos diferentes.';
+      'O ícone da peça do meio (coroa) é o mesmo que a peça esquerda mas diferente da peça direita (bandeira). Os ícones das peças devem ser ou todos iguais ou todos diferentes.';
 
   @override
   String get tutorial_final => 'Boa sorte e divirta-se!';

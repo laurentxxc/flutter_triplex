@@ -59,14 +59,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get tutorial_good_desc =>
-      'La même icône de cœur bleu est présente sur toutes les tuiles. Les couleurs de fond sont différentes entre les tuiles.';
+      'La même icône (cœur) est présente sur toutes les tuiles. Les couleurs de fond et d\'icônes sont différentes entre les tuiles.';
 
   @override
   String get tutorial_wrong_title => 'Exemple de correspondance incorrecte';
 
   @override
   String get tutorial_wrong_desc =>
-      'L\'icône de représentation de la tuile du milieu (couronne) est identique à la tuile de gauche mais différente de la tuile de droite (drapeau). Les icônes de représentation des tuiles doivent être soit toutes identiques soit toutes différentes.';
+      'L\'icône présente sur la tuile du milieu (couronne) est identique à celle de la tuile gauche mais différente de celle sur la tuile droite (drapeau) or les icônes des tuiles doivent être soit toutes identiques, soit toutes différentes.';
 
   @override
   String get tutorial_final => 'Bonne chance et amusez-vous bien!';

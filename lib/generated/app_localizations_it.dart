@@ -59,14 +59,14 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get tutorial_good_desc =>
-      'La stessa icona di cuore blu singola è presente su tutte le tessere. I colori di sfondo sono diversi tra le tessere.';
+      'La stessa icona di cuore è presente su tutte le tessere. I colori di sfondo e delle icone sono diversi tra le tessere.';
 
   @override
   String get tutorial_wrong_title => 'Esempio di corrispondenza errata';
 
   @override
   String get tutorial_wrong_desc =>
-      'L\'icona di rappresentazione della tessera centrale (corona) è uguale alla tessera di sinistra ma diversa dalla tessera di destra (bandiera). Le icone di rappresentazione delle tessere devono essere o tutte uguali o tutte diverse.';
+      'L\'icona della tessera centrale (corona) è uguale alla tessera di sinistra ma diversa dalla tessera di destra (bandiera). Le icone delle tessere devono essere o tutte uguali o tutte diverse.';
 
   @override
   String get tutorial_final => 'Buona fortuna e buon divertimento!';

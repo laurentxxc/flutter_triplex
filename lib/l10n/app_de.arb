@@ -59,9 +59,9 @@
   "tutorial_main":"In diesem Spiel haben Sie begrenzte Zeit, um passende Dreiergruppen von Kacheln basierend auf ihren Attributen zu finden.\nJede Kachel hat unterschiedliche Attribute (z.B. Darstellung, Größe, Farbe, Hintergrund).\n\nWählen Sie drei Kacheln, um eine Übereinstimmung zu bilden.\n\nSie haben eine gültige Übereinstimmung, wenn für jedes Attribut die drei Kacheln entweder alle gleich oder alle unterschiedlich sind.\nDas Ziel ist, so viele gültige Übereinstimmungen wie möglich zu finden, bevor die Zeit abläuft!",
 
   "tutorial_good_title":"Beispiel für eine gültige Übereinstimmung",
-  "tutorial_good_desc":"Das gleiche einzelne blaue Herz-Symbol ist auf allen Kacheln vorhanden. Die Hintergrundfarben sind bei den Kacheln unterschiedlich.",
+  "tutorial_good_desc":"Das gleiche Herz-Symbol ist auf allen Kacheln vorhanden. Die Hintergrund- und Symbolfarben sind bei den Kacheln unterschiedlich.",
   "tutorial_wrong_title":"Beispiel für eine falsche Übereinstimmung",
-  "tutorial_wrong_desc":"Das Darstellungssymbol der mittleren Kachel (Krone) ist dasselbe wie bei der linken Kachel, aber anders als bei der rechten Kachel (Flagge). Die Darstellungssymbole der Kacheln müssen entweder alle gleich oder alle unterschiedlich sein.",
+  "tutorial_wrong_desc":"Das Symbol der mittleren Kachel (Krone) ist dasselbe wie bei der linken Kachel, aber anders als bei der rechten Kachel (Flagge). Die Kachel-Symbole müssen entweder alle gleich oder alle unterschiedlich sein.",
   "tutorial_final":"Viel Glück und haben Sie Spaß!",
   
   "pauseMessage": "Das Spiel ist pausiert.\n\nMachen Sie eine Pause und setzen Sie fort, wenn Sie bereit sind.",

@@ -59,9 +59,9 @@
   "tutorial_main":"Neste jogo, tem tempo limitado para encontrar tríos de peças correspondentes baseadas nos seus atributos.\nCada peça tem atributos diferentes (ex: representação, tamanho, cor, fundo).\n\nSelecione três peças para formar uma correspondência.\n\nTem uma correspondência válida se, para cada atributo, as três peças são ou todas iguais ou todas diferentes.\nO objetivo é encontrar o maior número possível de correspondências válidas antes do tempo acabar!",
 
   "tutorial_good_title":"Exemplo de correspondência válida",
-  "tutorial_good_desc":"O mesmo ícone único de coração azul está presente em todas as peças. As cores de fundo são diferentes entre as peças.",
+  "tutorial_good_desc":"O mesmo ícone de coração está presente em todas as peças. As cores de fundo e dos ícones são diferentes entre as peças.",
   "tutorial_wrong_title":"Exemplo de correspondência errada",
-  "tutorial_wrong_desc":"O ícone de representação da peça do meio (coroa) é o mesmo que a peça esquerda mas diferente da peça direita (bandeira). Os ícones de representação das peças devem ser ou todos iguais ou todos diferentes.",
+  "tutorial_wrong_desc":"O ícone da peça do meio (coroa) é o mesmo que a peça esquerda mas diferente da peça direita (bandeira). Os ícones das peças devem ser ou todos iguais ou todos diferentes.",
   "tutorial_final":"Boa sorte e divirta-se!",
   
   "pauseMessage": "O jogo está em pausa.\n\nFaça uma pausa e retome quando estiver pronto.",

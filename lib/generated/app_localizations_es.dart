@@ -59,14 +59,14 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get tutorial_good_desc =>
-      'El mismo icono de corazón azul único está presente en todas las fichas. Los colores de fondo son diferentes entre las fichas.';
+      'El mismo icono de corazón está presente en todas las fichas. Los colores de fondo y de icono son diferentes entre las fichas.';
 
   @override
   String get tutorial_wrong_title => 'Ejemplo de coincidencia incorrecta';
 
   @override
   String get tutorial_wrong_desc =>
-      'El icono de representación de la ficha central (corona) es el mismo que la ficha izquierda pero diferente de la ficha derecha (bandera). Los iconos de representación de las fichas deben ser todos iguales o todos diferentes.';
+      'El icono de la ficha del medio (corona) es el mismo que la ficha izquierda pero diferente de la ficha derecha (bandera). Los iconos de las fichas deben ser todos iguales o todos diferentes.';
 
   @override
   String get tutorial_final => '¡Buena suerte y diviértete!';

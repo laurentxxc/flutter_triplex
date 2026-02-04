@@ -59,14 +59,14 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get tutorial_good_desc =>
-      'Ta sama pojedyncza ikona niebieskiego serca jest obecna na wszystkich kafelkach. Kolory tła są różne między kafelkami.';
+      'Ta sama ikona serca jest obecna na wszystkich kafelkach. Kolory tła i ikon są różne między kafelkami.';
 
   @override
   String get tutorial_wrong_title => 'Przykład nieprawidłowego dopasowania';
 
   @override
   String get tutorial_wrong_desc =>
-      'Ikona reprezentacji środkowego kafelka (korona) jest taka sama jak lewego kafelka, ale różna od prawego kafelka (flaga). Ikony reprezentacji kafelków muszą być albo wszystkie takie same, albo wszystkie różne.';
+      'Ikona środkowego kafelka (korona) jest taka sama jak lewego kafelka, ale różna od prawego kafelka (flaga). Ikony kafelków muszą być albo wszystkie takie same, albo wszystkie różne.';
 
   @override
   String get tutorial_final => 'Powodzenia i baw się dobrze!';

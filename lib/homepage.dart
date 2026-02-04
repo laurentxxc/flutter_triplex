@@ -50,32 +50,16 @@ const Color mainThemeColor = Colors.deepPurple;
 const Color tileSelectionColor = Colors.orange;
 
 enum GameState {
-  notStarted(
-    buttonType: TriplexButtonType.start
-  ),
-  running(
-    buttonType: TriplexButtonType.pause
-  ),
-  paused(
-    buttonType: TriplexButtonType.resume,
-    messageId: MessageType.pause,
-  ),
-  gameOver(
-    buttonType: TriplexButtonType.start,
-    messageId: MessageType.gameOver,
-    messageIdAlt: MessageType.bestScore,
-  );
+  notStarted(buttonType: TriplexButtonType.start),
+  running(buttonType: TriplexButtonType.pause),
+  paused(buttonType: TriplexButtonType.resume, messageId: MessageType.pause,),
+  gameOver(buttonType: TriplexButtonType.start, messageId: MessageType.gameOver,),
+  bestScore(buttonType: TriplexButtonType.start,messageId: MessageType.bestScore);
 
-  const GameState({
-
-    required this.buttonType,
-    this.messageId = MessageType.none,
-    this.messageIdAlt = MessageType.none,
-  });
+  const GameState({required this.buttonType, this.messageId = MessageType.none,});
 
   final TriplexButtonType buttonType;
   final MessageType messageId;
-  final MessageType messageIdAlt;
 }
 
 class MyHomePage extends StatefulWidget {
@@ -114,7 +98,6 @@ class _MyHomePageState extends State<MyHomePage>
   int _tileScore = 0;
   double _timeProgress = 1.0;
   Timer? _gameTimer;
-  bool _isGameCompletedWithBestScore = false;
   bool _isVolumeOn = false;
   bool _isSettingsOn = false;
   bool _isTutorialOn = true;
@@ -171,7 +154,8 @@ class _MyHomePageState extends State<MyHomePage>
   void _onGameButtonTap() {
     if (_isVolumeOn) SoundPlayer.play(Sound.message);
     if (_gameState == GameState.notStarted ||
-        _gameState == GameState.gameOver) {
+        _gameState == GameState.gameOver ||
+        _gameState == GameState.bestScore) {
       _startGame();
     } else if (_gameState == GameState.running) {
       _pauseGame();
@@ -238,7 +222,6 @@ class _MyHomePageState extends State<MyHomePage>
       _gameAssets = AssetCollection();
       _gameState = GameState.running;
       _score = 0;
-      _isGameCompletedWithBestScore = false;
       _timeLeft = maxTime;
       _timeProgress = 1.0;
       _gameTimer?.cancel();
@@ -271,19 +254,21 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   void _endGame() {
+    bool bestScoreReached = false;
     setState(() {
       _gameState = GameState.gameOver;
       _selectedTiles.clear();
       _gameTimer?.cancel();
       if (_score > _bestScore) {
+        bestScoreReached = true;
+        _gameState = GameState.bestScore;
         _bestScore = _score;
         _saveBestScore(_bestScore);
-        _isGameCompletedWithBestScore = true;
       }
     });
     if (_isVolumeOn) {
       SoundPlayer.play(
-        _isGameCompletedWithBestScore ? Sound.endingBest : Sound.ending,
+        bestScoreReached ? Sound.endingBest : Sound.ending,
       );
     }
   }
@@ -534,7 +519,7 @@ class _MyHomePageState extends State<MyHomePage>
                         left: 0,
                         child: (_isTutorialOn) ? 
                         TriplexTutorial() :   
-                        TriplexBoardMessage(message: _isGameCompletedWithBestScore ? _gameState.messageIdAlt : _gameState.messageId),
+                        TriplexBoardMessage(message: _gameState.messageId),
                       ),
                     if (_isSettingsOn)
                       Positioned(

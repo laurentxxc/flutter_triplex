@@ -52,50 +52,31 @@ const Color tileSelectionColor = Colors.orange;
 
 enum GameState {
   notStarted(
-    buttonIcon: Icons.play_arrow,
-    buttonTextKey: "startButton",
+    buttonType: TriplexButtonType.start
   ),
   running(
-    buttonIcon: Icons.pause,
-    buttonTextKey: "pauseButton",
+    buttonType: TriplexButtonType.pause
   ),
   paused(
-    buttonIcon: Icons.play_arrow,
-    buttonTextKey: "resumeButton",
+    buttonType: TriplexButtonType.resume,
     messageId: MessageType.pause,
   ),
   gameOver(
-    buttonIcon: Icons.play_arrow,
-    buttonTextKey: "startButton",
+    buttonType: TriplexButtonType.start,
     messageId: MessageType.gameOver,
     messageIdAlt: MessageType.bestScore,
   );
 
   const GameState({
-    required this.buttonTextKey,
-    required this.buttonIcon,
+
+    required this.buttonType,
     this.messageId = MessageType.none,
     this.messageIdAlt = MessageType.none,
   });
 
-  final String buttonTextKey;
-  final IconData buttonIcon;
+  final TriplexButtonType buttonType;
   final MessageType messageId;
   final MessageType messageIdAlt;
-
-  String getButtonText(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    switch (buttonTextKey) {
-      case 'startButton':
-        return l10n.startButton;
-      case 'pauseButton':
-        return l10n.pauseButton;
-      case 'resumeButton':
-        return l10n.resumeButton;
-      default:
-        return buttonTextKey;
-    }
-  }
 }
 
 class MyHomePage extends StatefulWidget {
@@ -602,18 +583,17 @@ class _MyHomePageState extends State<MyHomePage>
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     CircleButton(
-                      buttonSymbol: Icons.settings,
+                      type: CircleButtonType.settings,
                       onTap: () => _onSettingsButtonTap,
                     ),
                     // Main button
                     TriplexButton(
-                      buttonSymbol: _gameState.buttonIcon,
-                      buttonText: _gameState.getButtonText(context),
+                      type: _gameState.buttonType,
                       onTap: () => _onGameButtonTap,
                     ),
                     // Restart button
                     CircleButton(
-                      buttonSymbol: Icons.replay,
+                      type: CircleButtonType.restart,
                       onTap: () => _onRestartButton,
                     ),
                   ],

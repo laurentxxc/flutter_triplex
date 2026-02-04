@@ -14,7 +14,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'asset_model.dart';
 import 'tile_scheme.dart';
 import 'sound_player.dart';
-import 'generated/app_localizations.dart';
 
 // custom widgets
 import 'widgets/button.dart';
@@ -357,21 +356,6 @@ class _MyHomePageState extends State<MyHomePage>
     });
   }
 
-  // Heplers for building UI
-  String _formatTime(int seconds) {
-    int min = seconds ~/ 60;
-    int sec = seconds % 60;
-    return '${min.toString().padLeft(2, '0')}:${sec.toString().padLeft(2, '0')}';
-  }
-
-  String _formatScore(int score) {
-    if (score >= 0) {
-      return score.toString().padLeft(4, '0');
-    } else {
-      return "-${(score * -1).toString().padLeft(3, '0')}";
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -416,21 +400,9 @@ class _MyHomePageState extends State<MyHomePage>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      TriplexUIIndicator(
-                        uiIndicatorText: _formatScore(_score),
-                        uiIndicatorSymbol: Icons.sports_score,
-                        uiSemantic: AppLocalizations.of(context)!.currentScore,
-                      ),
-                      TriplexUIIndicator(
-                        uiIndicatorText: _formatTime(_timeLeft),
-                        uiIndicatorSymbol: Icons.timer,
-                        uiSemantic: AppLocalizations.of(context)!.timeLeft,
-                      ),
-                      TriplexUIIndicator(
-                        uiIndicatorText: _formatScore(_bestScore),
-                        uiIndicatorSymbol: Icons.emoji_events,
-                        uiSemantic: AppLocalizations.of(context)!.bestScore,
-                      ),
+                      TriplexUIIndicator(type: TriplexUIIndicatorType.currentScore, value:_score),
+                      TriplexUIIndicator(type: TriplexUIIndicatorType.timeLeft, value: _timeLeft),
+                      TriplexUIIndicator(type: TriplexUIIndicatorType.bestScore, value: _bestScore),
                     ],
                   ),
                 ),

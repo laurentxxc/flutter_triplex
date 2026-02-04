@@ -64,13 +64,8 @@ class _TriplexAppState extends State<TriplexApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: mainThemeColor),
         textTheme: GoogleFonts.revaliaTextTheme(theme.textTheme),
         scrollbarTheme: ScrollbarThemeData(
-          thickness: WidgetStateProperty.all(14.0),
-          thumbColor: WidgetStateProperty.all(theme.colorScheme.primary.withAlpha(150)),
-          thumbVisibility: WidgetStateProperty.all(true),
-          //trackVisibility: WidgetStateProperty.all(true),
-          trackBorderColor: WidgetStateProperty.all(theme.colorScheme.surfaceContainer),
-          radius: const Radius.circular(8),
-        ),
+          // #17: thumbcolor is not visible on iOS device (web app). I don't know why.
+          thumbColor: WidgetStatePropertyAll(theme.colorScheme.primary.withValues(alpha:0.6))),
       ),
       locale: _locale,
       localizationsDelegates: const [

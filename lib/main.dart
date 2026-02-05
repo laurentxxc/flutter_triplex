@@ -57,11 +57,15 @@ class _TriplexAppState extends State<TriplexApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return MaterialApp(
       title: 'Triplex',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: mainThemeColor),
-        textTheme: GoogleFonts.revaliaTextTheme(Theme.of(context).textTheme),
+        textTheme: GoogleFonts.revaliaTextTheme(theme.textTheme),
+        scrollbarTheme: ScrollbarThemeData(
+          // #17: thumbcolor is not visible on iOS device (web app). I don't know why.
+          thumbColor: WidgetStatePropertyAll(theme.colorScheme.primary.withValues(alpha:0.6))),
       ),
       locale: _locale,
       localizationsDelegates: const [

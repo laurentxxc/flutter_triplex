@@ -13,20 +13,28 @@ import '../asset_model.dart';
 
 const Widget welcomeLogo = Text('🎉', style: TextStyle(fontSize: 35));
 const Widget luckLogo = Text('🍀', style: TextStyle(fontSize: 35));
-const Widget goodLogo = Icon(Icons.check_box, size:50, color: Colors.green);
-const Widget wrongLogo = Icon(Icons.cancel, size:50, color:Colors.red);
-const Widget vSpace = SizedBox(height:20.0);
+const Widget goodLogo = Icon(Icons.check_box, size: 50, color: Colors.green);
+const Widget wrongLogo = Icon(Icons.cancel, size: 50, color: Colors.red);
+const Widget vSpace = SizedBox(height: 20.0);
 
 const bool enableScrolling = true;
 const bool showScrollbar = true;
 
 enum TutorialMatchSample {
   good(
-    assets: [[1,1,3,1], [1,1,1,2], [1,1,2,3]],
+    assets: [
+      [1, 1, 3, 1],
+      [1, 1, 1, 2],
+      [1, 1, 2, 3],
+    ],
     logo: goodLogo,
-    ),
+  ),
   wrong(
-    assets: [[2,1,2,1], [2,1,2,1], [3,1,2,1]],
+    assets: [
+      [2, 1, 2, 1],
+      [2, 1, 2, 1],
+      [3, 1, 2, 1],
+    ],
     logo: wrongLogo,
   );
 
@@ -35,45 +43,48 @@ enum TutorialMatchSample {
   final Widget logo;
 }
 
-Text getText(String text,TextStyle style, {TextAlign align = TextAlign.center}){
+Text getText(
+  String text,
+  TextStyle style, {
+  TextAlign align = TextAlign.center,
+}) {
   return Text(text, textAlign: align, style: style);
 }
 
 Widget getTutorialSampleView(TutorialMatchSample sample, Color borderColor) {
   List<Widget> content = [sample.logo];
-  content.addAll(sample.assets.map(
-          (assetValues) => Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all( color:borderColor, width: 10.0),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10.0),
-              child: TileView.fromAsset(Asset(values: assetValues))),
-          )
-        ));
+  content.addAll(
+    sample.assets.map(
+      (assetValues) => Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: borderColor, width: 10.0),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10.0),
+          child: TileView.fromAsset(Asset(values: assetValues)),
+        ),
+      ),
+    ),
+  );
 
   return SizedBox(
     width: 300,
     child: FittedBox(
       fit: BoxFit.contain,
-      child: Row(
-        spacing: 10.0,
-        children: content,
-      ),
+      child: Row(spacing: 10.0, children: content),
     ),
   );
 }
 
-
 class TriplexTutorial extends StatelessWidget {
   final Size size;
 
-  TriplexTutorial({this.size = const Size(500,760)});
+  TriplexTutorial({this.size = const Size(500, 760)});
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations l10n = AppLocalizations.of(context)!; 
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final textStyleHead = theme.textTheme.displaySmall!.copyWith(
       fontSize: 24,
@@ -86,20 +97,24 @@ class TriplexTutorial extends StatelessWidget {
       fontWeight: FontWeight.bold,
     );
     final Color borderColor = theme.colorScheme.primary;
-    final Icon lineSep = Icon(Icons.horizontal_rule, size: 50, color: borderColor,);
+    final Icon lineSep = Icon(
+      Icons.horizontal_rule,
+      size: 50,
+      color: borderColor,
+    );
 
     Widget content = Column(
       children: [
         // welcome header
-        welcomeLogo,        
-        getText(l10n.tutorial_welcome,textStyleHead),
+        welcomeLogo,
+        getText(l10n.tutorial_welcome, textStyleHead),
 
         vSpace,
         // tutorial main
         getText(l10n.tutorial_main, textStyleCore, align: TextAlign.left),
 
         lineSep,
-        
+
         // Example good
         getText(l10n.tutorial_good_title, textStyleHead),
         vSpace,
@@ -125,21 +140,19 @@ class TriplexTutorial extends StatelessWidget {
       ],
     );
 
+    // #17: controller needed otherwise scrollbar is not visible on phone (web app)
+    final ScrollController scrollController = ScrollController();
     // Wrap with scrolling widgets if enabled
     if (enableScrolling) {
       content = SingleChildScrollView(
-        primary: true,
-        padding: const EdgeInsets.all(16),
+        controller: scrollController,
+        primary: false, //#17: need to be set to false (dedicated controller)
+        padding: const EdgeInsets.all(30),
         child: content,
       );
 
       if (showScrollbar) {
-        content = Scrollbar(
-          thumbVisibility: true, // Always show scrollbar thumb
-          thickness: 8, // Scrollbar thickness
-          radius: const Radius.circular(4), // Rounded scrollbar
-          child: content,
-        );
+        content = Scrollbar( thumbVisibility: true, thickness: 15.0, radius: Radius.circular(8.0), child: content,);
       }
     }
     return SizedBox(

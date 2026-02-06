@@ -54,14 +54,10 @@ enum MessageType {
 class TriplexBoardMessage extends StatelessWidget {
   final MessageType message;
   final Size size;
-  final bool enableScrolling;
-  final bool showScrollbar;
 
   TriplexBoardMessage({
     required this.message,
     this.size = const Size(500,760),
-    this.enableScrolling = false,   // default no scrolling (original behavior)
-    this.showScrollbar = true,      // default show scrollbar when scrolling
   });
 
   @override
@@ -90,23 +86,6 @@ class TriplexBoardMessage extends StatelessWidget {
         ],
       ),
     );
-
-  // Wrap with scrolling widgets if enabled
-  if (enableScrolling) {
-    content = SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: content,
-    );
-    
-    if (showScrollbar) {
-      content = Scrollbar(
-        thumbVisibility: true,        // Always show scrollbar thumb
-        thickness: 8,              // Scrollbar thickness
-        radius: const Radius.circular(4),  // Rounded scrollbar
-        child: content,
-      );
-    }
-  }
 
     return SizedBox(
       width: size.width,

@@ -9,10 +9,10 @@
 enum AchievementType { score, streak, speed, totalMatches, specialPattern, session }
 
 class Achievement {
-  final String id;
+//  final String id;
   final String title;
-  final String description;
-  final String iconPath;
+//  final String description;
+  final String emoji;
   final AchievementType type;
   final Map<String, dynamic> criteria;
   final bool isUnlocked;
@@ -21,10 +21,10 @@ class Achievement {
   final int maxProgress;
 
   const Achievement({
-    required this.id, 
+//    required this.id, 
     required this.title, 
-    required this.description, 
-    required this.iconPath,
+//    required this.description, 
+    required this.emoji,
     required this.type,
     required this.criteria,
     this.isUnlocked = false,
@@ -36,10 +36,10 @@ class Achievement {
  // JSON Serialization
   factory Achievement.fromJson(Map<String, dynamic> json) {
     return Achievement(
-      id: json['id'] as String,
+    //  id: json['id'] as String,
       title: json['title'] as String,
-      description: json['description'] as String,
-      iconPath: json['iconPath'] as String,
+    //  description: json['description'] as String,
+      emoji: json['emoji'] as String,
       type: AchievementType.values.firstWhere(
         (e) => e.name == json['type'],
         orElse: () => AchievementType.score,
@@ -56,10 +56,10 @@ class Achievement {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+    //  'id': id,
       'title': title,
-      'description': description,
-      'iconPath': iconPath,
+    //  'description': description,
+      'emoji': emoji,
       'type': type.name,
       'criteria': criteria,
       'isUnlocked': isUnlocked,
@@ -69,10 +69,10 @@ class Achievement {
     };
   }
   Achievement copyWith({
-    String? id,
+  //  String? id,
     String? title,
-    String? description,
-    String? iconPath,
+  //  String? description,
+    String? emoji,
     AchievementType? type,
     Map<String, dynamic>? criteria,
     bool? isUnlocked,
@@ -81,10 +81,10 @@ class Achievement {
     int? maxProgress,
   }) {
     return Achievement(
-      id: id ?? this.id,
+    //  id: id ?? this.id,
       title: title ?? this.title,
-      description: description ?? this.description,
-      iconPath: iconPath ?? this.iconPath,
+    //  description: description ?? this.description,
+      emoji: emoji ?? this.emoji,
       type: type ?? this.type,
       criteria: criteria ?? this.criteria,
       isUnlocked: isUnlocked ?? this.isUnlocked,

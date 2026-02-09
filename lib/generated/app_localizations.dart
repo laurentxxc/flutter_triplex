@@ -249,6 +249,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Game Over! Time\'s up.\n\nCongratulation ! You make the best score this time.'**
   String get gameOverMessageBestScore;
+
+  /// No description provided for @share_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Share it with your friends'**
+  String get share_button;
+
+  /// No description provided for @share_try_url.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s try yourself at <<url>> 😜'**
+  String get share_try_url;
+
+  /// No description provided for @share_achievement_bestScore.
+  ///
+  /// In en, this message translates to:
+  /// **'I just got new Best Score on Triplex! Can you beat my record? 🏆'**
+  String get share_achievement_bestScore;
 }
 
 class _AppLocalizationsDelegate

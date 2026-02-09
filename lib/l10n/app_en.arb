@@ -77,5 +77,9 @@
   "gameOverMessageBestScore": "Game Over! Time's up.\n\nCongratulation ! You make the best score this time.",
   "@gameOverMessageBestScore": {
     "description": "Message shown when game ends with new best score"
-  }
+  },
+
+  "share_button": "Share it with your friends",
+  "share_try_url": "Let's try yourself at <<url>> 😜",
+  "share_achievement_bestScore": "I just got new Best Score on Triplex! Can you beat my record? 🏆"
 }

@@ -56,13 +56,13 @@ class AchievementStorage {
   
   // Update single achievement progress
   static Future<void> updateAchievementProgress(
-    String achievementId, 
+    String title, 
     int newProgress, {
     bool forceUnlock = false,
   }) async {
     try {
       final achievements = await loadAchievements();
-      final index = achievements.indexWhere((a) => a.id == achievementId);
+      final index = achievements.indexWhere((a) => a.title == title);
       
       if (index != -1) {
         final achievement = achievements[index];
@@ -140,19 +140,19 @@ class AchievementStorage {
     return [
       // Score Achievements
       Achievement(
-        id: 'first_blood',
+      //  id: 'first_blood',
         title: 'First Blood',
-        description: 'Make your first successful match',
-        iconPath: 'assets/icons/first_blood.png',
+      //  description: 'Make your first successful match',
+        emoji: 'assets/icons/first_blood.png',
         type: AchievementType.score,
         criteria: {'score': 1},
         maxProgress: 1,
       ),
       Achievement(
-        id: 'score_master',
+        //id: 'score_master',
         title: 'Score Master',
-        description: 'Reach 1000 points in a single game',
-        iconPath: 'assets/icons/score_master.png',
+        //description: 'Reach 1000 points in a single game',
+        emoji: 'assets/icons/score_master.png',
         type: AchievementType.score,
         criteria: {'score': 1000},
         maxProgress: 1000,
@@ -160,10 +160,10 @@ class AchievementStorage {
       
       // Speed Achievements
       Achievement(
-        id: 'speed_demon',
+      //  id: 'speed_demon',
         title: 'Speed Demon',
-        description: 'Make 10 matches in 60 seconds',
-        iconPath: 'assets/icons/speed_demon.png',
+      //  description: 'Make 10 matches in 60 seconds',
+        emoji: 'assets/icons/speed_demon.png',
         type: AchievementType.speed,
         criteria: {'matches': 10, 'timeLimit': 60},
         maxProgress: 10,
@@ -171,10 +171,10 @@ class AchievementStorage {
       
       // Streak Achievements
       Achievement(
-        id: 'on_fire',
+      //  id: 'on_fire',
         title: 'On Fire',
-        description: 'Make 5 consecutive correct matches',
-        iconPath: 'assets/icons/on_fire.png',
+      //  description: 'Make 5 consecutive correct matches',
+        emoji: 'assets/icons/on_fire.png',
         type: AchievementType.streak,
         criteria: {'streak': 5},
         maxProgress: 5,

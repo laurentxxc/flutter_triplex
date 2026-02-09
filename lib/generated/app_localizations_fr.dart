@@ -82,4 +82,14 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get gameOverMessageBestScore =>
       'Jeu terminé! Le temps est écoulé.\n\nFélicitations! Vous avez obtenu le meilleur score cette fois-ci.';
+
+  @override
+  String get share_button => 'Partagez avec vos amis';
+
+  @override
+  String get share_try_url => 'Essayez vous-même à <<url>> 😜';
+
+  @override
+  String get share_achievement_bestScore =>
+      'Je viens d\'obtenir un nouveau Best Score sur Triplex! Peux-tu battre mon record ? 🏆';
 }

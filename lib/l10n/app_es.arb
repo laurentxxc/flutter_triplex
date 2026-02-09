@@ -77,5 +77,9 @@
   "gameOverMessageBestScore": "¡Juego terminado! Se acabó el tiempo.\n\n¡Felicidades! Has conseguido la mejor puntuación esta vez.",
   "@gameOverMessageBestScore": {
     "description": "Message shown when game ends with new best score"
-  }
+  },
+ 
+  "share_button": "Comparte con tus amigos",
+  "share_try_url": "Pruébalo tú mismo en <<url>> 😜",
+  "share_achievement_bestScore": "¡Acabo de conseguir un nuevo Best Score en Triplex! ¿Puedes superar mi récord? 🏆"
 }

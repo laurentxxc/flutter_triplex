@@ -7,7 +7,7 @@
 // This file is part of Triplex, a puzzle game where players match tiles based on attributes.
 
 import 'package:flutter/material.dart';
-import 'asset_model.dart';
+import 'models/asset_model.dart';
 
 class TileView extends StatelessWidget {
   // View representation of a tile for a given asset

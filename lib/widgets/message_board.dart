@@ -6,13 +6,15 @@
 //
 // This file is part of Triplex, a puzzle game where players match tiles based on attributes.
 
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:triplex/generated/app_localizations.dart';
 
 const Widget coffeeLogo = Text('☕️', style: TextStyle(fontSize: 50));
 const Widget smileyLogo = Text('😜', style: TextStyle(fontSize: 50));
 const Widget winnerLogo = Text('🏆', style: TextStyle(fontSize: 50));
-const Widget vSpace = SizedBox(height:20.0);
+const Widget messageBoardVSpace = SizedBox(height:40.0);
 
 
 enum MessageType {
@@ -54,15 +56,14 @@ enum MessageType {
 class TriplexBoardMessage extends StatelessWidget {
   final MessageType message;
   final Size size;
-  final bool enableScrolling;
-  final bool showScrollbar;
+  final List<Widget>? extra; // optional list of widgets to add bellow the message, e.g., for sharing best score achievement
 
   TriplexBoardMessage({
     required this.message,
     this.size = const Size(500,760),
-    this.enableScrolling = false,   // default no scrolling (original behavior)
-    this.showScrollbar = true,      // default show scrollbar when scrolling
+    this.extra = const [],
   });
+
 
   @override
   Widget build(BuildContext context) {
@@ -75,38 +76,22 @@ class TriplexBoardMessage extends StatelessWidget {
     );
 
     Widget content = Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          message.logo,
+          messageBoardVSpace,
           Text(
             message.translate(l10n), 
             textAlign: TextAlign.center, 
-            style: textStyle, 
+            style: textStyle,
             softWrap: true,
           ),
-          vSpace,
-          message.logo,
+          ...extra!,
         ],
       ),
     );
-
-  // Wrap with scrolling widgets if enabled
-  if (enableScrolling) {
-    content = SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: content,
-    );
-    
-    if (showScrollbar) {
-      content = Scrollbar(
-        thumbVisibility: true,        // Always show scrollbar thumb
-        thickness: 8,              // Scrollbar thickness
-        radius: const Radius.circular(4),  // Rounded scrollbar
-        child: content,
-      );
-    }
-  }
 
     return SizedBox(
       width: size.width,

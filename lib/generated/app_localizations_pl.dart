@@ -82,4 +82,14 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get gameOverMessageBestScore =>
       'Koniec gry! Czas minął.\n\nGratulacje! Tym razem uzyskałeś najlepszy wynik.';
+
+  @override
+  String get share_button => 'Udostępnij ze znajomymi';
+
+  @override
+  String get share_try_url => 'Spróbuj sam na <<url>> 😜';
+
+  @override
+  String get share_achievement_bestScore =>
+      'Właśnie zdobyłem nowy Best Score w Triplex! Potrafisz pobić mój rekord? 🏆';
 }

@@ -82,4 +82,14 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get gameOverMessageBestScore =>
       'Игра окончена! Время вышло.\n\nПоздравляем! В этот раз вы установили лучший счёт.';
+
+  @override
+  String get share_button => 'Поделиться с друзьями';
+
+  @override
+  String get share_try_url => 'Попробуйте сами на <<url>> 😜';
+
+  @override
+  String get share_achievement_bestScore =>
+      'Я только что получил новый Best Score в Triplex! Можете побить мой рекорд? 🏆';
 }

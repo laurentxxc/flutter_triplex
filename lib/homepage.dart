@@ -5,13 +5,14 @@
 // See LICENSE file in the project root for full license text.
 //
 // This file is part of Triplex, a puzzle game where players match tiles based on attributes.
-
 import 'package:flutter/material.dart';
+import 'dart:typed_data';
 import 'dart:async';
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'asset_model.dart';
+import 'models/achievement_model.dart';
+import 'models/asset_model.dart';
 import 'tile_scheme.dart';
 import 'sound_player.dart';
 
@@ -23,6 +24,10 @@ import 'widgets/message_board.dart';
 import 'widgets/game_title.dart';
 import 'widgets/settings_panel.dart';
 import 'widgets/tutorial_board.dart';
+
+// custom services
+import 'services/share_service.dart';
+import 'services/achievement_service.dart';
 
 const bool debug =
     String.fromEnvironment('DEBUG_ASSETS', defaultValue: 'false') == 'true';
@@ -52,18 +57,31 @@ const Color tileSelectionColor = Colors.orange;
 enum GameState {
   notStarted(buttonType: TriplexButtonType.start),
   running(buttonType: TriplexButtonType.pause),
-  paused(buttonType: TriplexButtonType.resume, messageId: MessageType.pause,),
-  gameOver(buttonType: TriplexButtonType.start, messageId: MessageType.gameOver,),
-  bestScore(buttonType: TriplexButtonType.start,messageId: MessageType.bestScore);
+  paused(buttonType: TriplexButtonType.resume, messageId: MessageType.pause),
+  gameOver(
+    buttonType: TriplexButtonType.start,
+    messageId: MessageType.gameOver,
+  ),
+  bestScore(
+    buttonType: TriplexButtonType.start,
+    messageId: MessageType.bestScore,
+  );
 
-  const GameState({required this.buttonType, this.messageId = MessageType.none,});
+  const GameState({
+    required this.buttonType,
+    this.messageId = MessageType.none,
+  });
 
   final TriplexButtonType buttonType;
   final MessageType messageId;
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title, required this.onLocaleChanged,});
+  const MyHomePage({
+    super.key,
+    required this.title,
+    required this.onLocaleChanged,
+  });
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -99,8 +117,11 @@ class _MyHomePageState extends State<MyHomePage>
   double _timeProgress = 1.0;
   Timer? _gameTimer;
   bool _isVolumeOn = false;
-  bool _isSettingsOn = false;
+  bool _isSettingsOn = false; 
   bool _isTutorialOn = true;
+  bool _isGeneratingImage = false;
+  Achievement? _lastBestScoreAchievement;
+  Uint8List? _lastBestScoreAchievementImage;
 
   late AnimationController _tileScoringAnimationController;
   late Animation<double> _scaleAnimation;
@@ -111,12 +132,14 @@ class _MyHomePageState extends State<MyHomePage>
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _bestScore = prefs.getInt('bestScore') ?? 0;
+      // TODO: create associated bestScore achievement (should go thru achievement_storage service)
     });
   }
 
   Future<void> _saveBestScore(int score) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('bestScore', score);
+    // TODO: best score being an achievement then it sould go thru achievement_storage service
   }
 
   @override
@@ -193,6 +216,13 @@ class _MyHomePageState extends State<MyHomePage>
     _startGame();
   }
 
+  void _onShareButtonTap(){
+    ShareService.shareAchievement(
+        context: context,
+        achievement: _lastBestScoreAchievement!,
+      );
+  }
+
   // Game state changes
   void _updateTime(int seconds) {
     if (_isVolumeOn & (seconds < 6)) SoundPlayer.play(Sound.clock);
@@ -263,13 +293,19 @@ class _MyHomePageState extends State<MyHomePage>
         bestScoreReached = true;
         _gameState = GameState.bestScore;
         _bestScore = _score;
+        _lastBestScoreAchievement = AchievementService.createBestScoreAchievement(_bestScore);
+        _isGeneratingImage = true;
+        AchievementService.getAchievementImage(achievement: _lastBestScoreAchievement!).then(
+          (imageBytes) => setState(() {
+            _lastBestScoreAchievementImage = imageBytes;
+            _isGeneratingImage = false;
+          }),
+        );
         _saveBestScore(_bestScore);
       }
     });
     if (_isVolumeOn) {
-      SoundPlayer.play(
-        bestScoreReached ? Sound.endingBest : Sound.ending,
-      );
+      SoundPlayer.play(bestScoreReached ? Sound.endingBest : Sound.ending);
     }
   }
 
@@ -313,18 +349,17 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   // handle settings panel
-  void _openSettings(){
+  void _openSettings() {
     setState(() {
       _isSettingsOn = true;
     });
   }
 
-  void _closeSettings(){
-    setState( () {
+  void _closeSettings() {
+    setState(() {
       _isSettingsOn = false;
     });
   }
-
 
   // volumes handling
   void _soundOff() {
@@ -356,6 +391,23 @@ class _MyHomePageState extends State<MyHomePage>
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+
+    final List<Widget> bestScoreExtraWidgets = _lastBestScoreAchievementImage != null 
+    ? [
+        messageBoardVSpace,
+        Container(
+        width: 150, height: 150,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.6), blurRadius: 10)],
+        ),
+        child: Image.memory(_lastBestScoreAchievementImage!, width: 150, height: 150)),
+        messageBoardVSpace,
+                            // Share button
+        ShareButton(onTap: () => _onShareButtonTap()),
+      ]
+    : [];
+    
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -385,9 +437,18 @@ class _MyHomePageState extends State<MyHomePage>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      TriplexUIIndicator(type: TriplexUIIndicatorType.currentScore, value:_score),
-                      TriplexUIIndicator(type: TriplexUIIndicatorType.timeLeft, value: _timeLeft),
-                      TriplexUIIndicator(type: TriplexUIIndicatorType.bestScore, value: _bestScore),
+                      TriplexUIIndicator(
+                        type: TriplexUIIndicatorType.currentScore,
+                        value: _score,
+                      ),
+                      TriplexUIIndicator(
+                        type: TriplexUIIndicatorType.timeLeft,
+                        value: _timeLeft,
+                      ),
+                      TriplexUIIndicator(
+                        type: TriplexUIIndicatorType.bestScore,
+                        value: _bestScore,
+                      ),
                     ],
                   ),
                 ),
@@ -419,7 +480,7 @@ class _MyHomePageState extends State<MyHomePage>
                             onTap: () {
                               // Handle tile tap
                               _onTileTap(index);
-                              print('You tapped on tile $index');
+                              //print('You tapped on tile $index');
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -514,24 +575,25 @@ class _MyHomePageState extends State<MyHomePage>
                     ),
                     // Overlay message
                     if (_gameState != GameState.running)
+                      if (_isTutorialOn)
+                        Positioned(top:0, left:0, child: TriplexTutorial())                   
+                      else
+                        Positioned(top:0, left:0, child: TriplexBoardMessage(
+                          message: _gameState.messageId,
+                          extra: (_gameState == GameState.bestScore) ? bestScoreExtraWidgets : [],)
+                        ),
+
+                    if (_isSettingsOn)
                       Positioned(
                         top: 0,
                         left: 0,
-                        child: (_isTutorialOn) ? 
-                        TriplexTutorial() :   
-                        TriplexBoardMessage(message: _gameState.messageId),
-                      ),
-                    if (_isSettingsOn)
-                      Positioned(
-                        top:0,
-                        left:0,
                         child: SettingsPanel(
-                          size: const Size(500,760),
-                          isSoundOn: _isVolumeOn, 
-                          onSoundTap: (b) => _onVolumeToggleSwitch(b), 
+                          size: const Size(500, 760),
+                          isSoundOn: _isVolumeOn,
+                          onSoundTap: (b) => _onVolumeToggleSwitch(b),
                           onLanguageTap: (loc) => widget.onLocaleChanged(loc),
                           onTutorialTap: () => _onTutorialSettingEvt(),
-                          ),
+                        ),
                       ),
                   ],
                 ),

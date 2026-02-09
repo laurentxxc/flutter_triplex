@@ -9,7 +9,7 @@
 import 'package:flutter/material.dart';
 import '../generated/app_localizations.dart';
 import '../tile_scheme.dart';
-import '../asset_model.dart';
+import '../models/asset_model.dart';
 
 const Widget welcomeLogo = Text('🎉', style: TextStyle(fontSize: 35));
 const Widget luckLogo = Text('🍀', style: TextStyle(fontSize: 35));

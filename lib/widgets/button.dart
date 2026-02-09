@@ -82,6 +82,57 @@ class TriplexButton extends StatelessWidget {
   }
 }
 
+class ShareButton extends StatelessWidget {
+  static const int buttonWidth = 290;
+
+  final Function onTap;
+
+  ShareButton({super.key, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: theme.colorScheme.surfaceContainer,
+        side: BorderSide(width: 3, color: theme.colorScheme.primary),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        elevation: 10,
+      ),
+      onPressed: () {
+        onTap.call();
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 15.0),
+        child: SizedBox(
+          width: 250,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: 200,
+                child: Text(
+                  l10n.share_button,
+                  style: theme.textTheme.displaySmall!.copyWith(
+                    fontSize: 18,
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Icon(Icons.ios_share, size: 40, color: theme.colorScheme.primary),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 enum CircleButtonType {
   settings(icon: Icons.settings),
   restart(icon: Icons.replay);

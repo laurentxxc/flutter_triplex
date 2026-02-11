@@ -10,6 +10,7 @@ import 'dart:typed_data';
 import 'dart:async';
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:triplex/services/achievement_storages.dart';
 
 import 'models/achievement_model.dart';
 import 'models/asset_model.dart';
@@ -129,17 +130,34 @@ class _MyHomePageState extends State<MyHomePage>
   List<int> _notMatchingTiles = [];
 
   Future<void> _loadBestScore() async {
-    final prefs = await SharedPreferences.getInstance();
+
+    Achievement? bestScoreAchievement = await AchievementStorage.loadAchievement(AchievementID.bestScore); // always exits as AchievementStorage has a default one.
+
+    // up to v1.4.0 best score was only stored in shared preferences and not with achievement format, so we need to handle this particular case for backward compatibility
+    if (bestScoreAchievement!.criteria['score'] == 0) {
+      // try to load best score from shared preferences
+      final SharedPreferences preferences = await SharedPreferences.getInstance();
+      final int storedBestScore = preferences.getInt('bestScore') ?? 0;
+      if (storedBestScore > 0) {
+        // if we find a stored best score, we update the achievement accordingly
+        bestScoreAchievement = bestScoreAchievement.copyWith(
+          criteria: {'score': storedBestScore},
+          nbTimesUnlocked: 1,
+          unlockedAt: DateTime.now(),
+        );
+        AchievementStorage.updateAchievement(bestScoreAchievement);
+        preferences.remove('bestScore'); // we can remove the old stored best score as it's now saved as an achievement
+      }
+    } 
+    _updateBestScoreAchievementImage();
     setState(() {
-      _bestScore = prefs.getInt('bestScore') ?? 0;
-      // TODO: create associated bestScore achievement (should go thru achievement_storage service)
+      _bestScore = bestScoreAchievement!.criteria['score'] ?? 0;
+      _lastBestScoreAchievement = bestScoreAchievement;
     });
   }
 
-  Future<void> _saveBestScore(int score) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('bestScore', score);
-    // TODO: best score being an achievement then it sould go thru achievement_storage service
+  Future<void> _saveBestScore() async {
+    AchievementStorage.updateAchievement(_lastBestScoreAchievement!);
   }
 
   @override
@@ -155,6 +173,8 @@ class _MyHomePageState extends State<MyHomePage>
 
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadBestScore());
 
+    // load best score achievement
+  
     super.initState();
   }
 
@@ -293,20 +313,32 @@ class _MyHomePageState extends State<MyHomePage>
         bestScoreReached = true;
         _gameState = GameState.bestScore;
         _bestScore = _score;
-        _lastBestScoreAchievement = AchievementService.createBestScoreAchievement(_bestScore);
-        _isGeneratingImage = true;
-        AchievementService.getAchievementImage(achievement: _lastBestScoreAchievement!).then(
-          (imageBytes) => setState(() {
-            _lastBestScoreAchievementImage = imageBytes;
-            _isGeneratingImage = false;
-          }),
+        _lastBestScoreAchievement = _lastBestScoreAchievement!.copyWith(
+          criteria: {'score': _bestScore},
+          nbTimesUnlocked: _lastBestScoreAchievement!.nbTimesUnlocked + 1,
+          unlockedAt: DateTime.now(),
         );
-        _saveBestScore(_bestScore);
+        _updateBestScoreAchievementImage();
+        _saveBestScore();
       }
     });
     if (_isVolumeOn) {
       SoundPlayer.play(bestScoreReached ? Sound.endingBest : Sound.ending);
     }
+  }
+
+  void _updateBestScoreAchievementImage(){
+    setState(() {
+      _isGeneratingImage = true;
+      AchievementService.getAchievementImage(
+        achievement: _lastBestScoreAchievement!,
+      ).then(
+        (imageBytes) => setState(() {
+          _lastBestScoreAchievementImage = imageBytes;
+          _isGeneratingImage = false;
+        }),
+      );
+    });
   }
 
   void _updateBoardAndScore() {

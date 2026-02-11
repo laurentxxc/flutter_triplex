@@ -52,33 +52,50 @@ class AchievementStorage {
       return _getDefaultAchievements(); // Fallback to defaults
     }
   }
-  
+
+  static Future<Achievement?> loadAchievement(AchievementID id) async {
+    final achievements = await loadAchievements();
+    return achievements.firstWhere((a) => a.id == id);
+  }
+
+  static Future<void> updateAchievement(Achievement updatedAchievement) async {
+    final achievements = await loadAchievements();
+    final index = achievements.indexWhere((a) => a.id == updatedAchievement.id);
+    
+    if (index != -1) {
+      achievements[index] = updatedAchievement;
+      await saveAchievements(achievements);
+    }
+  }
   
   // Update single achievement progress
   static Future<void> updateAchievementProgress(
-    String title, 
-    int newProgress, {
-    bool forceUnlock = false,
+    AchievementID id, 
+    { int newProgress = 0,
+      Map<String, dynamic>? criteria,
+      bool forceUnlock = false,
   }) async {
     try {
       final achievements = await loadAchievements();
-      final index = achievements.indexWhere((a) => a.id.title == title);
+      final index = achievements.indexWhere((a) => a.id == id);
       
       if (index != -1) {
         final achievement = achievements[index];
+        final bool isNowUnlocked = forceUnlock || newProgress >= achievement.id.maxProgress;
         final updatedAchievement = achievement.copyWith(
-          //progress: newProgress,
-          nbTimesUnlocked: forceUnlock || newProgress >= achievement.id.maxProgress ? achievement.nbTimesUnlocked + 1 : achievement.nbTimesUnlocked,
+          progress: isNowUnlocked ? 0 : newProgress,
+          nbTimesUnlocked: isNowUnlocked ? achievement.nbTimesUnlocked + 1 : achievement.nbTimesUnlocked,
           unlockedAt: (forceUnlock || newProgress >= achievement.id.maxProgress) 
               ? DateTime.now() 
               : achievement.unlockedAt,
+          criteria: criteria ?? achievement.criteria,
         );
         
         achievements[index] = updatedAchievement;
         await saveAchievements(achievements);
         
         // Return if unlocked for notification purposes
-        if (updatedAchievement.nbTimesUnlocked > achievement.nbTimesUnlocked) {
+        if (isNowUnlocked) {
           _notifyAchievementUnlocked(updatedAchievement);
         }
       }
@@ -140,7 +157,7 @@ class AchievementStorage {
     return [
       Achievement(
         id: AchievementID.bestScore,
-        criteria: {'score': 1},
+        criteria: {'score': 0},
         progress: 0,
         nbTimesUnlocked: 0,
       ),

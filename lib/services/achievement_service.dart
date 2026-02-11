@@ -25,7 +25,7 @@ class AchievementService {
     return Achievement(
       id: AchievementID.bestScore,
       criteria: {'score': bestScore},
-      isUnlocked: true,
+      nbTimesUnlocked: 1,
       unlockedAt: DateTime.now(),
     );
   }

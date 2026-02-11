@@ -68,7 +68,7 @@ class AchievementStorage {
         final achievement = achievements[index];
         final updatedAchievement = achievement.copyWith(
           //progress: newProgress,
-          isUnlocked: forceUnlock || newProgress >= achievement.id.maxProgress,
+          nbTimesUnlocked: forceUnlock || newProgress >= achievement.id.maxProgress ? achievement.nbTimesUnlocked + 1 : achievement.nbTimesUnlocked,
           unlockedAt: (forceUnlock || newProgress >= achievement.id.maxProgress) 
               ? DateTime.now() 
               : achievement.unlockedAt,
@@ -78,7 +78,7 @@ class AchievementStorage {
         await saveAchievements(achievements);
         
         // Return if unlocked for notification purposes
-        if (updatedAchievement.isUnlocked && !achievement.isUnlocked) {
+        if (updatedAchievement.nbTimesUnlocked > achievement.nbTimesUnlocked) {
           _notifyAchievementUnlocked(updatedAchievement);
         }
       }
@@ -142,7 +142,7 @@ class AchievementStorage {
         id: AchievementID.bestScore,
         criteria: {'score': 1},
         progress: 0,
-        isUnlocked: false,
+        nbTimesUnlocked: 0,
       ),
     ];
   }

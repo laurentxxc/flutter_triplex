@@ -35,14 +35,14 @@ enum AchievementID {
 class Achievement {
   final AchievementID id;
   final Map<String, dynamic> criteria;
-  final bool isUnlocked;
+  final int nbTimesUnlocked; // Nb of times the achievement has been unlocked
   final DateTime? unlockedAt;
   final int progress;
 
   const Achievement({
     required this.id,
     required this.criteria,
-    this.isUnlocked = false,
+    this.nbTimesUnlocked = 0,
     this.unlockedAt,
     this.progress = 0});
 
@@ -55,7 +55,7 @@ class Achievement {
         orElse: () => AchievementID.unknown,
       ),
       criteria: Map<String, dynamic>.from(json['criteria'] ?? {}),
-      isUnlocked: json['isUnlocked'] as bool? ?? false,
+      nbTimesUnlocked: json['nbTimesUnlocked'] as int? ?? 0,
       unlockedAt: json['unlockedAt'] != null 
           ? DateTime.parse(json['unlockedAt'] as String)
           : null,
@@ -67,7 +67,7 @@ class Achievement {
     return {
       'id': id.name,
       'criteria': criteria,
-      'isUnlocked': isUnlocked,
+      'nbTimesUnlocked': nbTimesUnlocked,
       'unlockedAt': unlockedAt?.toIso8601String(),
       'progress': progress,
     };
@@ -79,7 +79,7 @@ class Achievement {
     String? emoji,
     AchievementID? type,
     Map<String, dynamic>? criteria,
-    bool? isUnlocked,
+    int? nbTimesUnlocked,
     DateTime? unlockedAt,
     int? progress,
     int? maxProgress,
@@ -87,7 +87,7 @@ class Achievement {
     return Achievement(
       id: type ?? id,
       criteria: criteria ?? this.criteria,
-      isUnlocked: isUnlocked ?? this.isUnlocked,
+      nbTimesUnlocked: nbTimesUnlocked ?? this.nbTimesUnlocked,
       unlockedAt: unlockedAt ?? this.unlockedAt,
       progress: progress ?? this.progress,
     );

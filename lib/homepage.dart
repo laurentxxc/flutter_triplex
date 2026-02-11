@@ -10,8 +10,9 @@ import 'dart:typed_data';
 import 'dart:async';
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:triplex/services/achievement_storages.dart';
+import 'package:flutter/services.dart';
 
+// custom models
 import 'models/achievement_model.dart';
 import 'models/asset_model.dart';
 import 'tile_scheme.dart';
@@ -29,6 +30,7 @@ import 'widgets/tutorial_board.dart';
 // custom services
 import 'services/share_service.dart';
 import 'services/achievement_service.dart';
+import 'services/achievement_storages.dart';
 
 const bool debug =
     String.fromEnvironment('DEBUG_ASSETS', defaultValue: 'false') == 'true';
@@ -129,6 +131,9 @@ class _MyHomePageState extends State<MyHomePage>
   List<int> _matchingTiles = [];
   List<int> _notMatchingTiles = [];
 
+  //for debug only
+  late FocusNode _debugFocusNode;
+
   Future<void> _loadBestScore() async {
 
     Achievement? bestScoreAchievement = await AchievementStorage.loadAchievement(AchievementID.bestScore); // always exits as AchievementStorage has a default one.
@@ -148,11 +153,11 @@ class _MyHomePageState extends State<MyHomePage>
         AchievementStorage.updateAchievement(bestScoreAchievement);
         preferences.remove('bestScore'); // we can remove the old stored best score as it's now saved as an achievement
       }
-    } 
-    _updateBestScoreAchievementImage();
+    }
     setState(() {
       _bestScore = bestScoreAchievement!.criteria['score'] ?? 0;
       _lastBestScoreAchievement = bestScoreAchievement;
+      _updateBestScoreAchievementImage();
     });
   }
 
@@ -173,8 +178,8 @@ class _MyHomePageState extends State<MyHomePage>
 
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadBestScore());
 
-    // load best score achievement
-  
+    if (debug) _debugFocusNode = FocusNode();  
+    
     super.initState();
   }
 
@@ -440,7 +445,7 @@ class _MyHomePageState extends State<MyHomePage>
       ]
     : [];
     
-    return Scaffold(
+    Widget content = Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         // TRY THIS: Try changing the color here to a specific color (to
@@ -656,5 +661,83 @@ class _MyHomePageState extends State<MyHomePage>
         ),
       ),
     );
+
+    if (debug) {
+      content = KeyboardListener(
+        focusNode: _debugFocusNode,
+        autofocus: true,
+        onKeyEvent: _handleKeyEvent,
+        child: content);
+    }
+
+    return content;
   }
+
+  // Debug method to handle keyboard events for testing purposes
+  void _handleKeyEvent(KeyEvent event) {
+    print("Key: ${event.logicalKey}"); // Log the event for debugging
+    if (!debug) return; // Only work in debug mode
+
+    if (event is KeyDownEvent) {
+      final isShiftPressed = HardwareKeyboard.instance.isShiftPressed;
+
+      switch (event.logicalKey) {
+        case LogicalKeyboardKey.digit1:
+          if (isShiftPressed) {
+            _adjustScore(-10);
+          } else {
+            _adjustScore(10);
+          }
+          break;
+
+        case LogicalKeyboardKey.digit2:
+          if (isShiftPressed) {
+            _adjustTimeLeft(-10);
+          } else {
+            _adjustTimeLeft(10);
+          }
+          break;
+        case LogicalKeyboardKey.digit3:
+          if (isShiftPressed) {
+            _adjustBestScore(-10);
+          } else {
+            _adjustBestScore(10);
+          }
+          break;
+        case LogicalKeyboardKey.keyR:
+          _resetDebugValues();
+          break;
+      }
+    }
+  }
+
+  // Add these helper methods
+  void _adjustScore(int delta) {
+    setState(() {
+      _score = _score + delta;
+    });
+  }
+
+  void _adjustTimeLeft(int delta) {
+    setState(() {
+      _timeLeft = max(0, min(maxTime * 2, _timeLeft + delta));
+      _timeProgress = min(1.0, _timeLeft / maxTime);
+    });
+  }
+
+  void _adjustBestScore(int delta) {
+    setState(() {
+      _bestScore = max(0, _bestScore + delta);
+    });
+  }
+
+  void _resetDebugValues() {
+    setState(() {
+      _score = 0;
+      _timeLeft = maxTime;
+      _bestScore = 0;
+      _timeProgress = 1.0;
+    });
+  }
+
 }

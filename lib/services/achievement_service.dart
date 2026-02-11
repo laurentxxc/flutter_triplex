@@ -21,15 +21,6 @@ class AchievementService {
 
   static Map<Achievement, Uint8List> _imageCache = {};
 
-  static Achievement createBestScoreAchievement(int bestScore){
-    return Achievement(
-      id: AchievementID.bestScore,
-      criteria: {'score': bestScore},
-      nbTimesUnlocked: 1,
-      unlockedAt: DateTime.now(),
-    );
-  }
-
   /// Creates a professional achievement certificate image with gradient background
   static Future<Uint8List> getAchievementImage({
     required Achievement achievement,

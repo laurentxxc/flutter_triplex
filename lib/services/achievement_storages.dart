@@ -10,7 +10,13 @@
 // services/achievement_storage.dart
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:collection/collection.dart';
+
 import '../models/achievement_model.dart';
+
+const bool debug =
+    String.fromEnvironment('DEBUG_ASSETS', defaultValue: 'false') == 'true';
+
 class AchievementStorage {
   static const String _achievementsKey = 'triplex_achievements';
   static const String _statsKey = 'triplex_stats';
@@ -54,8 +60,14 @@ class AchievementStorage {
   }
 
   static Future<Achievement?> loadAchievement(AchievementID id) async {
-    final achievements = await loadAchievements();
-    return achievements.firstWhere((a) => a.id == id);
+    try {
+      final achievements = await loadAchievements();
+     final achievement =  achievements.firstWhereOrNull((a) => a.id == id);
+      return achievement;
+    } catch (e) {
+      print('Error loading achievement $id: $e');
+      return null;
+    }
   }
 
   static Future<void> updateAchievement(Achievement updatedAchievement) async {
@@ -155,12 +167,14 @@ class AchievementStorage {
   // Default achievements setup
   static List<Achievement> _getDefaultAchievements() {
     return [
-      Achievement(
-        id: AchievementID.bestScore,
-        criteria: {'score': 0},
-        progress: 0,
-        nbTimesUnlocked: 0,
-      ),
+      // nothing to return, there is no achievements except for debug purpose
+      // if (debug) Achievement(
+      //   id: AchievementID.bestScore,
+      //   criteria: {'score': 10},
+      //   progress: 0,
+      //   nbTimesUnlocked: 1,
+      //   unlockedAt: DateTime.parse('2024-01-01T00:00:00Z'),
+      // ),
     ];
   }
   static void _notifyAchievementUnlocked(Achievement achievement) {

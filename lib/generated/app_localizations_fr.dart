@@ -84,10 +84,10 @@ class AppLocalizationsFr extends AppLocalizations {
       'Jeu terminé! Le temps est écoulé.\n\nFélicitations! Vous avez obtenu le meilleur score cette fois-ci.';
 
   @override
-  String get share_button => 'Partagez avec vos amis';
+  String get share_button => 'Partage avec tes amis';
 
   @override
-  String get share_try_url => 'Essayez vous-même à <<url>> 😜';
+  String get share_try_url => 'Essaye toi-même à <<url>> 😜';
 
   @override
   String get share_achievement_bestScore =>

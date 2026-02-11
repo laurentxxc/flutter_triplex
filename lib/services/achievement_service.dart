@@ -23,9 +23,7 @@ class AchievementService {
 
   static Achievement createBestScoreAchievement(int bestScore){
     return Achievement(
-      title: 'BEST SCORE',
-      emoji: '🏆',
-      type: AchievementType.score,
+      id: AchievementID.bestScore,
       criteria: {'score': bestScore},
       isUnlocked: true,
       unlockedAt: DateTime.now(),
@@ -69,7 +67,7 @@ class AchievementService {
       context: context,
       barrierDismissible: true,
       builder: (context) => AlertDialog(
-        title: Text(achievement.title),
+        title: Text(achievement.id.title),
         content: Container(
           width: 500,
           height: 500,

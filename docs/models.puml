@@ -1,57 +1,33 @@
 @startuml Triplex Archi Diagram
 title "Triplex Archi Diagram"
-package "Models" {
-    class AssetFactory{
-        + nb_attributes: int
-        + attribute_size: int
-
-        + generateRandomAsset() -> Asset
-        + generateRandomAssets() -> [Asset]
-
-        + generateMatchingAsset(with: [Asset]) -> Asset
-        + generateMatchingAssets(matchingLevel: int) -> [Asset]
-
-        + checkAssetsMatchingLevel(assets: [Asset]) -> int
-
-    }
-
-    class Asset{
-        + attributes: [int]
-    }
+class AchievementStorage<<Services>> {
+    + AchievementStorage singleton
+    .. For achievements ..
+    + Future<List<Achievement>> loadAchievements()
+    + Future<void> saveAchievements(List<Achievement> achievements)
+    + Future<void> updateAchievementProgress(String title, int newProgress, {bool forceUnlock = false})
+    + Future<void> clearAchievements()
+    .. For statistics ..
+    + Future<Map<String, dynamic>> getAchievementStats()
+    + Future<void> updateStats(Map<String, dynamic> newStats)
 }
 
-package "UI Components" {
-
-
-    class SelectableTile{
-        - face: Widget
-        + isSelected: bool
-
-        + toggleSelection()
-        + select()
-        + unselect()
-        + changeFace(newFace: Widget)
-        + invertColor()  
-    }
-
-    class TileFaceFactory{
-        + createTileFace(asset: Asset) -> Widget
-    }
+class Homepage {
+    + createState() : _HomepageState
 }
 
-
-package "Game Logic" {
-
-    class TriplexGame{
-        +
-        + assets: [Asset]
-        + score: int
-
-        + startNewGame()
-        + resetGame()
-
-        + selectAsset(asset: Asset)
-        + checkSelectedAssetsMatchingLevel() -> int
-    }
+class Achievement<<models>>{
+    + String title
+    + String description
+    + String emoji
+    + AchievementType type
+    + Map<String, dynamic> criteria
+    + int maxProgress
+    + int currentProgress
 }
+
+Homepage --> AchievementStorage : uses
+Homepage --> Achievement : reads
+AchievementStorage -> Achievement : manages
+
 @enduml

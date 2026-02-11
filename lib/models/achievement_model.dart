@@ -6,43 +6,53 @@
 //
 // This file is part of Triplex, a puzzle game where players match tiles based on attributes.
 
-enum AchievementType { score, streak, speed, totalMatches, specialPattern, session }
+enum AchievementID { 
+  bestScore(emoji:'🏆', title:'BEST SCORE', maxProgress: 1,
+    description:'Achieve a new best score in a game session.'), 
+  hundred(emoji: '💯', title: 'HUNDRED', maxProgress: 100,
+    description:'Reach 100 points in a single game session.'),
+  addicted(emoji: '🎮', title: 'ADDICTED', maxProgress: 50,
+    description:'Play 50 games.'),
+  diversity(emoji: '🌈', title: 'DIVERSITY', maxProgress: 4,
+    description:'Find 4 different tile sets with no common criteria.'),
+  unknown(emoji:'❓', title: 'UNKNOWN', maxProgress: 1,
+    description:'An unknown achievement.'); // fallback in case of JSON parsing issues
+
+  // these are fixed for enum value, so don't need to be stored in the achievement instance
+  final String title;
+  final String emoji;
+  final String description;
+  final int maxProgress;
+
+  const AchievementID({
+    required this.title,
+    required this.emoji,
+    this.description = '',
+    this.maxProgress = 1, // default to 1 for simple achievements
+  });
+}
 
 class Achievement {
-//  final String id;
-  final String title;
-//  final String description;
-  final String emoji;
-  final AchievementType type;
+  final AchievementID id;
   final Map<String, dynamic> criteria;
   final bool isUnlocked;
   final DateTime? unlockedAt;
   final int progress;
-  final int maxProgress;
 
   const Achievement({
-//    required this.id, 
-    required this.title, 
-//    required this.description, 
-    required this.emoji,
-    required this.type,
+    required this.id,
     required this.criteria,
     this.isUnlocked = false,
     this.unlockedAt,
-    this.progress = 0,
-    this.maxProgress = 1,});
+    this.progress = 0});
 
 
  // JSON Serialization
   factory Achievement.fromJson(Map<String, dynamic> json) {
     return Achievement(
-    //  id: json['id'] as String,
-      title: json['title'] as String,
-    //  description: json['description'] as String,
-      emoji: json['emoji'] as String,
-      type: AchievementType.values.firstWhere(
-        (e) => e.name == json['type'],
-        orElse: () => AchievementType.score,
+      id: AchievementID.values.firstWhere(
+        (e) => e.name == json['id'],
+        orElse: () => AchievementID.unknown,
       ),
       criteria: Map<String, dynamic>.from(json['criteria'] ?? {}),
       isUnlocked: json['isUnlocked'] as bool? ?? false,
@@ -50,22 +60,16 @@ class Achievement {
           ? DateTime.parse(json['unlockedAt'] as String)
           : null,
       progress: json['progress'] as int? ?? 0,
-      maxProgress: json['maxProgress'] as int? ?? 1,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-    //  'id': id,
-      'title': title,
-    //  'description': description,
-      'emoji': emoji,
-      'type': type.name,
+      'id': id.name,
       'criteria': criteria,
       'isUnlocked': isUnlocked,
       'unlockedAt': unlockedAt?.toIso8601String(),
       'progress': progress,
-      'maxProgress': maxProgress,
     };
   }
   Achievement copyWith({
@@ -73,7 +77,7 @@ class Achievement {
     String? title,
   //  String? description,
     String? emoji,
-    AchievementType? type,
+    AchievementID? type,
     Map<String, dynamic>? criteria,
     bool? isUnlocked,
     DateTime? unlockedAt,
@@ -81,23 +85,11 @@ class Achievement {
     int? maxProgress,
   }) {
     return Achievement(
-    //  id: id ?? this.id,
-      title: title ?? this.title,
-    //  description: description ?? this.description,
-      emoji: emoji ?? this.emoji,
-      type: type ?? this.type,
+      id: type ?? id,
       criteria: criteria ?? this.criteria,
       isUnlocked: isUnlocked ?? this.isUnlocked,
       unlockedAt: unlockedAt ?? this.unlockedAt,
       progress: progress ?? this.progress,
-      maxProgress: maxProgress ?? this.maxProgress,
     );
   }
-
 }
-
-// TODO: ideas for achievements:
-// title:'100', description:'Reach 100 points during a party.'
-// title:'Addicted!', description:'You have played 50 games'
-// title:'Upside down', description: 'You have finished a session with a negative score'
-// title:'Diversity', description: 'There is no common criteria in the tile set you have found' 

@@ -34,7 +34,7 @@ class ShareService {
 
       final ShareParams params = ShareParams(
         //subject: 'New Best Score in Triplex!',
-        files: [XFile.fromData(achievementImage,mimeType:'image/png', name: 'triplex_${achievement.title.replaceAll(' ', '_')}.png')],
+        files: [XFile.fromData(achievementImage,mimeType:'image/png', name: 'triplex_${achievement.id.title.replaceAll(' ', '_')}.png')],
         text: shareText,
       );
 
@@ -56,11 +56,11 @@ class ShareService {
   ) {
     String res;
     // For now, use a hardcoded message. You can add localization keys later
-    switch (achievement.title){
-      case 'BEST SCORE': 
+    switch (achievement.id){
+      case AchievementID.bestScore: 
         res = l10n.share_achievement_bestScore;
       default:
-        res =  achievement.title;
+        res =  achievement.id.title;
     }
     res += "\n${l10n.share_try_url.replaceAll('<<url>>', shareUrl)}";
     return res;

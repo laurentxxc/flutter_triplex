@@ -265,8 +265,14 @@ abstract class AppLocalizations {
   /// No description provided for @share_achievement_bestScore.
   ///
   /// In en, this message translates to:
-  /// **'I just got new Best Score on Triplex! Can you beat my record? 🏆'**
+  /// **'I just got new Best Score on Triplex! Think you can go higher? 🚀'**
   String get share_achievement_bestScore;
+
+  /// No description provided for @share_achievement_bestScore_old.
+  ///
+  /// In en, this message translates to:
+  /// **'<<score>> is my last best score on Triplex! Pure luck... or skill? 😎'**
+  String get share_achievement_bestScore_old;
 }
 
 class _AppLocalizationsDelegate

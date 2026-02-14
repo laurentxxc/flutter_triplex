@@ -72,6 +72,12 @@ class Achievement {
       'progress': progress,
     };
   }
+
+  Duration timeSinceLastUnlock() {
+    if (unlockedAt == null) return Duration.zero;
+    return DateTime.now().difference(unlockedAt!);
+  }
+
   Achievement copyWith({
   //  String? id,
     String? title,

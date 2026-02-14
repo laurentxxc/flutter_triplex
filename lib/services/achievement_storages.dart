@@ -168,13 +168,13 @@ class AchievementStorage {
   static List<Achievement> _getDefaultAchievements() {
     return [
       // nothing to return, there is no achievements except for debug purpose
-      // if (debug) Achievement(
-      //   id: AchievementID.bestScore,
-      //   criteria: {'score': 10},
-      //   progress: 0,
-      //   nbTimesUnlocked: 1,
-      //   unlockedAt: DateTime.parse('2024-01-01T00:00:00Z'),
-      // ),
+      if (debug) Achievement(
+        id: AchievementID.bestScore,
+        criteria: {'score': 10},
+        progress: 0,
+        nbTimesUnlocked: 1,
+        unlockedAt: DateTime.parse('2024-01-01T00:00:00Z'),
+      ),
     ];
   }
   static void _notifyAchievementUnlocked(Achievement achievement) {

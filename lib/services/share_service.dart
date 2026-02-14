@@ -12,7 +12,7 @@ import 'package:share_plus/share_plus.dart';
 
 import 'package:triplex/generated/app_localizations.dart';
 import 'package:triplex/models/achievement_model.dart';
-import 'package:triplex/services/achievement_service.dart';
+import 'package:triplex/services/achievement_images.dart';
 
 const String shareUrl = 'https://triplex-web.vercel.app';
 
@@ -29,7 +29,7 @@ class ShareService {
       final String shareText = _buildShareText(l10n, achievement);
    
       // Generate achievement image
-      final Uint8List achievementImage = await AchievementService.getAchievementImage(achievement: achievement
+      final Uint8List achievementImage = await AchievementImageService.getAchievementImage(achievement: achievement
       );
 
       final ShareParams params = ShareParams(
@@ -58,8 +58,10 @@ class ShareService {
     // For now, use a hardcoded message. You can add localization keys later
     switch (achievement.id){
       case AchievementID.bestScore: 
-        res = l10n.share_achievement_bestScore;
-      default:
+        res = (achievement.timeSinceLastUnlock().inDays < 3) 
+        ? l10n.share_achievement_bestScore 
+        : l10n.share_achievement_bestScore_old.replaceAll('<<score>>', achievement.criteria['score']?.toString() ?? '0');
+       default:
         res =  achievement.id.title;
     }
     res += "\n${l10n.share_try_url.replaceAll('<<url>>', shareUrl)}";

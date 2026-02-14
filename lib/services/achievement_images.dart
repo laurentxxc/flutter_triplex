@@ -17,7 +17,7 @@ const achievementImageSize = Size(500, 500);
 
 
 /// Service for generating achievement certificate images
-class AchievementService {
+class AchievementImageService {
 
   static Map<Achievement, Uint8List> _imageCache = {};
 

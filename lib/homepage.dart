@@ -28,7 +28,7 @@ import 'widgets/tutorial_board.dart';
 
 // custom services
 import 'services/share_service.dart';
-import 'services/achievement_service.dart';
+import 'services/achievement_images.dart';
 import 'services/achievement_storages.dart';
 
 const bool debug =
@@ -341,7 +341,7 @@ class _MyHomePageState extends State<MyHomePage>
 
     setState(() {
       _isGeneratingImage = true;
-      AchievementService.getAchievementImage(
+      AchievementImageService.getAchievementImage(
         achievement: _lastBestScoreAchievement,
       ).then(
         (imageBytes) => setState(() {

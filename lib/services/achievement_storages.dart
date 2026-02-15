@@ -10,14 +10,20 @@
 // services/achievement_storage.dart
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:collection/collection.dart';
+
 import '../models/achievement_model.dart';
+
+const bool debug =
+    String.fromEnvironment('DEBUG_ASSETS', defaultValue: 'false') == 'true';
+
 class AchievementStorage {
   static const String _achievementsKey = 'triplex_achievements';
-  static const String _statsKey = 'triplex_achievement_stats';
+  static const String _statsKey = 'triplex_stats';
   // Save all achievements to localStorage
   static Future<void> saveAchievements(List<Achievement> achievements) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
+      final SharedPreferences preferences = await SharedPreferences.getInstance();
       
       // Convert achievements to JSON
       final achievementsJson = achievements
@@ -25,7 +31,7 @@ class AchievementStorage {
           .toList();
       
       // Store as JSON string
-      await prefs.setString(_achievementsKey, jsonEncode(achievementsJson));
+      await preferences.setString(_achievementsKey, jsonEncode(achievementsJson));
       print('Successfully saved ${achievements.length} achievements');
     } catch (e) {
       print('Error saving achievements: $e');
@@ -52,33 +58,56 @@ class AchievementStorage {
       return _getDefaultAchievements(); // Fallback to defaults
     }
   }
-  
+
+  static Future<Achievement?> loadAchievement(AchievementID id) async {
+    try {
+      final achievements = await loadAchievements();
+     final achievement =  achievements.firstWhereOrNull((a) => a.id == id);
+      return achievement;
+    } catch (e) {
+      print('Error loading achievement $id: $e');
+      return null;
+    }
+  }
+
+  static Future<void> updateAchievement(Achievement updatedAchievement) async {
+    final achievements = await loadAchievements();
+    final index = achievements.indexWhere((a) => a.id == updatedAchievement.id);
+    
+    if (index != -1) {
+      achievements[index] = updatedAchievement;
+      await saveAchievements(achievements);
+    }
+  }
   
   // Update single achievement progress
   static Future<void> updateAchievementProgress(
-    String title, 
-    int newProgress, {
-    bool forceUnlock = false,
+    AchievementID id, 
+    { int newProgress = 0,
+      Map<String, dynamic>? criteria,
+      bool forceUnlock = false,
   }) async {
     try {
       final achievements = await loadAchievements();
-      final index = achievements.indexWhere((a) => a.title == title);
+      final index = achievements.indexWhere((a) => a.id == id);
       
       if (index != -1) {
         final achievement = achievements[index];
+        final bool isNowUnlocked = forceUnlock || newProgress >= achievement.id.maxProgress;
         final updatedAchievement = achievement.copyWith(
-          //progress: newProgress,
-          isUnlocked: forceUnlock || newProgress >= achievement.maxProgress,
-          unlockedAt: (forceUnlock || newProgress >= achievement.maxProgress) 
+          progress: isNowUnlocked ? 0 : newProgress,
+          nbTimesUnlocked: isNowUnlocked ? achievement.nbTimesUnlocked + 1 : achievement.nbTimesUnlocked,
+          unlockedAt: (forceUnlock || newProgress >= achievement.id.maxProgress) 
               ? DateTime.now() 
               : achievement.unlockedAt,
+          criteria: criteria ?? achievement.criteria,
         );
         
         achievements[index] = updatedAchievement;
         await saveAchievements(achievements);
         
         // Return if unlocked for notification purposes
-        if (updatedAchievement.isUnlocked && !achievement.isUnlocked) {
+        if (isNowUnlocked) {
           _notifyAchievementUnlocked(updatedAchievement);
         }
       }
@@ -138,51 +167,18 @@ class AchievementStorage {
   // Default achievements setup
   static List<Achievement> _getDefaultAchievements() {
     return [
-      // Score Achievements
-      Achievement(
-      //  id: 'first_blood',
-        title: 'First Blood',
-      //  description: 'Make your first successful match',
-        emoji: 'assets/icons/first_blood.png',
-        type: AchievementType.score,
-        criteria: {'score': 1},
-        maxProgress: 1,
-      ),
-      Achievement(
-        //id: 'score_master',
-        title: 'Score Master',
-        //description: 'Reach 1000 points in a single game',
-        emoji: 'assets/icons/score_master.png',
-        type: AchievementType.score,
-        criteria: {'score': 1000},
-        maxProgress: 1000,
-      ),
-      
-      // Speed Achievements
-      Achievement(
-      //  id: 'speed_demon',
-        title: 'Speed Demon',
-      //  description: 'Make 10 matches in 60 seconds',
-        emoji: 'assets/icons/speed_demon.png',
-        type: AchievementType.speed,
-        criteria: {'matches': 10, 'timeLimit': 60},
-        maxProgress: 10,
-      ),
-      
-      // Streak Achievements
-      Achievement(
-      //  id: 'on_fire',
-        title: 'On Fire',
-      //  description: 'Make 5 consecutive correct matches',
-        emoji: 'assets/icons/on_fire.png',
-        type: AchievementType.streak,
-        criteria: {'streak': 5},
-        maxProgress: 5,
+      // nothing to return, there is no achievements except for debug purpose
+      if (debug) Achievement(
+        id: AchievementID.bestScore,
+        criteria: {'score': 10},
+        progress: 0,
+        nbTimesUnlocked: 1,
+        unlockedAt: DateTime.parse('2024-01-01T00:00:00Z'),
       ),
     ];
   }
   static void _notifyAchievementUnlocked(Achievement achievement) {
     // This can be integrated with your existing notification system
-    print('🏆 Achievement Unlocked: ${achievement.title}');
+    print('🏆 Achievement Unlocked: ${achievement.id.title}');
   }
 }

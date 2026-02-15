@@ -81,5 +81,6 @@
  
   "share_button": "Teile es mit deinen Freunden",
   "share_try_url": "Versuch es selbst unter <<url>> 😜",
-  "share_achievement_bestScore": "Ich habe gerade einen neuen Best Score bei Triplex erreicht! Kannst du meinen Rekord schlagen? 🏆"
+  "share_achievement_bestScore": "Ich habe gerade einen neuen Best Score bei Triplex erreicht! Kannst du meinen Rekord schlagen? 🏆",
+  "share_achievement_bestScore_old": "<<score>> ist mein Bestwert bei Triplex! Versuch ihn zu schlagen! 🏆"
 }

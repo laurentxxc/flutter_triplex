@@ -92,4 +92,8 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get share_achievement_bestScore =>
       'Ho appena ottenuto un nuovo Best Score su Triplex! Puoi battere il mio record? 🏆';
+
+  @override
+  String get share_achievement_bestScore_old =>
+      '<<score>> è il mio miglior punteggio su Triplex! Prova a batterlo! 🏆';
 }

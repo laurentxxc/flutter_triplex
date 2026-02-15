@@ -84,12 +84,16 @@ class AppLocalizationsFr extends AppLocalizations {
       'Jeu terminé! Le temps est écoulé.\n\nFélicitations! Vous avez obtenu le meilleur score cette fois-ci.';
 
   @override
-  String get share_button => 'Partagez avec vos amis';
+  String get share_button => 'Partage avec tes amis';
 
   @override
-  String get share_try_url => 'Essayez vous-même à <<url>> 😜';
+  String get share_try_url => 'Essaye toi-même à <<url>> 😜';
 
   @override
   String get share_achievement_bestScore =>
-      'Je viens d\'obtenir un nouveau Best Score sur Triplex! Peux-tu battre mon record ? 🏆';
+      'Je viens d\'obtenir un nouveau meilleur score sur Triplex! Seras-tu capable de battre mon record? 🏆';
+
+  @override
+  String get share_achievement_bestScore_old =>
+      'Mon meilleur score sur Triplex est <<score>>! Seras-tu capable de battre mon record? 🏆';
 }

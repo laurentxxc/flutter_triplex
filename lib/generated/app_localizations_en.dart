@@ -91,5 +91,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get share_achievement_bestScore =>
-      'I just got new Best Score on Triplex! Can you beat my record? 🏆';
+      'I just got new Best Score on Triplex! Think you can go higher? 🚀';
+
+  @override
+  String get share_achievement_bestScore_old =>
+      '<<score>> is my last best score on Triplex! Pure luck... or skill? 😎';
 }

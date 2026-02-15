@@ -6,11 +6,12 @@
 //
 // This file is part of Triplex, a puzzle game where players match tiles based on attributes.
 import 'package:flutter/material.dart';
-import 'dart:typed_data';
 import 'dart:async';
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 
+// custom models
 import 'models/achievement_model.dart';
 import 'models/asset_model.dart';
 import 'tile_scheme.dart';
@@ -27,7 +28,8 @@ import 'widgets/tutorial_board.dart';
 
 // custom services
 import 'services/share_service.dart';
-import 'services/achievement_service.dart';
+import 'services/achievement_images.dart';
+import 'services/achievement_storages.dart';
 
 const bool debug =
     String.fromEnvironment('DEBUG_ASSETS', defaultValue: 'false') == 'true';
@@ -120,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage>
   bool _isSettingsOn = false; 
   bool _isTutorialOn = true;
   bool _isGeneratingImage = false;
-  Achievement? _lastBestScoreAchievement;
+  late Achievement _lastBestScoreAchievement;
   Uint8List? _lastBestScoreAchievementImage;
 
   late AnimationController _tileScoringAnimationController;
@@ -128,18 +130,39 @@ class _MyHomePageState extends State<MyHomePage>
   List<int> _matchingTiles = [];
   List<int> _notMatchingTiles = [];
 
+  //for debug only
+  late FocusNode _debugFocusNode;
+
   Future<void> _loadBestScore() async {
-    final prefs = await SharedPreferences.getInstance();
+
+    Achievement? bestScoreAchievement = await AchievementStorage.loadAchievement(AchievementID.bestScore);
+
+    // up to v1.4.0 best score was only stored in shared preferences and not with achievement format, so we need to handle this particular case for backward compatibility
+    if (bestScoreAchievement == null || bestScoreAchievement.criteria['score'] == 0) {
+      // try to load best score from shared preferences
+      final SharedPreferences preferences = await SharedPreferences.getInstance();
+      final int storedBestScore = preferences.getInt('bestScore') ?? 0;
+
+      bestScoreAchievement = Achievement(
+        id: AchievementID.bestScore,
+        criteria: {'score': storedBestScore},
+        nbTimesUnlocked: storedBestScore > 0 ? 1 : 0,
+        unlockedAt: storedBestScore > 0 ? DateTime.now() : null,
+      );
+
+      if (storedBestScore > 0) {
+        AchievementStorage.updateAchievement(bestScoreAchievement);
+        preferences.remove('bestScore'); // we can remove the old stored best score as it's now saved as an achievement
+      }
+    }
     setState(() {
-      _bestScore = prefs.getInt('bestScore') ?? 0;
-      // TODO: create associated bestScore achievement (should go thru achievement_storage service)
+      _bestScore = bestScoreAchievement!.criteria['score'] ?? 0;
+      _lastBestScoreAchievement = bestScoreAchievement;
     });
   }
 
-  Future<void> _saveBestScore(int score) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('bestScore', score);
-    // TODO: best score being an achievement then it sould go thru achievement_storage service
+  Future<void> _saveBestScore() async {
+    AchievementStorage.updateAchievement(_lastBestScoreAchievement);
   }
 
   @override
@@ -155,6 +178,8 @@ class _MyHomePageState extends State<MyHomePage>
 
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadBestScore());
 
+    if (debug) _debugFocusNode = FocusNode();  
+    
     super.initState();
   }
 
@@ -219,7 +244,7 @@ class _MyHomePageState extends State<MyHomePage>
   void _onShareButtonTap(){
     ShareService.shareAchievement(
         context: context,
-        achievement: _lastBestScoreAchievement!,
+        achievement: _lastBestScoreAchievement,
       );
   }
 
@@ -293,20 +318,38 @@ class _MyHomePageState extends State<MyHomePage>
         bestScoreReached = true;
         _gameState = GameState.bestScore;
         _bestScore = _score;
-        _lastBestScoreAchievement = AchievementService.createBestScoreAchievement(_bestScore);
-        _isGeneratingImage = true;
-        AchievementService.getAchievementImage(achievement: _lastBestScoreAchievement!).then(
-          (imageBytes) => setState(() {
-            _lastBestScoreAchievementImage = imageBytes;
-            _isGeneratingImage = false;
-          }),
+        _lastBestScoreAchievement = _lastBestScoreAchievement.copyWith(
+          criteria: {'score': _bestScore},
+          nbTimesUnlocked: _lastBestScoreAchievement.nbTimesUnlocked + 1,
+          unlockedAt: DateTime.now(),
         );
-        _saveBestScore(_bestScore);
-      }
+        _generateBestScoreAchievementImage();
+        _saveBestScore();
+      } else if (_bestScore >0 && _lastBestScoreAchievementImage == null) {
+        // if we have a best score but no image (e.g., because we are loading an old best score stored before we implemented achievement images), we try to load the image
+        _generateBestScoreAchievementImage();
+      } 
     });
     if (_isVolumeOn) {
       SoundPlayer.play(bestScoreReached ? Sound.endingBest : Sound.ending);
     }
+  }
+
+  void _generateBestScoreAchievementImage(){
+    // don't generate if achievement is not unlocked of bestSCore is 0;
+    if (_lastBestScoreAchievement.criteria['score'] == 0) return;
+
+    setState(() {
+      _isGeneratingImage = true;
+      AchievementImageService.getAchievementImage(
+        achievement: _lastBestScoreAchievement,
+      ).then(
+        (imageBytes) => setState(() {
+          _lastBestScoreAchievementImage = imageBytes;
+          _isGeneratingImage = false;
+        }),
+      );
+    });
   }
 
   void _updateBoardAndScore() {
@@ -408,7 +451,7 @@ class _MyHomePageState extends State<MyHomePage>
       ]
     : [];
     
-    return Scaffold(
+    Widget content = Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         // TRY THIS: Try changing the color here to a specific color (to
@@ -580,7 +623,7 @@ class _MyHomePageState extends State<MyHomePage>
                       else
                         Positioned(top:0, left:0, child: TriplexBoardMessage(
                           message: _gameState.messageId,
-                          extra: (_gameState == GameState.bestScore) ? bestScoreExtraWidgets : [],)
+                          extra: (_gameState != GameState.paused) ? bestScoreExtraWidgets : [],)
                         ),
 
                     if (_isSettingsOn)
@@ -624,5 +667,83 @@ class _MyHomePageState extends State<MyHomePage>
         ),
       ),
     );
+
+    if (debug) {
+      content = KeyboardListener(
+        focusNode: _debugFocusNode,
+        autofocus: true,
+        onKeyEvent: _handleKeyEvent,
+        child: content);
+    }
+
+    return content;
   }
+
+  // Debug method to handle keyboard events for testing purposes
+  void _handleKeyEvent(KeyEvent event) {
+    print("Key: ${event.logicalKey}"); // Log the event for debugging
+    if (!debug) return; // Only work in debug mode
+
+    if (event is KeyDownEvent) {
+      final isShiftPressed = HardwareKeyboard.instance.isShiftPressed;
+
+      switch (event.logicalKey) {
+        case LogicalKeyboardKey.digit1:
+          if (isShiftPressed) {
+            _adjustScore(-10);
+          } else {
+            _adjustScore(10);
+          }
+          break;
+
+        case LogicalKeyboardKey.digit2:
+          if (isShiftPressed) {
+            _adjustTimeLeft(-10);
+          } else {
+            _adjustTimeLeft(10);
+          }
+          break;
+        case LogicalKeyboardKey.digit3:
+          if (isShiftPressed) {
+            _adjustBestScore(-10);
+          } else {
+            _adjustBestScore(10);
+          }
+          break;
+        case LogicalKeyboardKey.keyR:
+          _resetDebugValues();
+          break;
+      }
+    }
+  }
+
+  // Add these helper methods
+  void _adjustScore(int delta) {
+    setState(() {
+      _score = _score + delta;
+    });
+  }
+
+  void _adjustTimeLeft(int delta) {
+    setState(() {
+      _timeLeft = max(0, min(maxTime * 2, _timeLeft + delta));
+      _timeProgress = min(1.0, _timeLeft / maxTime);
+    });
+  }
+
+  void _adjustBestScore(int delta) {
+    setState(() {
+      _bestScore = max(0, _bestScore + delta);
+    });
+  }
+
+  void _resetDebugValues() {
+    setState(() {
+      _score = 0;
+      _timeLeft = maxTime;
+      _bestScore = 0;
+      _timeProgress = 1.0;
+    });
+  }
+
 }

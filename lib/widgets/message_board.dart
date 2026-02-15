@@ -5,15 +5,12 @@
 // See LICENSE file in the project root for full license text.
 //
 // This file is part of Triplex, a puzzle game where players match tiles based on attributes.
-
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:triplex/generated/app_localizations.dart';
 
-const Widget coffeeLogo = Text('☕️', style: TextStyle(fontSize: 50));
-const Widget smileyLogo = Text('😜', style: TextStyle(fontSize: 50));
-const Widget winnerLogo = Text('🏆', style: TextStyle(fontSize: 50));
+const Widget coffeeLogo = Text('☕️', style: TextStyle(fontSize: 50, shadows: [Shadow(color: Colors.black87, blurRadius: 10.0)]));
+const Widget smileyLogo = Text('😜', style: TextStyle(fontSize: 50, shadows: [Shadow(color: Colors.black87, blurRadius: 10.0)]));
+const Widget winnerLogo = Text('🏆', style: TextStyle(fontSize: 50, shadows: [Shadow(color: Colors.black87, blurRadius: 10.0)]));
 const Widget messageBoardVSpace = SizedBox(height:40.0);
 
 

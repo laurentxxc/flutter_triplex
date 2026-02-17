@@ -46,6 +46,7 @@ class AchievementStorage {
       final achievementsJson = prefs.getString(_achievementsKey);
       
       if (achievementsJson == null) {
+        print('No achievement found in persistent storage');
         return _getDefaultAchievements(); // Return default achievements
       }
       
@@ -74,10 +75,14 @@ class AchievementStorage {
     final achievements = await loadAchievements();
     final index = achievements.indexWhere((a) => a.id == updatedAchievement.id);
     
+    // existing achievements
     if (index != -1) {
       achievements[index] = updatedAchievement;
-      await saveAchievements(achievements);
+    } else {
+      // new Achievements
+      achievements.add(updatedAchievement);
     }
+    await saveAchievements(achievements);
   }
   
   // Update single achievement progress

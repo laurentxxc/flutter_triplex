@@ -30,7 +30,8 @@ The game uses stateful widgets for real-time updates, animations for tile change
 ## Nice to have
 * [x] Language selection
   => This has been added in v1.2.0
-* [ ] Several difficulty levels
+* [x] Several difficulty levels
+  => Easy mode added in v1.6.0
 * [ ] Other themes for tiles
 * [ ] A way to earn some achievements
 * [x] A way to share best score with friends

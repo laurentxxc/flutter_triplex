@@ -27,6 +27,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settingsTutorial => 'Обучение';
 
   @override
+  String get settingsEasyMode => 'Легкий режим';
+
+  @override
   String get appTitle => 'Triplex';
 
   @override

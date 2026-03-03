@@ -35,7 +35,7 @@ class AchievementImageService {
     final canvas = Canvas(pictureRecorder);
     
     // Draw achievement certificate
-    final painter = AchievementPainter(score: achievement.criteria['score'] ?? 0, date: achievement.unlockedAt ?? DateTime.now());
+    final painter = AchievementPainter(achievement: achievement);
     painter.paint(canvas, achievementImageSize);
     
     // Convert to PNG bytes
@@ -94,12 +94,11 @@ class AchievementImageService {
 
 /// CustomPainter for drawing achievement certificate
 class AchievementPainter extends CustomPainter {
-  final int score;
-  final DateTime date;
+  final Achievement achievement;
   
   // Color constants
-  static const Color _goldStart = Color(0xFFFFD900);
-  static const Color _goldEnd = Color(0xFFFFA000);
+  static const List<Color> _golds = [ui.Color(0xFFFFD900), Color(0xFFFFA000)];
+  static const List<Color> _blues = [ui.Color(0xFF79EAFF), ui.Color(0xFF00AAFF)];
   static const Color _whiteText = Color(0xFFFFFFFF);
   static const Color _shadowColor = Color(0x40000000);
   
@@ -110,13 +109,12 @@ class AchievementPainter extends CustomPainter {
   // Fonsize constants
   static const double _bestScoreFontSize = 64.0;
   static const double _titleFontSize = 40.0;
-  static const double _dateFontSize = 24.0;
+  static const double _dateFontSize = 35.0;
   static const double _brandingFontSize = 30.0;
   static const double _trophyFontSize = 64.0;
 
   AchievementPainter({
-    required this.score,
-    required this.date,
+    required this.achievement,
   }) : super();
   @override
   void paint(Canvas canvas, Size size) {
@@ -130,13 +128,17 @@ class AchievementPainter extends CustomPainter {
     // Draw content elements
     _drawTrophy(canvas);
     _drawTitle(canvas);
-    _drawScore(canvas, score);
-    _drawDate(canvas, date);
+    _drawScore(canvas);
+    _drawDate(canvas);
     _drawBranding(canvas);
   }
   @override
   bool shouldRepaint(covariant AchievementPainter oldDelegate) {
-    return oldDelegate.score != score || oldDelegate.date != date;
+    final int newScore = achievement.criteria['score'];
+    final int oldScore = oldDelegate.achievement.criteria['score'];
+    final DateTime newDate = achievement.unlockedAt!;
+    final DateTime oldDate = oldDelegate.achievement.unlockedAt!;
+    return oldScore != newScore || oldDate != newDate;
   }
   /// Draws gradient background
   void _drawBackground(Canvas canvas) {
@@ -172,7 +174,7 @@ class AchievementPainter extends CustomPainter {
       ..shader = ui.Gradient.linear(
         Offset.zero,
         Offset(achievementImageSize.width, achievementImageSize.height),
-        [_goldStart, _goldEnd],
+        (achievement.id.easyModeRelated ? _blues : _golds),
         [0.0, 1.0],
       )
       ..style = PaintingStyle.fill;
@@ -206,11 +208,10 @@ class AchievementPainter extends CustomPainter {
   /// Draws "BEST SCORE" title
   void _drawTitle(Canvas canvas) {
     final TextStyle style = GoogleFonts.revalia().copyWith(
-      //color: _goldEnd,
       foreground: Paint()..shader = ui.Gradient.linear(
         Offset.zero,
         Offset(achievementImageSize.width, _titleFontSize),
-        [_goldStart, _goldEnd],
+        (achievement.id.easyModeRelated ? _blues : _golds),
         [0.0, 1.0],
       ),
       fontSize: _titleFontSize,
@@ -226,7 +227,7 @@ class AchievementPainter extends CustomPainter {
     );
     final titlePainter = TextPainter(
       text: TextSpan(
-        text: 'BEST SCORE',
+        text: achievement.id.title,
         style: style,
       ),
       textDirection: TextDirection.ltr,
@@ -240,7 +241,8 @@ class AchievementPainter extends CustomPainter {
     titlePainter.paint(canvas, Offset(titleX, titleY));
   }
   /// Draws the achievement score number
-  void _drawScore(Canvas canvas, int score) {
+  void _drawScore(Canvas canvas) {
+    final score = achievement.criteria['score'];
     final scorePainter = TextPainter(
       text: TextSpan(
         text: score.toString(),
@@ -269,7 +271,8 @@ class AchievementPainter extends CustomPainter {
     scorePainter.paint(canvas, Offset(scoreX, scoreY));
   }
   /// Draws achievement date in ISO format
-  void _drawDate(Canvas canvas, DateTime date) {
+  void _drawDate(Canvas canvas) {
+    final date = achievement.unlockedAt ?? DateTime.now();
     final dateString = '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
     
     final datePainter = TextPainter(
@@ -278,7 +281,7 @@ class AchievementPainter extends CustomPainter {
         style: GoogleFonts.revalia().copyWith(
           color: _whiteText,
           fontSize: _dateFontSize,
-          fontWeight: FontWeight.normal,
+          fontWeight: FontWeight.bold,
           shadows: [
             const Shadow(
               color: _shadowColor,

@@ -104,7 +104,8 @@ class TileView extends StatelessWidget {
     // criteria 3
     Color fgColor = _symbolsColors[asset.valueAt(2) - 1];
     // criteria 4
-    RadialGradient bgColor = _backgroundGradients[asset.valueAt(3) - 1];
+    // may not exist if Easy level (only 3 criteria)
+    RadialGradient bgColor = _backgroundGradients[(asset.size >3 ? asset.valueAt(3) - 1 : 0)];
 
     TileView tv = TileView(
       symbol: label,

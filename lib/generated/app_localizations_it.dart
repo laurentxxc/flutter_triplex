@@ -27,6 +27,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsTutorial => 'Tutorial';
 
   @override
+  String get settingsEasyMode => 'Modalità facile';
+
+  @override
   String get appTitle => 'Triplex';
 
   @override

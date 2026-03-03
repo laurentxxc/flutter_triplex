@@ -110,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage>
   // ];
 
   GameState _gameState = GameState.notStarted;
-  AssetCollection _gameAssets = AssetCollection();
+  late AssetCollection _gameAssets;
   List<int> _selectedTiles = [];
   int _score = 0;
   int _bestScore = 0;
@@ -122,6 +122,7 @@ class _MyHomePageState extends State<MyHomePage>
   bool _isSettingsOn = false; 
   bool _isTutorialOn = true;
   bool _isGeneratingImage = false;
+  bool _isEasyMode = false;
   late Achievement _lastBestScoreAchievement;
   Uint8List? _lastBestScoreAchievementImage;
 
@@ -133,36 +134,46 @@ class _MyHomePageState extends State<MyHomePage>
   //for debug only
   late FocusNode _debugFocusNode;
 
+  // load best score for easy or normal session depending _isEasyMode global value
   Future<void> _loadBestScore() async {
 
-    Achievement? bestScoreAchievement = await AchievementStorage.loadAchievement(AchievementID.bestScore);
+    Achievement? bestScoreAchievement = await AchievementStorage.loadAchievement(
+    _isEasyMode 
+    ? AchievementID.bestScoreEZ 
+    : AchievementID.bestScore);
 
     // up to v1.4.0 best score was only stored in shared preferences and not with achievement format, so we need to handle this particular case for backward compatibility
     if (bestScoreAchievement == null || bestScoreAchievement.criteria['score'] == 0) {
-      // try to load best score from shared preferences
-      final SharedPreferences preferences = await SharedPreferences.getInstance();
-      final int storedBestScore = preferences.getInt('bestScore') ?? 0;
+      int cachedBestScore = 0;
+      
+      if (!_isEasyMode) {
+        // try to load best score from shared preferences
+        final SharedPreferences preferences = await SharedPreferences.getInstance();
+        cachedBestScore = preferences.getInt('bestScore') ?? 0;
+        // remove the old bestScore preference
+        preferences.remove('bestScore');
+      }
 
       bestScoreAchievement = Achievement(
-        id: AchievementID.bestScore,
-        criteria: {'score': storedBestScore},
-        nbTimesUnlocked: storedBestScore > 0 ? 1 : 0,
-        unlockedAt: storedBestScore > 0 ? DateTime.now() : null,
+        id: (_isEasyMode ? AchievementID.bestScoreEZ: AchievementID.bestScore),
+        criteria: {'score': cachedBestScore},
+        nbTimesUnlocked: cachedBestScore > 0 ? 1 : 0,
+        unlockedAt: cachedBestScore > 0 ? DateTime.now() : null,
       );
 
-      if (storedBestScore > 0) {
+      if (cachedBestScore > 0) {
         AchievementStorage.updateAchievement(bestScoreAchievement);
-        preferences.remove('bestScore'); // we can remove the old stored best score as it's now saved as an achievement
       }
     }
+
     setState(() {
       _bestScore = bestScoreAchievement!.criteria['score'] ?? 0;
       _lastBestScoreAchievement = bestScoreAchievement;
     });
   }
 
-  Future<void> _saveBestScore() async {
-    AchievementStorage.updateAchievement(_lastBestScoreAchievement);
+  Future<void> _saveBestScore(Achievement bestScoreAchievement) async {
+    AchievementStorage.updateAchievement(bestScoreAchievement);
   }
 
   @override
@@ -236,6 +247,18 @@ class _MyHomePageState extends State<MyHomePage>
     });
   }
 
+  void _onEasyModeSettingEvt(bool easyModeOn){
+    if (_gameState == GameState.running) return; // can't change mode during game
+    if (_gameState == GameState.paused) _endGame();
+    setState(() {
+      _isEasyMode = !_isEasyMode;
+      // we need to reload best score achievement
+      _loadBestScore();
+      // set last achievement image to null as this is from old mode
+      _lastBestScoreAchievementImage = null;
+    });
+    }
+
   void _onRestartButton() {
     if (_isVolumeOn) SoundPlayer.play(Sound.restart);
     _startGame();
@@ -274,7 +297,7 @@ class _MyHomePageState extends State<MyHomePage>
       _isSettingsOn = false;
       _isTutorialOn = false;
       _selectedTiles.clear(); //clean in case of restart
-      _gameAssets = AssetCollection();
+      _gameAssets = AssetCollection(factory: _isEasyMode ? AssetsFactory.singletonEasy : AssetsFactory.singleton);
       _gameState = GameState.running;
       _score = 0;
       _timeLeft = maxTime;
@@ -323,11 +346,11 @@ class _MyHomePageState extends State<MyHomePage>
           nbTimesUnlocked: _lastBestScoreAchievement.nbTimesUnlocked + 1,
           unlockedAt: DateTime.now(),
         );
-        _generateBestScoreAchievementImage();
-        _saveBestScore();
+        _generateBestScoreAchievementImage(_lastBestScoreAchievement);
+        _saveBestScore(_lastBestScoreAchievement);
       } else if (_bestScore >0 && _lastBestScoreAchievementImage == null) {
         // if we have a best score but no image (e.g., because we are loading an old best score stored before we implemented achievement images), we try to load the image
-        _generateBestScoreAchievementImage();
+        _generateBestScoreAchievementImage(_lastBestScoreAchievement);
       } 
     });
     if (_isVolumeOn) {
@@ -335,14 +358,14 @@ class _MyHomePageState extends State<MyHomePage>
     }
   }
 
-  void _generateBestScoreAchievementImage(){
+  void _generateBestScoreAchievementImage(Achievement bestScoreAchievement){
     // don't generate if achievement is not unlocked of bestSCore is 0;
-    if (_lastBestScoreAchievement.criteria['score'] == 0) return;
+    if (bestScoreAchievement.criteria['score'] == 0) return;
 
     setState(() {
       _isGeneratingImage = true;
       AchievementImageService.getAchievementImage(
-        achievement: _lastBestScoreAchievement,
+        achievement: bestScoreAchievement,
       ).then(
         (imageBytes) => setState(() {
           _lastBestScoreAchievementImage = imageBytes;
@@ -359,7 +382,7 @@ class _MyHomePageState extends State<MyHomePage>
       if (_isVolumeOn) SoundPlayer.play(Sound.matchingOK);
       setState(() {
         _tileScore =
-            (AssetsFactory.nbCriteriaPerAsset - matchingLevel) * scoreBonus;
+            (_gameAssets.factory!.nbCriteriaPerAsset - matchingLevel) * scoreBonus;
         _score += _tileScore * _selectedTiles.length;
         _timeLeft = min(maxTime, _timeLeft + timeExtra);
         _timeProgress = min(1.0, _timeLeft / maxTime);
@@ -498,7 +521,7 @@ class _MyHomePageState extends State<MyHomePage>
                 // Timer
                 Padding(
                   padding: EdgeInsets.only(top: 20, bottom: 20),
-                  child: TriplexTimeProgressBar(progress: _timeProgress),
+                  child: TriplexTimeProgressBar(progress: _timeProgress, easyModeOn: _isEasyMode,),
                 ),
                 // Play grid
                 Stack(
@@ -636,6 +659,8 @@ class _MyHomePageState extends State<MyHomePage>
                           onSoundTap: (b) => _onVolumeToggleSwitch(b),
                           onLanguageTap: (loc) => widget.onLocaleChanged(loc),
                           onTutorialTap: () => _onTutorialSettingEvt(),
+                          onEasyModeTap: (b) => _onEasyModeSettingEvt(b),
+                          isEasyModeOn: _isEasyMode,
                         ),
                       ),
                   ],
@@ -694,25 +719,20 @@ class _MyHomePageState extends State<MyHomePage>
           } else {
             _adjustScore(10);
           }
-          break;
-
         case LogicalKeyboardKey.digit2:
           if (isShiftPressed) {
             _adjustTimeLeft(-10);
           } else {
             _adjustTimeLeft(10);
           }
-          break;
         case LogicalKeyboardKey.digit3:
           if (isShiftPressed) {
             _adjustBestScore(-10);
           } else {
             _adjustBestScore(10);
           }
-          break;
         case LogicalKeyboardKey.keyR:
           _resetDebugValues();
-          break;
       }
     }
   }

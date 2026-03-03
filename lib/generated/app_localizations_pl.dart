@@ -27,6 +27,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get settingsTutorial => 'Samouczek';
 
   @override
+  String get settingsEasyMode => 'Tryb łatwy';
+
+  @override
   String get appTitle => 'Triplex';
 
   @override

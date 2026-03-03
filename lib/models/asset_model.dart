@@ -36,22 +36,27 @@ class AssetCollection {
 
   List<Asset> assets = [];
 
+  late AssetsFactory? factory;
+
   /// Initialize the collection with a random set of assets making sure there is at least one matching set of assets
-  AssetCollection() {
+  AssetCollection({this.factory}) {
+    factory ??= AssetsFactory.singleton;
+
     if (debug) {
-      assets = List.filled(nbAssets, Asset(values: [1, 1, 1, 1]));
+      List<int> debugAssetValues = List.filled(factory!.nbCriteriaPerAsset, 1);
+      assets = List.filled(nbAssets, Asset(values: debugAssetValues));
     } else {
       final int nbMatchingAssets = nbAssets ~/ 2;
       int fillidx = 0;
       // start filling with matching asset
       while (fillidx < nbMatchingAssets) {
-        assets += AssetsFactory.singleton.generateMatchingAssets(3);
-        fillidx += AssetsFactory.nbValuesPerCriteria;
+        assets += factory!.generateMatchingAssets(3);
+        fillidx += factory!.nbValuesPerCriteria;
       }
 
       // complet with random asset
       while (fillidx < nbAssets) {
-        assets.add(AssetsFactory.singleton.generateRandomAsset());
+        assets.add(factory!.generateRandomAsset());
         fillidx += 1;
       }
 
@@ -66,7 +71,7 @@ class AssetCollection {
     for (int pos in positions) {
       selectedAssets.add(assets[pos]);
     }
-    return AssetsFactory.singleton.checkAssets(selectedAssets);
+    return factory!.checkAssets(selectedAssets);
   }
 
   /// Update collection by replacing assets at given positions with new random assets making sure there is at least
@@ -74,7 +79,7 @@ class AssetCollection {
   void updateCollection(List<int> positions) {
     positions.shuffle();
     for (int i = 0; i < positions.length - 1; i++) {
-      assets[positions[i]] = AssetsFactory.singleton.generateRandomAsset();
+      assets[positions[i]] = factory!.generateRandomAsset();
     }
 
     // for last one generate a matching asset with 2 others form the board randomly selected
@@ -89,7 +94,7 @@ class AssetCollection {
       iA2 = Random().nextInt(assets.length);
     } while (positions.contains(iA2) || iA2 == iA1);
 
-    assets[iA3] = AssetsFactory.singleton.generateMatchingAsset(
+    assets[iA3] = factory!.generateMatchingAsset(
       assets[iA1],
       assets[iA2],
     );
@@ -97,13 +102,16 @@ class AssetCollection {
 }
 
 class AssetsFactory {
-  static const int nbCriteriaPerAsset = 4;
-  static const int nbValuesPerCriteria = 3;
+  final int nbCriteriaPerAsset;
+  final int nbValuesPerCriteria = 3;
   static const int sum1_3 = 6;
   static const int facto3 = 6;
   static const List<int> root3 = [0, 1, 8, 27];
 
-  static final AssetsFactory singleton = AssetsFactory();
+  static final AssetsFactory singleton = AssetsFactory._();
+  static final AssetsFactory singletonEasy = AssetsFactory._(nbCriteriaPerAsset: 3);
+
+  AssetsFactory._({this.nbCriteriaPerAsset = 4});
 
   Asset generateMatchingAsset(Asset first, Asset second) {
     List<int> matchingAssetContent = List.filled(nbCriteriaPerAsset, 0);

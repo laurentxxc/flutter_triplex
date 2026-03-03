@@ -33,7 +33,8 @@ The game uses stateful widgets for real-time updates, animations for tile change
 * [x] Several difficulty levels
   => Easy mode added in v1.6.0
 * [ ] Other themes for tiles
-* [ ] A way to earn some achievements
+* [x] A way to earn some achievements
+  => best score achievement added in v1.5.0
 * [x] A way to share best score with friends
   => Some share button added with game is complete and new best score is set
 * [x] Better tutorial

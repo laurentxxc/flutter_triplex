@@ -521,7 +521,7 @@ class _MyHomePageState extends State<MyHomePage>
                 // Timer
                 Padding(
                   padding: EdgeInsets.only(top: 20, bottom: 20),
-                  child: Expanded(child: TriplexTimeProgressBar(progress: _timeProgress, easyModeOn: _isEasyMode,)),
+                  child: TriplexTimeProgressBar(progress: _timeProgress, easyModeOn: _isEasyMode,),
                 ),
                 // Play grid
                 Stack(

@@ -148,6 +148,12 @@ abstract class AppLocalizations {
   /// **'Tutorial'**
   String get settingsTutorial;
 
+  /// No description provided for @settingsEasyMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy mode'**
+  String get settingsEasyMode;
+
   /// Application title
   ///
   /// In en, this message translates to:

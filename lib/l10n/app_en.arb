@@ -19,6 +19,7 @@
   "settingLanguageMenu":"Language",
   "settingsSoundMenu":"Sound/FX",
   "settingsTutorial":"Tutorial",
+  "settingsEasyMode":"Easy mode",
 
   "appTitle": "Triplex",
   "@appTitle": {

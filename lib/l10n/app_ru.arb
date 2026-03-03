@@ -19,6 +19,7 @@
   "settingLanguageMenu":"Язык",
   "settingsSoundMenu":"Звук/Эффекты",
   "settingsTutorial":"Обучение",
+  "settingsEasyMode":"Легкий режим",
 
   "appTitle": "Triplex",
   "@appTitle": {

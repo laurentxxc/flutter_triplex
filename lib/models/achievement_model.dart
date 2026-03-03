@@ -9,6 +9,10 @@
 enum AchievementID { 
   bestScore(emoji:'🏆', title:'BEST SCORE', maxProgress: 1,
     description:'Achieve a new best score in a game session.'), 
+  bestScoreEZ(emoji:'🏆', title:'BEST SCORE EZ', maxProgress: 1,
+    description:'Achieve a new best score in an easy mode game session.',
+    easyModeRelated: true,
+    ), 
   hundred(emoji: '💯', title: 'HUNDRED', maxProgress: 100,
     description:'Reach 100 points in a single game session.'),
   addicted(emoji: '🎮', title: 'ADDICTED', maxProgress: 50,
@@ -23,12 +27,14 @@ enum AchievementID {
   final String emoji;
   final String description;
   final int maxProgress;
+  final bool easyModeRelated;
 
   const AchievementID({
     required this.title,
     required this.emoji,
     this.description = '',
     this.maxProgress = 1, // default to 1 for simple achievements
+    this.easyModeRelated = false,
   });
 }
 

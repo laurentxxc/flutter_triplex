@@ -36,14 +36,18 @@ class SettingsPanel extends StatelessWidget {
   final Function(bool) onSoundTap;
   final Function(Locale) onLanguageTap;
   final Function onTutorialTap;
+  final Function(bool) onEasyModeTap;
   final bool isSoundOn;
+  final bool isEasyModeOn;
 
   SettingsPanel({
     required this.size,
     required this.onSoundTap,
     required this.onLanguageTap,
     required this.onTutorialTap,
+    required this.onEasyModeTap,
     required this.isSoundOn,
+    required this.isEasyModeOn,
   });
 
   @override
@@ -124,6 +128,22 @@ class SettingsPanel extends StatelessWidget {
               ),
             ),
 
+            menuSettingSeparator,
+
+            // difficulty level
+              SizedBox(
+              width: 300,
+              height: 60,
+              child: SettingsButton(
+                leftText: loc.settingsEasyMode,
+                rightLogo: Icon((isEasyModeOn) 
+                  ? Icons.check_box
+                  : Icons.check_box_outline_blank, 
+                  size:40, color: theme.colorScheme.primary), 
+                onTap: () => onEasyModeTap(!isEasyModeOn)
+              ),
+            ),
+            
             menuSettingSeparator,
 
            // Tutorial access

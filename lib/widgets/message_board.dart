@@ -7,6 +7,7 @@
 // This file is part of Triplex, a puzzle game where players match tiles based on attributes.
 import 'package:flutter/material.dart';
 import 'package:triplex/generated/app_localizations.dart';
+import 'package:flutter_confetti/flutter_confetti.dart';
 
 const Widget coffeeLogo = Text('☕️', style: TextStyle(fontSize: 50, shadows: [Shadow(color: Colors.black87, blurRadius: 10.0)]));
 const Widget smileyLogo = Text('😜', style: TextStyle(fontSize: 50, shadows: [Shadow(color: Colors.black87, blurRadius: 10.0)]));
@@ -50,7 +51,7 @@ enum MessageType {
   final Widget logo;
 }
 
-class TriplexBoardMessage extends StatelessWidget {
+class TriplexBoardMessage extends StatefulWidget {
   final MessageType message;
   final Size size;
   final List<Widget>? extra; // optional list of widgets to add bellow the message, e.g., for sharing best score achievement
@@ -61,6 +62,30 @@ class TriplexBoardMessage extends StatelessWidget {
     this.extra = const [],
   });
 
+  @override
+  State<TriplexBoardMessage> createState() => _TriplexBoardMessageState();
+}
+
+class _TriplexBoardMessageState extends State<TriplexBoardMessage> {
+late ConfettiController _confettiController;
+
+@override
+  void initState() {
+    super.initState();
+    _confettiController = ConfettiController();
+  }
+
+@override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+      if (widget.message == MessageType.bestScore) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _confettiController.launch();
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,27 +102,45 @@ class TriplexBoardMessage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          message.logo,
+          widget.message.logo,
           messageBoardVSpace,
           Text(
-            message.translate(l10n), 
+            widget.message.translate(l10n), 
             textAlign: TextAlign.center, 
             style: textStyle,
             softWrap: true,
           ),
-          ...extra!,
+          ...widget.extra!,
         ],
       ),
     );
 
     return SizedBox(
-      width: size.width,
-      height: size.height,
-      child: Card(
-        elevation: 20,
-        color: theme.colorScheme.primaryContainer.withValues(alpha: 0.9),
-        margin: const EdgeInsets.all(30),
-        child: content,
+      width: widget.size.width,
+      height: widget.size.height,
+      child: Stack(
+        children: [
+          Card(
+            elevation: 20,
+            color: theme.colorScheme.primaryContainer.withValues(alpha: 0.9),
+            margin: const EdgeInsets.all(30),
+            child: content,
+          ),
+          IgnorePointer(
+            child: Confetti(
+              controller: _confettiController,
+              options: const ConfettiOptions(
+                startVelocity: 30,
+                gravity: 0.6,
+                particleCount: 100,
+                ticks: 300,
+                spread: 70,
+                y: 0.6,
+                scalar: 1.5,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

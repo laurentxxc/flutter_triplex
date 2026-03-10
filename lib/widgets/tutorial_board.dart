@@ -152,7 +152,8 @@ class TriplexTutorial extends StatelessWidget {
       );
 
       if (showScrollbar) {
-        content = Scrollbar( thumbVisibility: true, thickness: 15.0, radius: Radius.circular(8.0), child: content,);
+        content = Scrollbar( controller:  scrollController,
+          thumbVisibility: true, thickness: 15.0, radius: Radius.circular(8.0), child: content,);
       }
     }
     return SizedBox(
